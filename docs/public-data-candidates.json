@@ -154,6 +154,70 @@
       "revision": "56c6d6da556283fbd6012753aa1117b8b9e03b32",
       "findings": "README identifies household migration panel surveys, not riverbed cross sections. Excluded by data content regardless of stated package/data licences.",
       "redistributed_data": false
+    },
+    {
+      "id": "adv-explorer-flowtracker",
+      "status": "pending_primary_metadata",
+      "source_url": "https://github.com/sschwindt/ADV-Explorer/tree/8c9fdcc7f330fa20c9089782ae628c7b0af1ef2e/input-data/flowtracker-data",
+      "revision": "8c9fdcc7f330fa20c9089782ae628c7b0af1ef2e",
+      "inspected_attribute_files": [
+        {
+          "path": "input-data/flowtracker-data/UPSTREAM_20220330.ft.sum.csv",
+          "bytes": 4156,
+          "sha256": "48acdf7a09f3bdcf997a908cfdf27f48c627e320992ec565649bc5d3f73e54ee",
+          "measurement_records": 22,
+          "declared_units": {
+            "Loc": "(m)",
+            "LocY": "(m)",
+            "FinalD": "(m)",
+            "MeasD": "(m)",
+            "VelX": "(m/s)",
+            "VelY": "(m/s)",
+            "VelZ": "(m/s)"
+          }
+        },
+        {
+          "path": "input-data/flowtracker-data/DOWNSTREAM_20220330.ft.sum.csv",
+          "bytes": 4011,
+          "sha256": "48f6c37465fa0ea875421ac7a3a3a4ecfc4e78323f79d75ea00f5262e7989a6b",
+          "measurement_records": 21,
+          "declared_units": {
+            "Loc": "(m)",
+            "LocY": "(m)",
+            "FinalD": "(m)",
+            "MeasD": "(m)",
+            "VelX": "(m/s)",
+            "VelY": "(m/s)",
+            "VelZ": "(m/s)"
+          }
+        }
+      ],
+      "survey_date": "2022-03-30 in UPSTREAM control CSV Start_Time; not inferred from file name only",
+      "horizontal_reference": "Application field example declares EPSG:25832; this was not verified for every raw 2022 survey file",
+      "vertical_datum": "unconfirmed; measured depth and height above bed do not establish common bed elevations across sections",
+      "data_usage_terms": "README identifies software GPLv3; original field-data attribution and applicable data usage terms remain unconfirmed",
+      "adoption_blockers": [
+        "Confirm original survey attribution and applicable data usage terms",
+        "Confirm common vertical reference, banks and reach direction for usable cross sections",
+        "Select model-compatible reaches and record discharge, roughness and boundary conditions; do not manufacture them from missing metadata"
+      ],
+      "redistributed_data": false
+    },
+    {
+      "id": "mchrb-synthetic",
+      "status": "excluded_by_content",
+      "source_url": "https://github.com/akiczko/multi_channel_river_bathymetry/tree/29d8243398cc18acc62748bf81d01d679e6bc2e9",
+      "revision": "29d8243398cc18acc62748bf81d01d679e6bc2e9",
+      "findings": "Pinned README explicitly says included example is fully synthetic and has no real project data. Synthetic generators in tree do not satisfy real-river trial requirements.",
+      "redistributed_data": false
+    },
+    {
+      "id": "pyriverbed-synthetic",
+      "status": "excluded_by_content",
+      "source_url": "https://github.com/ZhiLiHydro/pyRiverBed/blob/master/README.md",
+      "inspected_readme_sha256": "c683b7b8baf0aedfb8e41ecd9cae70260316dd7977087eebce2ffa3594880391",
+      "findings": "README describes generated synthetic riverbed topography. A real centerline does not establish measured underwater bathymetry.",
+      "redistributed_data": false
     }
   ]
 }
