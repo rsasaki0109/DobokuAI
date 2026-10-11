@@ -2,7 +2,8 @@
 use crate::{validate_project, ApiError, ApiResult};
 use axum::{http::StatusCode, Json};
 use doboku_core::{
-    Boundary, ImportProvenance, Point, Project, Regime, River, Section, SpatialReference, Station,
+    Boundary, DatasetProvenance, ImportProvenance, Point, Project, Regime, River, Section,
+    SpatialReference, Station,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -25,6 +26,8 @@ pub struct Source {
     pub unit: String,
     pub vertical_datum: String,
     pub horizontal_reference: String,
+    #[serde(default)]
+    pub dataset: Option<DatasetProvenance>,
 }
 #[derive(Clone, Copy, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -130,6 +133,12 @@ pub fn inspect(source: &Source) -> Preview {
             "単位はmのみ対応。単位変換は行いません",
         ));
     }
+    if let Some(data) = &source.dataset {
+        if let Err(error) = crate::provenance::validate(data) {
+            errors.push(diagnostic(None, None, "dataset", error));
+        }
+    }
+    warnings.extend(crate::provenance::warnings(source.dataset.as_ref()));
     if source.csv.len() > 65536 {
         errors.push(diagnostic(None, None, "csv", "CSVはUTF-8で64KiB以内"));
     }
@@ -157,6 +166,7 @@ pub fn inspect(source: &Source) -> Preview {
             }
             .into(),
             unit: source.unit.clone(),
+            dataset: source.dataset.clone(),
         }),
     };
     let mut stations: Vec<Station> = Vec::new();

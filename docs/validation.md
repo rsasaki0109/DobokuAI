@@ -254,3 +254,43 @@ This is numerical/workflow verification using synthetic cases. It does not add p
 river datasets or actual technical reviewers. Maturity stays44.0/100 (displayed about45%).
 Hosted CI, actual provider credentials and the target's practical-data/review requirements
 remain unverified. Resolution-specific SQLite history/HTML are not implemented.
+
+## Dataset provenance and candidate screening — 2026-10-11
+
+Optional user-declared dataset origin/URL/attribution/usage terms/survey date/processing
+now accompany confirmed survey imports, projects and calculation/sensitivity snapshots.
+Missing fields remain unrecorded; metadata presence is not licence or survey certification.
+Source edits invalidate the review token. HTTP URL, credential exclusion, UTF-8 byte bounds,
+control characters and real calendar dates are validated both during preview and project
+validation. Old inputs without this optional field remain accepted. HTML escapes source text.
+
+Verification:
+
+- Workspace formatting, clippy with `-D warnings`, **52 Rust tests**, six-case independent
+  reference regeneration and **3 Python recovery tests** passed. The first full check
+  found one Clippy boolean simplification; it was corrected and the complete check rerun.
+- TypeScript/Vite build and all **7 development browser E2E tests** passed. The import
+  E2E now edits provenance after preview, confirms it again, reloads a saved project and
+  independently parses CSV fields to compare provenance with exported JSON.
+- Two API integration tests cover stale metadata confirmation, exact SQLite reopening
+  of normal/sensitivity snapshots, escaping of executable-looking source text, multiline
+  CSV round trips, invalid dates/URLs/control/length limits and pre-feature input formats.
+- Final Docker API/Web builds, startup/smoke and all **7 Docker browser E2E tests** passed
+  through Nginx on a dedicated new database volume, including the final field layout.
+
+API image: `sha256:30236756ea97598faa264eb66d0e8155ee0da38d5fe89b205d40dd8bd13a4f5b`.
+Web image: `sha256:ad1f08f344ffda1db486bb8d45778cf621ff923761943d707f94904d350e17fe`.
+Compose project: `doboku-provenance-check-20261011`. CA/proxy and TLS verification were
+retained; no new application dependency or solver equation was introduced.
+Vite retains its existing bundle-size warning; hosted CI execution remains unverified.
+
+[Candidate inventory](public-data-candidates.json) records pinned repository revisions and
+BathyPix attribute-file hashes/counts. Actual attribute/CRS files exist, but vertical units,
+reference datum, original survey attribution and usage terms remain unconfirmed. No dataset
+was adopted/redistributed, and no field calibration or external engineer review was performed.
+Maturity remains44.0/100 (displayed about45%), target60%.
+
+An eighth actual UI GIF was recorded on the dedicated synthetic database, including the
+stored-results HTML. Its four source screenshots were visually inspected. Local evidence
+and source hashes are in `.local/provenance-verification.json` and `.local/readme-capture/`;
+raw research/database files are ignored by Git.

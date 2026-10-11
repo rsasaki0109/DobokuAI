@@ -32,7 +32,16 @@ export type SpatialReference = {
     imported_at: string;
     elevation_mode: string;
     unit: string;
+    dataset?: DatasetProvenance | null;
   };
+};
+export type DatasetProvenance = {
+  data_kind: 'unspecified' | 'synthetic' | 'measured';
+  source_url: string;
+  attribution: string;
+  usage_terms: string;
+  survey_date: string;
+  processing: string;
 };
 export type Row = {
   chainage: number;

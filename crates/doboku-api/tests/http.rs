@@ -31,6 +31,222 @@ fn request() -> Value {
 fn survey_source() -> Value {
     json!({"csv":include_str!("../../../examples/survey-absolute.csv"),"file_name":"survey-absolute.csv","elevation_mode":"absolute","unit":"m","vertical_datum":"合成サンプルの仮想基準高","horizontal_reference":"局所座標（m）"})
 }
+fn dataset_declaration() -> Value {
+    json!({"data_kind":"synthetic","source_url":"https://example.org/fixtures/v1","attribution":"試験用著作者 <script>window.injected=1</script>","usage_terms":"=未確認の試験用条件\n公開データの採用許可ではありません","survey_date":"","processing":"合成台形を測点CSVに変換\n座標変換・補間なし"})
+}
+
+#[tokio::test]
+async fn dataset_declarations_require_reconfirmation_and_survive_reopening_and_exports() {
+    let path = std::env::temp_dir().join(format!(
+        "doboku-source-{}-{}.sqlite",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
+    ));
+    let api = app(state(path.to_str().unwrap()).unwrap());
+    let mut source = survey_source();
+    source["dataset"] = dataset_declaration();
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/imports/survey/preview",
+        source.clone(),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    let preview: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(preview["valid"], true);
+    assert_eq!(preview["reference"]["import"]["dataset"], source["dataset"]);
+    assert!(preview["warnings"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|w| w.as_str().unwrap().contains("合成データ")));
+    let mut req = json!({"source":source,"project":doboku_core::sample(),"confirmed":true,"review_token":preview["review_token"]});
+    req["source"]["dataset"]["usage_terms"] = json!("プレビュー後の変更");
+    assert_eq!(
+        call(
+            api.clone(),
+            "POST",
+            "/api/imports/survey/apply",
+            req.clone()
+        )
+        .await
+        .0,
+        StatusCode::CONFLICT
+    );
+    req["source"] = source.clone();
+    let (status, body) = call(api.clone(), "POST", "/api/imports/survey/apply", req).await;
+    assert_eq!(status, StatusCode::OK);
+    let project: Value = serde_json::from_str(&body).unwrap();
+    let reference = project["reference"].clone();
+    assert_eq!(
+        reference["import"]["sha256"],
+        preview["reference"]["import"]["sha256"]
+    );
+    assert_eq!(
+        call(api.clone(), "POST", "/api/projects", project.clone())
+            .await
+            .0,
+        StatusCode::OK
+    );
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/runs",
+        json!({"project":project,"scenarios":[]}),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    let saved: Value = serde_json::from_str(&body).unwrap();
+    let (status, body) = call(api.clone(), "POST", "/api/sensitivity/runs", json!({"project":project,"cases":[{"parameter":"discharge","value":80},{"parameter":"discharge","value":-1}]})).await;
+    assert_eq!(status, StatusCode::OK);
+    let sensitivity: Value = serde_json::from_str(&body).unwrap();
+    drop(api);
+    let api = app(state(path.to_str().unwrap()).unwrap());
+    let (status, body) = call(
+        api.clone(),
+        "GET",
+        "/api/projects/sample-river",
+        Value::Null,
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(
+        serde_json::from_str::<Value>(&body).unwrap()["reference"],
+        reference
+    );
+    for (url, key, expected) in [
+        (
+            format!("/api/runs/{}", saved["id"]),
+            "analysis",
+            &saved["analysis"],
+        ),
+        (
+            format!("/api/sensitivity/runs/{}", sensitivity["id"]),
+            "comparison",
+            &sensitivity["comparison"],
+        ),
+    ] {
+        let (status, body) = call(api.clone(), "GET", &url, Value::Null).await;
+        assert_eq!(status, StatusCode::OK);
+        assert_eq!(
+            &serde_json::from_str::<Value>(&body).unwrap()[key],
+            expected
+        );
+        let (status, csv) = call(
+            api.clone(),
+            "GET",
+            &format!("{url}/reports/csv"),
+            Value::Null,
+        )
+        .await;
+        assert_eq!(status, StatusCode::OK);
+        for row in parse_csv(&csv) {
+            let restored: Value = if key == "analysis" {
+                serde_json::from_str(row["reference_json"].as_str().unwrap()).unwrap()
+            } else {
+                serde_json::from_str::<Value>(row["project_json"].as_str().unwrap()).unwrap()
+                    ["reference"]
+                    .clone()
+            };
+            assert_eq!(restored, reference);
+        }
+        let (status, html) = call(
+            api.clone(),
+            "GET",
+            &format!("{url}/reports/html"),
+            Value::Null,
+        )
+        .await;
+        assert_eq!(status, StatusCode::OK);
+        assert!(html.contains("データ出典（利用者申告）"));
+        assert!(html.contains("&lt;script&gt;window.injected=1&lt;/script&gt;"));
+        assert!(!html.contains("<script>window.injected"));
+        assert!(html.contains("未記録"));
+        assert!(html.contains("合成データ"));
+    }
+    drop(api);
+    std::fs::remove_file(path).unwrap();
+}
+
+#[tokio::test]
+async fn dataset_metadata_rejects_bad_dates_urls_controls_and_limits_on_preview_and_save() {
+    let api = app(state(":memory:").unwrap());
+    let mut source = survey_source();
+    source["dataset"] = dataset_declaration();
+    let (_, body) = call(
+        api.clone(),
+        "POST",
+        "/api/imports/survey/preview",
+        source.clone(),
+    )
+    .await;
+    let preview: Value = serde_json::from_str(&body).unwrap();
+    let (_, body) = call(api.clone(), "POST", "/api/imports/survey/apply", json!({"source":source,"project":doboku_core::sample(),"confirmed":true,"review_token":preview["review_token"]})).await;
+    let project: Value = serde_json::from_str(&body).unwrap();
+    for (field, invalid) in [
+        ("source_url", "javascript:alert(1)".to_owned()),
+        (
+            "source_url",
+            "https://user:secret@example.org/data".to_owned(),
+        ),
+        ("source_url", "https://example.org/has space".to_owned()),
+        ("source_url", "file:///tmp/data".to_owned()),
+        ("survey_date", "2025-02-29".to_owned()),
+        ("survey_date", "2024-2-9".to_owned()),
+        ("attribution", "control\u{0}".to_owned()),
+        ("processing", "x".repeat(4001)),
+    ] {
+        let mut modified = source.clone();
+        modified["dataset"][field] = json!(invalid);
+        let (_, body) = call(api.clone(), "POST", "/api/imports/survey/preview", modified).await;
+        let failed: Value = serde_json::from_str(&body).unwrap();
+        assert_eq!(failed["valid"], false, "{field}");
+        assert!(failed["stations"].as_array().unwrap().is_empty());
+        assert!(failed["review_token"].is_null());
+        let mut invalid_project = project.clone();
+        invalid_project["reference"]["import"]["dataset"][field] = json!(invalid);
+        assert_eq!(
+            call(api.clone(), "POST", "/api/projects", invalid_project)
+                .await
+                .0,
+            StatusCode::UNPROCESSABLE_ENTITY,
+            "{field}"
+        );
+    }
+    source["dataset"]["data_kind"] = json!("measured");
+    source["dataset"]["survey_date"] = json!("2024-02-29");
+    let (_, body) = call(api.clone(), "POST", "/api/imports/survey/preview", source).await;
+    assert_eq!(serde_json::from_str::<Value>(&body).unwrap()["valid"], true);
+    let (_, body) = call(
+        api.clone(),
+        "POST",
+        "/api/imports/survey/preview",
+        survey_source(),
+    )
+    .await;
+    let legacy: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(legacy["valid"], true);
+    assert!(legacy["reference"]["import"]["dataset"].is_null());
+    assert!(legacy["warnings"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|w| w.as_str().unwrap().contains("未記録")));
+    // A pre-feature project JSON has no dataset field at all.
+    let mut old_project = project;
+    old_project["reference"]["import"]
+        .as_object_mut()
+        .unwrap()
+        .remove("dataset");
+    assert_eq!(
+        call(api, "POST", "/api/projects", old_project).await.0,
+        StatusCode::OK
+    );
+}
 
 fn parse_csv(text: &str) -> Vec<Value> {
     use std::{

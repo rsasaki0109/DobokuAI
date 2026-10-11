@@ -1,0 +1,159 @@
+{
+  "reviewed_on": "2026-10-11",
+  "adopted_practical_datasets": 0,
+  "note": "Candidate inventory only. No source-data licence, field calibration or engineering trial is certified. Dataset files are not distributed with DobokuAI.",
+  "candidates": [
+    {
+      "id": "bathypix-iowa",
+      "status": "pending_primary_metadata",
+      "source_url": "https://github.com/ShishirBro/BathyPix/tree/70ac176d01e551a64dc04ce23e74cf628dc5a039/in-situ/iowa",
+      "revision": "70ac176d01e551a64dc04ce23e74cf628dc5a039",
+      "inspected_attribute_file": {
+        "path": "in-situ/iowa/mesh_iowa.dbf",
+        "bytes": 129470,
+        "sha256": "4977d7dd7d01f5405dd58c88396b95da4700c7ea483fa417996d6008cf4425b6",
+        "record_count": 756,
+        "fields": [
+          {
+            "name": "XS_id",
+            "type": "C",
+            "width": 80,
+            "decimals": 0,
+            "offset": 1
+          },
+          {
+            "name": "S",
+            "type": "N",
+            "width": 24,
+            "decimals": 15,
+            "offset": 81
+          },
+          {
+            "name": "N",
+            "type": "N",
+            "width": 24,
+            "decimals": 15,
+            "offset": 105
+          },
+          {
+            "name": "z",
+            "type": "N",
+            "width": 24,
+            "decimals": 15,
+            "offset": 129
+          },
+          {
+            "name": "vertex_id",
+            "type": "N",
+            "width": 18,
+            "decimals": 0,
+            "offset": 153
+          }
+        ]
+      },
+      "horizontal_reference": "NAD83 / UTM 15N (EPSG:26915), horizontal unit metre; checked .prj",
+      "vertical_unit": "unconfirmed",
+      "vertical_datum": "unconfirmed",
+      "survey_date": "unconfirmed",
+      "data_usage_terms": "unconfirmed; no data licence found in inspected tree or in-situ README",
+      "adoption_blockers": [
+        "Confirm original survey source and data usage terms",
+        "Confirm vertical unit and common datum; do not infer from magnitude or DEM",
+        "Document upstream/downstream direction, cross-section extraction, processing and hydraulic conditions"
+      ],
+      "redistributed_data": false
+    },
+    {
+      "id": "bathypix-wabash",
+      "status": "pending_primary_metadata",
+      "source_url": "https://github.com/ShishirBro/BathyPix/tree/70ac176d01e551a64dc04ce23e74cf628dc5a039/in-situ/wabash",
+      "revision": "70ac176d01e551a64dc04ce23e74cf628dc5a039",
+      "inspected_attribute_file": {
+        "path": "in-situ/wabash/wabash.dbf",
+        "bytes": 4711586,
+        "sha256": "bceaa1307b788f5e2c22939439974e56f41c508a8c4a6c7abf290c5ccd89e3f1",
+        "record_count": 27552,
+        "fields": [
+          {
+            "name": "XS_id",
+            "type": "C",
+            "width": 80,
+            "decimals": 0,
+            "offset": 1
+          },
+          {
+            "name": "S",
+            "type": "N",
+            "width": 24,
+            "decimals": 15,
+            "offset": 81
+          },
+          {
+            "name": "N",
+            "type": "N",
+            "width": 24,
+            "decimals": 15,
+            "offset": 105
+          },
+          {
+            "name": "z",
+            "type": "N",
+            "width": 24,
+            "decimals": 15,
+            "offset": 129
+          },
+          {
+            "name": "vertex_id",
+            "type": "N",
+            "width": 18,
+            "decimals": 0,
+            "offset": 153
+          }
+        ]
+      },
+      "horizontal_reference": "NAD83 / UTM 16N (EPSG:26916), horizontal unit metre; checked .prj",
+      "vertical_unit": "unconfirmed",
+      "vertical_datum": "unconfirmed",
+      "survey_date": "unconfirmed",
+      "data_usage_terms": "unconfirmed; no data licence found in inspected tree or in-situ README",
+      "adoption_blockers": [
+        "Confirm original survey source and data usage terms",
+        "Confirm vertical unit and common datum; do not infer from magnitude or DEM",
+        "Document upstream/downstream direction, cross-section extraction, processing and hydraulic conditions"
+      ],
+      "redistributed_data": false
+    },
+    {
+      "id": "argyle-adcp",
+      "status": "pending_primary_metadata",
+      "source_url": "https://github.com/sabacyr/2024-Argyle-Landslide-ADCP/tree/655dc261e578f71aa223805ccabb1fef423de5b6",
+      "revision": "655dc261e578f71aa223805ccabb1fef423de5b6",
+      "findings": "Raw ADCP files exist; original data usage terms, datums and section extraction remain unconfirmed.",
+      "redistributed_data": false
+    },
+    {
+      "id": "waal-mesh",
+      "status": "pending_primary_metadata",
+      "source_url": "https://github.com/Parisa-KHRSND/Modified-low-resolution-mesh/tree/64debb50328153a646284d10024ba8b02dcf933d",
+      "revision": "64debb50328153a646284d10024ba8b02dcf933d",
+      "findings": "XYZ bed file exists in tree; licence, original survey metadata and model-compatible reach selection remain unconfirmed. README describes side-channel flooding outside current single-valley model.",
+      "redistributed_data": false
+    },
+    {
+      "id": "survey-dashboard",
+      "status": "pending_primary_metadata",
+      "source_url": "https://github.com/nyinyinyanlin/cross-section-survey-dashboard/tree/543719de0508024f04373caa0a1df548ec5ff0b1",
+      "revision": "543719de0508024f04373caa0a1df548ec5ff0b1",
+      "findings": "Profile JSON files exist in tree; geographic identity, units, datum, survey date and data licence remain unconfirmed. Bundled renderer licences do not establish a licence for survey data.",
+      "redistributed_data": false
+    },
+    {
+      "id": "bemp-household",
+      "status": "excluded_by_content",
+      "source_url": "https://github.com/janfreihardt/BEMPdata/tree/56c6d6da556283fbd6012753aa1117b8b9e03b32",
+      "revision": "56c6d6da556283fbd6012753aa1117b8b9e03b32",
+      "findings": "README identifies household migration panel surveys, not riverbed cross sections. Excluded by data content regardless of stated package/data licences.",
+      "redistributed_data": false
+    }
+  ]
+}

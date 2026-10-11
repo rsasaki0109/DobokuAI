@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 use tokio::sync::Semaphore;
 pub mod history;
+mod provenance;
 pub mod report;
 pub mod resolution;
 pub mod sensitivity;
@@ -117,6 +118,9 @@ fn validate_project(p: &Project) -> ApiResult<()> {
         }
     }
     if let Some(source) = &p.reference.import {
+        if let Some(data) = &source.dataset {
+            provenance::validate(data)?;
+        }
         if source.file_name.is_empty()
             || source.file_name.len() > 200
             || source.sha256.len() != 64

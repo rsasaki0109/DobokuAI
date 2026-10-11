@@ -120,7 +120,8 @@ pub fn html(a: &Response) -> String {
         })
         .collect();
     let mut s=format!("<!doctype html><html lang='ja'><meta charset='utf-8'><title>DobokuAI 感度比較レポート</title><style>body{{font:14px system-ui;color:#203244;max-width:1100px;margin:40px auto;padding:20px}}table{{width:100%;border-collapse:collapse;font-size:12px}}td,th{{border-bottom:1px solid #ddd;padding:7px;text-align:right}}pre{{white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;background:#f4f6f7;padding:15px}}svg{{width:100%;font:12px system-ui}}section{{break-inside:avoid;margin:24px 0}}</style><h1>DobokuAI 感度比較 / {}</h1><p>エンジン {} / 基本計算日時 {} (UTC) / SI単位</p><p>{}</p><h2>基準高・取込み元</h2><p>標高系: {} / 水平座標: {}。全図共通基準高、座標変換は行っていません。</p><pre>{}</pre><h2>計算手法と適用範囲</h2><p>標準逐次計算法、Manning摩擦、α=1、区間摩擦勾配の算術平均。二分法最大120回、エネルギー残差≤10⁻⁷m。等流水深は参照勾配の診断値。</p><p>{}</p>",escape(&a.project.name),escape(&a.baseline.engine_version),escape(&a.baseline.executed_at),escape(&a.note),escape(&a.project.reference.vertical_datum),escape(&a.project.reference.horizontal_reference),escape(&serde_json::to_string_pretty(&a.project.reference).unwrap()),escape(doboku_hydraulics::LIMITATIONS));
-    if a.project.reference.import.is_some() {
+    if let Some(source) = &a.project.reference.import {
+        s.push_str(&crate::provenance::html(source.dataset.as_ref()));
         s.push_str("<p>SHA-256は取込み元CSVのものです。取込み後の編集は含みません。現在の条件は末尾の再現用JSONを参照してください。</p>");
     }
     s.push_str("<h2>各条件の判定</h2><table><tr><th>変更条件</th><th>判定</th><th>最大絶対変化地点の水位差 m / 診断</th></tr>");

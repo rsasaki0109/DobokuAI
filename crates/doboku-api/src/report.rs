@@ -149,6 +149,7 @@ pub fn html(a: &Analysis) -> String {
     s.push_str(&format!("<h3>座標・基準高と取込み元</h3><p>標高系: {} / 水平座標: {}。座標変換は行っていません。</p>", escape(&a.project.reference.vertical_datum), escape(&a.project.reference.horizontal_reference)));
     if let Some(source) = &a.project.reference.import {
         s.push_str(&format!("<p>取込み元: {} / 日時 {} / 高さの解釈 {} / 単位 {}<br>取込み元CSVのSHA-256: {}。取込み後の編集はハッシュに含まれません。現在の条件は末尾の再現用JSONを参照してください。</p>", escape(&source.file_name), escape(&source.imported_at), escape(&source.elevation_mode), escape(&source.unit), escape(&source.sha256)));
+        s.push_str(&crate::provenance::html(source.dataset.as_ref()));
     }
     let mut lines = vec![
         Series {

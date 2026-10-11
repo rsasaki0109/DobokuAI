@@ -106,6 +106,7 @@ test('survey CSV preview, explicit import, sensitivity failures, provenance and 
   page,
 }) => {
   const csv = await readFile('../../examples/survey-absolute.csv', 'utf8');
+  const dataset = {data_kind:'synthetic',source_url:'https://example.org/synthetic-test',attribution:'E2E 合成データ作成者',usage_terms:'試験用宣言（利用許可の判定ではありません）',survey_date:'',processing:'台形の合成CSV。座標変換・補間なし'};
   await page.goto('/');
   await expect(page.getByRole('heading', { name: '青葉川・河道改修検討' })).toBeVisible();
   await page.getByRole('button', { name: '複製して新規作成', exact: true }).click();
@@ -115,15 +116,29 @@ test('survey CSV preview, explicit import, sensitivity failures, provenance and 
     .getByLabel('横断測量CSV', { exact: true })
     .setInputFiles({ name: 'survey-absolute.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
   await page.getByLabel('取込みデータの標高系').fill('合成サンプル・仮想基準高');
+  await page.getByText('出典・利用条件を記録',{exact:true}).click();
+  await page.getByLabel('データ種別',{exact:true}).selectOption(dataset.data_kind);
+  await page.getByLabel('出典URL',{exact:true}).fill(dataset.source_url);
+  await page.getByLabel('出典・著作者',{exact:true}).fill(dataset.attribution);
+  await page.getByLabel('利用条件',{exact:true}).fill(dataset.usage_terms);
+  await page.getByLabel('変換・処理手順',{exact:true}).fill('変更前の手順');
   await page.getByRole('button', { name: 'CSVを検証・プレビュー', exact: true }).click();
   await expect(
     page.getByText('取込みプレビュー: 11 断面。確認前の条件は変更されていません。'),
   ).toBeVisible();
   await expect(page.getByLabel('断面形式', { exact: true })).toHaveValue('trapezoid');
+  await page.getByLabel('変換・処理手順',{exact:true}).fill(dataset.processing);
+  await expect(page.getByRole('button',{name:'内容を確認して全測点を置換・施工案をクリア'})).toHaveCount(0);
+  await page.getByRole('button', {name:'CSVを検証・プレビュー',exact:true}).click();
+  await expect(page.getByText('取込みプレビュー: 11 断面。確認前の条件は変更されていません。')).toBeVisible();
   await page.getByRole('button', { name: '内容を確認して全測点を置換・施工案をクリア' }).click();
   await expect(page.getByLabel('断面形式', { exact: true })).toHaveValue('survey');
   await expect(page.getByLabel('プロジェクトの標高系')).toHaveValue('合成サンプル・仮想基準高');
   await expect(page.getByText('取込み元: survey-absolute.csv', { exact: false })).toBeVisible();
+  await page.locator('.saved-source summary').click();
+  await expect(page.locator('.saved-source')).toContainText(dataset.processing);
+  await expect(page.locator('.saved-source')).toContainText('測量日: 未記録');
+  await page.screenshot({path:'../../.local/dataset-source.png',fullPage:true});
   await page.getByRole('button', { name: '水理計算', exact: true }).click();
   await page.getByLabel('感度比較の値').fill('80, 100, -1');
   await page.getByRole('button', { name: '基本条件を保持して感度比較' }).click();
@@ -138,6 +153,7 @@ test('survey CSV preview, explicit import, sensitivity failures, provenance and 
   );
   expect(sensitivity.cases[2].status).toBe('failed');
   expect(sensitivity.cases[2].run).toBeUndefined();
+  expect(sensitivity.project.reference.import.dataset).toEqual(dataset);
   for (const kind of ['CSV','HTML']) {
     const pending=page.waitForEvent('download');
     await page.getByRole('button',{name:`感度比較${kind}を保存`,exact:true}).click();
@@ -145,6 +161,8 @@ test('survey CSV preview, explicit import, sensitivity failures, provenance and 
     expect(text).toContain(sensitivity.baseline.executed_at);
     expect(text).toContain('survey-absolute.csv');
     expect(text).toContain('合成サンプル・仮想基準高');
+    if(kind==='CSV') csvRows(text).forEach(row=>expect(JSON.parse(row.project_json).reference.import.dataset).toEqual(dataset));
+    else {expect(text).toContain(dataset.processing);expect(text).toContain('測量日');expect(text).toContain('未記録');}
   }
   await page.getByRole('button', { name: '計算を実行', exact: true }).click();
   await expect(page.getByText('数値計算と施工比較が完了しました')).toBeVisible();
@@ -156,6 +174,8 @@ test('survey CSV preview, explicit import, sensitivity failures, provenance and 
     const text = await readFile((await (await pending).path())!, 'utf8');
     expect(text).toContain('survey-absolute.csv');
     expect(text).toContain('合成サンプル・仮想基準高');
+    if(button==='CSV')csvRows(text).forEach(row=>expect(JSON.parse(row.reference_json).import.dataset).toEqual(dataset));
+    else expect(text).toContain(dataset.processing);
   }
   await page.getByRole('button', { name: 'プロジェクトを保存', exact: true }).click();
   await expect(page.getByText('プロジェクトを SQLite に保存しました')).toBeVisible();
@@ -163,6 +183,9 @@ test('survey CSV preview, explicit import, sensitivity failures, provenance and 
   await page.getByLabel('保存済みプロジェクト').selectOption({ label: 'E2E 測量取込み' });
   await page.getByRole('button', { name: '横断面エディタ', exact: true }).click();
   await expect(page.getByLabel('プロジェクトの標高系')).toHaveValue('合成サンプル・仮想基準高');
+  await page.locator('.saved-source summary').click();
+  await expect(page.locator('.saved-source')).toContainText(dataset.processing);
+  await expect(page.locator('.saved-source')).toContainText(dataset.source_url);
   await page
     .getByLabel('横断測量CSV', { exact: true })
     .setInputFiles({

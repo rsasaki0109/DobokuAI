@@ -109,6 +109,35 @@ pub struct ImportProvenance {
     pub imported_at: String,
     pub elevation_mode: String,
     pub unit: String,
+    #[serde(default)]
+    pub dataset: Option<DatasetProvenance>,
+}
+
+/// User-declared provenance; presence does not certify a source or its licence.
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DatasetProvenance {
+    #[serde(default)]
+    pub data_kind: DataKind,
+    #[serde(default)]
+    pub source_url: String,
+    #[serde(default)]
+    pub attribution: String,
+    #[serde(default)]
+    pub usage_terms: String,
+    #[serde(default)]
+    pub survey_date: String,
+    #[serde(default)]
+    pub processing: String,
+}
+
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "snake_case")]
+pub enum DataKind {
+    #[default]
+    Unspecified,
+    Synthetic,
+    Measured,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

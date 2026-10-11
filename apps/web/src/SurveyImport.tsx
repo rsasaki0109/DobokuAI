@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { api, type Project, type Station, type SpatialReference } from './types';
+import { api, type Project, type Station, type SpatialReference, type DatasetProvenance } from './types';
 import { SectionChart } from './Charts';
+import { DatasetFields, DatasetDetails, emptyDataset } from './DatasetProvenance';
 
 type Source = {
   csv: string;
@@ -9,6 +10,7 @@ type Source = {
   unit: string;
   vertical_datum: string;
   horizontal_reference: string;
+  dataset: DatasetProvenance;
 };
 type Preview = {
   valid: boolean;
@@ -36,6 +38,7 @@ export function SurveyImport({
     unit: 'm',
     vertical_datum: '',
     horizontal_reference: '流下距離・横断距離（局所座標、m）',
+    dataset: emptyDataset(),
   });
   const [preview, setPreview] = useState<Preview | null>(null);
   const change = (patch: Partial<Source>) => {
@@ -64,7 +67,7 @@ export function SurveyImport({
         </p>
       </details>
       <div className="form-grid">
-        <label>
+        <label className="field">
           横断測量CSV
           <input
             type="file"
@@ -72,7 +75,7 @@ export function SurveyImport({
             aria-label="横断測量CSV"
             onChange={(e) => {
               const file = e.target.files?.[0];
-              change({ csv: '', file_name: '' });
+              change({ csv: '', file_name: '', dataset: emptyDataset() });
               if (file)
                 void task(async () => {
                   if (file.size > 65536) throw new Error('CSVは64 KiB以内');
@@ -84,7 +87,7 @@ export function SurveyImport({
             }}
           />
         </label>
-        <label>
+        <label className="field">
           CSVの高さの解釈
           <select
             aria-label="CSVの高さの解釈"
@@ -95,7 +98,7 @@ export function SurveyImport({
             <option value="relative">河床からの相対高さ</option>
           </select>
         </label>
-        <label>
+        <label className="field">
           取込みデータの標高系
           <input
             aria-label="取込みデータの標高系"
@@ -105,7 +108,7 @@ export function SurveyImport({
             onChange={(e) => change({ vertical_datum: e.target.value })}
           />
         </label>
-        <label>
+        <label className="field">
           取込みデータの水平座標
           <input
             aria-label="取込みデータの水平座標"
@@ -115,6 +118,7 @@ export function SurveyImport({
           />
         </label>
       </div>
+      <DatasetFields value={source.dataset} change={dataset => change({ dataset })} />
       <p className="muted">
         単位: m。現在の全測点を置換し、施工案をクリアします。流量・参照勾配・境界水深は保持します。
       </p>
@@ -167,6 +171,7 @@ export function SurveyImport({
                 </table>
               </div>
               <p>最初の断面・標高基準: {source.vertical_datum}</p>
+              <DatasetDetails value={preview.reference.import?.dataset} />
               <SectionChart station={preview.stations[0]} analysis={null} index={0} />
               <button
                 className="primary"
@@ -203,7 +208,7 @@ export function SurveyImport({
       <hr />
       <h3>現在の座標・基準高</h3>
       <div className="form-grid">
-        <label>
+        <label className="field">
           プロジェクトの標高系
           <input
             aria-label="プロジェクトの標高系"
@@ -216,7 +221,7 @@ export function SurveyImport({
             }
           />
         </label>
-        <label>
+        <label className="field">
           プロジェクトの水平座標
           <input
             aria-label="プロジェクトの水平座標"
@@ -231,6 +236,7 @@ export function SurveyImport({
         </label>
       </div>
       {project.reference.import && (
+        <>
         <p className="muted provenance">
           取込み元: {project.reference.import.file_name} / {project.reference.import.imported_at}
           <br />
@@ -238,6 +244,8 @@ export function SurveyImport({
           <br />
           取込み後の編集はこのハッシュに含まれません。現在の条件は再現用JSON・計算履歴に記録します。
         </p>
+        <DatasetDetails value={project.reference.import.dataset} />
+        </>
       )}
     </section>
   );
