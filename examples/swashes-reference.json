@@ -1,0 +1,5771 @@
+{
+  "source": {
+    "name": "SWASHES",
+    "binary_version": "1.05.00, 2025-04-22",
+    "wrapper_version": "1.5.0",
+    "wheel_url": "https://files.pythonhosted.org/packages/27/76/ef555970c79ad5a4f9fddeacd67c8e03a63691d7dbfd8c54ebb2f7bb0617/swashes-1.5.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+    "wheel_sha256": "14a1d359c9baa8b21ce384180fee21b47e42818c1092d8a7dedd4d2a0158607c",
+    "binary_sha256": "dbebe68fb9f26df4bcc4ca88ff8e4aafb78ba26750a64b86e423f7beeaaf4b24",
+    "declared_software_license": "CECILL-2.0",
+    "publication_doi": "10.1002/fld.3741"
+  },
+  "interpretation": {
+    "section": "MacDonald pseudo2D rectangular B1: B(x)=10-5*exp(-10*(x/200-0.5)^2)",
+    "external_gravity": 9.81,
+    "engine_gravity": 9.80665,
+    "external_discharge": 20,
+    "external_roughness": 0.03,
+    "normalization": "Q_engine=Q_external*sqrt(g_engine/g_external); n_engine=n_external*sqrt(g_external/g_engine). Preserves Q^2/g and (nQ)^2, hence depth/energy/friction equations. Velocity scales with Q.",
+    "boundary": "Use sampled cell-center boundary depth; no extrapolation to x=0/200. Both sides share the same truncated reach.",
+    "note": "External analytic hydraulic verification, not observed river calibration. Refined SWASHES bed output has integration/printing error. 8m banks and .01 normal-depth diagnostic slope are adapter settings."
+  },
+  "criteria": {
+    "external_bed_refinement_tolerance_m": 5e-06,
+    "depth_tolerance_m": 0.0001,
+    "minimum_improvement": 4.0
+  },
+  "cases": [
+    {
+      "id": "swashes_b1_subcritical",
+      "river": {
+        "discharge": 19.99658482564192,
+        "normal_slope": 0.01,
+        "boundary": {
+          "regime": "subcritical",
+          "depth": 0.9021385
+        },
+        "stations": [
+          {
+            "chainage": 0.5649718,
+            "bed_elevation": 1.972404,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.577849458796164
+            }
+          },
+          {
+            "chainage": 1.694915,
+            "bed_elevation": 1.963031,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.553597613479033
+            }
+          },
+          {
+            "chainage": 2.824859,
+            "bed_elevation": 1.953537,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.528253773949473
+            }
+          },
+          {
+            "chainage": 3.954802,
+            "bed_elevation": 1.943916,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.501789251780353
+            }
+          },
+          {
+            "chainage": 5.084746,
+            "bed_elevation": 1.934164,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.474175855419844
+            }
+          },
+          {
+            "chainage": 6.214689,
+            "bed_elevation": 1.924274,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.445386180087125
+            }
+          },
+          {
+            "chainage": 7.344633,
+            "bed_elevation": 1.91424,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.415393522442411
+            }
+          },
+          {
+            "chainage": 8.474576,
+            "bed_elevation": 1.904057,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.384172198261867
+            }
+          },
+          {
+            "chainage": 9.60452,
+            "bed_elevation": 1.893718,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.351697446906792
+            }
+          },
+          {
+            "chainage": 10.73446,
+            "bed_elevation": 1.883217,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.317945863624157
+            }
+          },
+          {
+            "chainage": 11.86441,
+            "bed_elevation": 1.872548,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.28289474050708
+            }
+          },
+          {
+            "chainage": 12.99435,
+            "bed_elevation": 1.861703,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.24652381748048
+            }
+          },
+          {
+            "chainage": 14.12429,
+            "bed_elevation": 1.850677,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.2088134351687
+            }
+          },
+          {
+            "chainage": 15.25424,
+            "bed_elevation": 1.839462,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.169745540163172
+            }
+          },
+          {
+            "chainage": 16.38418,
+            "bed_elevation": 1.828052,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.129304904627473
+            }
+          },
+          {
+            "chainage": 17.51412,
+            "bed_elevation": 1.816439,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.08747718163386
+            }
+          },
+          {
+            "chainage": 18.64407,
+            "bed_elevation": 1.804618,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.044250016918218
+            }
+          },
+          {
+            "chainage": 19.77401,
+            "bed_elevation": 1.792581,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.999614381104067
+            }
+          },
+          {
+            "chainage": 20.90395,
+            "bed_elevation": 1.78032,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.953562402891798
+            }
+          },
+          {
+            "chainage": 22.0339,
+            "bed_elevation": 1.76783,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.906088587294901
+            }
+          },
+          {
+            "chainage": 23.16384,
+            "bed_elevation": 1.755103,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.857191257348603
+            }
+          },
+          {
+            "chainage": 24.29379,
+            "bed_elevation": 1.742133,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.806869703950722
+            }
+          },
+          {
+            "chainage": 25.42373,
+            "bed_elevation": 1.728913,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.755127766873269
+            }
+          },
+          {
+            "chainage": 26.55367,
+            "bed_elevation": 1.715436,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.701970864070601
+            }
+          },
+          {
+            "chainage": 27.68362,
+            "bed_elevation": 1.701695,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.647407382201084
+            }
+          },
+          {
+            "chainage": 28.81356,
+            "bed_elevation": 1.687685,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.591450287338631
+            }
+          },
+          {
+            "chainage": 29.9435,
+            "bed_elevation": 1.673399,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.534114327551922
+            }
+          },
+          {
+            "chainage": 31.07345,
+            "bed_elevation": 1.658832,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.475417520394513
+            }
+          },
+          {
+            "chainage": 32.20339,
+            "bed_elevation": 1.643977,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.415382852931499
+            }
+          },
+          {
+            "chainage": 33.33333,
+            "bed_elevation": 1.62883,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.35403524384546
+            }
+          },
+          {
+            "chainage": 34.46328,
+            "bed_elevation": 1.613384,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.29140312056861
+            }
+          },
+          {
+            "chainage": 35.59322,
+            "bed_elevation": 1.597636,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.227520196604537
+            }
+          },
+          {
+            "chainage": 36.72316,
+            "bed_elevation": 1.581581,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.162422198175083
+            }
+          },
+          {
+            "chainage": 37.85311,
+            "bed_elevation": 1.565214,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.096148521635278
+            }
+          },
+          {
+            "chainage": 38.98305,
+            "bed_elevation": 1.548533,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.028744073795872
+            }
+          },
+          {
+            "chainage": 40.11299,
+            "bed_elevation": 1.531534,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.960255773662686
+            }
+          },
+          {
+            "chainage": 41.24294,
+            "bed_elevation": 1.514213,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.890734278837211
+            }
+          },
+          {
+            "chainage": 42.37288,
+            "bed_elevation": 1.49657,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.8202358724828525
+            }
+          },
+          {
+            "chainage": 43.50282,
+            "bed_elevation": 1.478601,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.748818756767149
+            }
+          },
+          {
+            "chainage": 44.63277,
+            "bed_elevation": 1.460306,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.6765448351641234
+            }
+          },
+          {
+            "chainage": 45.76271,
+            "bed_elevation": 1.441685,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.6034816279279465
+            }
+          },
+          {
+            "chainage": 46.89266,
+            "bed_elevation": 1.422736,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.529697724331914
+            }
+          },
+          {
+            "chainage": 48.0226,
+            "bed_elevation": 1.403462,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.4552678859828
+            }
+          },
+          {
+            "chainage": 49.15254,
+            "bed_elevation": 1.383862,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.380268411673778
+            }
+          },
+          {
+            "chainage": 50.28249,
+            "bed_elevation": 1.36394,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.304778979584617
+            }
+          },
+          {
+            "chainage": 51.41243,
+            "bed_elevation": 1.343697,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.2288845662508985
+            }
+          },
+          {
+            "chainage": 52.54237,
+            "bed_elevation": 1.323139,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.152671315279891
+            }
+          },
+          {
+            "chainage": 53.67232,
+            "bed_elevation": 1.302268,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.076228393488803
+            }
+          },
+          {
+            "chainage": 54.80226,
+            "bed_elevation": 1.281091,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.9996498841041275
+            }
+          },
+          {
+            "chainage": 55.9322,
+            "bed_elevation": 1.259614,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.923030564045532
+            }
+          },
+          {
+            "chainage": 57.06215,
+            "bed_elevation": 1.237844,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.846467756379606
+            }
+          },
+          {
+            "chainage": 58.19209,
+            "bed_elevation": 1.215789,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.770063176381393
+            }
+          },
+          {
+            "chainage": 59.32203,
+            "bed_elevation": 1.193459,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.693918664109611
+            }
+          },
+          {
+            "chainage": 60.45198,
+            "bed_elevation": 1.170866,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.618138014988535
+            }
+          },
+          {
+            "chainage": 61.58192,
+            "bed_elevation": 1.148019,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.5428287575055855
+            }
+          },
+          {
+            "chainage": 62.71186,
+            "bed_elevation": 1.124934,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.468097893224282
+            }
+          },
+          {
+            "chainage": 63.84181,
+            "bed_elevation": 1.101623,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.39405368704832
+            }
+          },
+          {
+            "chainage": 64.97175,
+            "bed_elevation": 1.078104,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.320807355909561
+            }
+          },
+          {
+            "chainage": 66.10169,
+            "bed_elevation": 1.054394,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.248468872863432
+            }
+          },
+          {
+            "chainage": 67.23164,
+            "bed_elevation": 1.030511,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.177148698628544
+            }
+          },
+          {
+            "chainage": 68.36158,
+            "bed_elevation": 1.006475,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.106959361610806
+            }
+          },
+          {
+            "chainage": 69.49153,
+            "bed_elevation": 0.9823097,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.038010781686721
+            }
+          },
+          {
+            "chainage": 70.62147,
+            "bed_elevation": 0.9580375,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.970414946787954
+            }
+          },
+          {
+            "chainage": 71.75141,
+            "bed_elevation": 0.933684,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.904281322255981
+            }
+          },
+          {
+            "chainage": 72.88136,
+            "bed_elevation": 0.909276,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.839718444590493
+            }
+          },
+          {
+            "chainage": 74.0113,
+            "bed_elevation": 0.884842,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.776835280531606
+            }
+          },
+          {
+            "chainage": 75.14124,
+            "bed_elevation": 0.8604121,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.715737499864616
+            }
+          },
+          {
+            "chainage": 76.27119,
+            "bed_elevation": 0.8360179,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.656528963611328
+            }
+          },
+          {
+            "chainage": 77.40113,
+            "bed_elevation": 0.8116926,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.599312929522835
+            }
+          },
+          {
+            "chainage": 78.53107,
+            "bed_elevation": 0.7874708,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.544188614152836
+            }
+          },
+          {
+            "chainage": 79.66102,
+            "bed_elevation": 0.7633882,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.491252559443564
+            }
+          },
+          {
+            "chainage": 80.79096,
+            "bed_elevation": 0.7394818,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.440599671349121
+            }
+          },
+          {
+            "chainage": 81.9209,
+            "bed_elevation": 0.7157897,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.392320130425762
+            }
+          },
+          {
+            "chainage": 83.05085,
+            "bed_elevation": 0.6923506,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.3465006218944096
+            }
+          },
+          {
+            "chainage": 84.18079,
+            "bed_elevation": 0.6692037,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.3032251963376185
+            }
+          },
+          {
+            "chainage": 85.31073,
+            "bed_elevation": 0.6463888,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.262572583902169
+            }
+          },
+          {
+            "chainage": 86.44068,
+            "bed_elevation": 0.6239456,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.224617274210473
+            }
+          },
+          {
+            "chainage": 87.57062,
+            "bed_elevation": 0.6019133,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.189430190389044
+            }
+          },
+          {
+            "chainage": 88.70056,
+            "bed_elevation": 0.5803309,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.157076456154181
+            }
+          },
+          {
+            "chainage": 89.83051,
+            "bed_elevation": 0.5592363,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.12761631337495
+            }
+          },
+          {
+            "chainage": 90.96045,
+            "bed_elevation": 0.5386662,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.101105603043035
+            }
+          },
+          {
+            "chainage": 92.0904,
+            "bed_elevation": 0.5186556,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0775938324752685
+            }
+          },
+          {
+            "chainage": 93.22034,
+            "bed_elevation": 0.4992377,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0571258932436765
+            }
+          },
+          {
+            "chainage": 94.35028,
+            "bed_elevation": 0.4804434,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.03974039832537
+            }
+          },
+          {
+            "chainage": 95.48023,
+            "bed_elevation": 0.4623008,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.025470306257313
+            }
+          },
+          {
+            "chainage": 96.61017,
+            "bed_elevation": 0.4448353,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.014343072485649
+            }
+          },
+          {
+            "chainage": 97.74011,
+            "bed_elevation": 0.4280689,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.006379804858535
+            }
+          },
+          {
+            "chainage": 98.87006,
+            "bed_elevation": 0.4120205,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0015957008242005
+            }
+          },
+          {
+            "chainage": 100.0,
+            "bed_elevation": 0.3967049,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0
+            }
+          },
+          {
+            "chainage": 101.1299,
+            "bed_elevation": 0.3821337,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.00159558786826
+            }
+          },
+          {
+            "chainage": 102.2599,
+            "bed_elevation": 0.368314,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.006379861283821
+            }
+          },
+          {
+            "chainage": 103.3898,
+            "bed_elevation": 0.3552495,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.014342818978823
+            }
+          },
+          {
+            "chainage": 104.5198,
+            "bed_elevation": 0.3429396,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.025470643514372
+            }
+          },
+          {
+            "chainage": 105.6497,
+            "bed_elevation": 0.3313801,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.03974011808508
+            }
+          },
+          {
+            "chainage": 106.7797,
+            "bed_elevation": 0.3205627,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.057126563465726
+            }
+          },
+          {
+            "chainage": 107.9096,
+            "bed_elevation": 0.3104757,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0775938324752685
+            }
+          },
+          {
+            "chainage": 109.0395,
+            "bed_elevation": 0.301104,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.10110449595095
+            }
+          },
+          {
+            "chainage": 110.1695,
+            "bed_elevation": 0.2924289,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.127616561123352
+            }
+          },
+          {
+            "chainage": 111.2994,
+            "bed_elevation": 0.2844292,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.157075361709515
+            }
+          },
+          {
+            "chainage": 112.4294,
+            "bed_elevation": 0.2770808,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.18943078831349
+            }
+          },
+          {
+            "chainage": 113.5593,
+            "bed_elevation": 0.2703572,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.224616626701482
+            }
+          },
+          {
+            "chainage": 114.6893,
+            "bed_elevation": 0.2642299,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.262573627743376
+            }
+          },
+          {
+            "chainage": 115.8192,
+            "bed_elevation": 0.2586686,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.3032248248413865
+            }
+          },
+          {
+            "chainage": 116.9492,
+            "bed_elevation": 0.2536417,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.346502593718375
+            }
+          },
+          {
+            "chainage": 118.0791,
+            "bed_elevation": 0.2491163,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.392320130425762
+            }
+          },
+          {
+            "chainage": 119.209,
+            "bed_elevation": 0.2450591,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.440597919716542
+            }
+          },
+          {
+            "chainage": 120.339,
+            "bed_elevation": 0.2414359,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.491253476477161
+            }
+          },
+          {
+            "chainage": 121.4689,
+            "bed_elevation": 0.2382124,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.544187179231067
+            }
+          },
+          {
+            "chainage": 122.5989,
+            "bed_elevation": 0.2353545,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.599314421281897
+            }
+          },
+          {
+            "chainage": 123.7288,
+            "bed_elevation": 0.2328283,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.656528448284413
+            }
+          },
+          {
+            "chainage": 124.8588,
+            "bed_elevation": 0.2306004,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.715739629894866
+            }
+          },
+          {
+            "chainage": 125.9887,
+            "bed_elevation": 0.228638,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.776835280531606
+            }
+          },
+          {
+            "chainage": 127.1186,
+            "bed_elevation": 0.2269093,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.839716188167989
+            }
+          },
+          {
+            "chainage": 128.2486,
+            "bed_elevation": 0.2253834,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.9042819007474305
+            }
+          },
+          {
+            "chainage": 129.3785,
+            "bed_elevation": 0.2240307,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.970413171039188
+            }
+          },
+          {
+            "chainage": 130.5085,
+            "bed_elevation": 0.2228226,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.038012594800636
+            }
+          },
+          {
+            "chainage": 131.6384,
+            "bed_elevation": 0.2217321,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.106958129914453
+            }
+          },
+          {
+            "chainage": 132.7684,
+            "bed_elevation": 0.2207334,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.177151204000607
+            }
+          },
+          {
+            "chainage": 133.8983,
+            "bed_elevation": 0.2198021,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.248468237010647
+            }
+          },
+          {
+            "chainage": 135.0282,
+            "bed_elevation": 0.2189152,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.320804134018456
+            }
+          },
+          {
+            "chainage": 136.1582,
+            "bed_elevation": 0.2180515,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.394054338970809
+            }
+          },
+          {
+            "chainage": 137.2881,
+            "bed_elevation": 0.217191,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.4680952592635075
+            }
+          },
+          {
+            "chainage": 138.4181,
+            "bed_elevation": 0.216315,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.542830085684491
+            }
+          },
+          {
+            "chainage": 139.548,
+            "bed_elevation": 0.2154067,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.618136677529154
+            }
+          },
+          {
+            "chainage": 140.678,
+            "bed_elevation": 0.2144503,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.6939206813799
+            }
+          },
+          {
+            "chainage": 141.8079,
+            "bed_elevation": 0.2134316,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.770062501196862
+            }
+          },
+          {
+            "chainage": 142.9379,
+            "bed_elevation": 0.2123376,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.846471141527122
+            }
+          },
+          {
+            "chainage": 144.0678,
+            "bed_elevation": 0.2111567,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.923030564045533
+            }
+          },
+          {
+            "chainage": 145.1977,
+            "bed_elevation": 0.2098784,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.999647171923213
+            }
+          },
+          {
+            "chainage": 146.3277,
+            "bed_elevation": 0.2084936,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.076229748004335
+            }
+          },
+          {
+            "chainage": 147.4576,
+            "bed_elevation": 0.2069939,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.152669288367743
+            }
+          },
+          {
+            "chainage": 148.5876,
+            "bed_elevation": 0.2053725,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.228886585877263
+            }
+          },
+          {
+            "chainage": 149.7175,
+            "bed_elevation": 0.2036233,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.30477830958621
+            }
+          },
+          {
+            "chainage": 150.8475,
+            "bed_elevation": 0.201741,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.380271075807414
+            }
+          },
+          {
+            "chainage": 151.9774,
+            "bed_elevation": 0.1997214,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.4552678859828
+            }
+          },
+          {
+            "chainage": 153.1073,
+            "bed_elevation": 0.1975613,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.529695100507851
+            }
+          },
+          {
+            "chainage": 154.2373,
+            "bed_elevation": 0.1952578,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.603482277831228
+            }
+          },
+          {
+            "chainage": 155.3672,
+            "bed_elevation": 0.192809,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.676542905514697
+            }
+          },
+          {
+            "chainage": 156.4972,
+            "bed_elevation": 0.1902138,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.748820028620934
+            }
+          },
+          {
+            "chainage": 157.6271,
+            "bed_elevation": 0.1874713,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.82023461634742
+            }
+          },
+          {
+            "chainage": 158.7571,
+            "bed_elevation": 0.1845815,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.890736757521649
+            }
+          },
+          {
+            "chainage": 159.887,
+            "bed_elevation": 0.1815448,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.960255162891731
+            }
+          },
+          {
+            "chainage": 161.0169,
+            "bed_elevation": 0.1783619,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.028741066794204
+            }
+          },
+          {
+            "chainage": 162.1469,
+            "bed_elevation": 0.1750343,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.096149113227476
+            }
+          },
+          {
+            "chainage": 163.2768,
+            "bed_elevation": 0.1715634,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.162419872652016
+            }
+          },
+          {
+            "chainage": 164.4068,
+            "bed_elevation": 0.1679514,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.227521338201514
+            }
+          },
+          {
+            "chainage": 165.5367,
+            "bed_elevation": 0.1642004,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.291402000810061
+            }
+          },
+          {
+            "chainage": 166.6667,
+            "bed_elevation": 0.160313,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.354036889809844
+            }
+          },
+          {
+            "chainage": 167.7966,
+            "bed_elevation": 0.156292,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.415382315773094
+            }
+          },
+          {
+            "chainage": 168.9266,
+            "bed_elevation": 0.1521403,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.475420147498467
+            }
+          },
+          {
+            "chainage": 170.0565,
+            "bed_elevation": 0.1478611,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.534114327551924
+            }
+          },
+          {
+            "chainage": 171.1864,
+            "bed_elevation": 0.1434576,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.591448281944974
+            }
+          },
+          {
+            "chainage": 172.3164,
+            "bed_elevation": 0.1389333,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.647408360346883
+            }
+          },
+          {
+            "chainage": 173.4463,
+            "bed_elevation": 0.1342917,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.701969434037961
+            }
+          },
+          {
+            "chainage": 174.5763,
+            "bed_elevation": 0.1295363,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.755129159441687
+            }
+          },
+          {
+            "chainage": 175.7062,
+            "bed_elevation": 0.1246707,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.806869252313803
+            }
+          },
+          {
+            "chainage": 176.8362,
+            "bed_elevation": 0.1196986,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.85719301352842
+            }
+          },
+          {
+            "chainage": 177.9661,
+            "bed_elevation": 0.1146236,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.906088587294901
+            }
+          },
+          {
+            "chainage": 179.096,
+            "bed_elevation": 0.1094494,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.953560333663395
+            }
+          },
+          {
+            "chainage": 180.226,
+            "bed_elevation": 0.1041797,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.999614782388644
+            }
+          },
+          {
+            "chainage": 181.3559,
+            "bed_elevation": 0.09881795,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.04424885057879
+            }
+          },
+          {
+            "chainage": 182.4859,
+            "bed_elevation": 0.09336786,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.087477934336118
+            }
+          },
+          {
+            "chainage": 183.6158,
+            "bed_elevation": 0.0878329,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.129304176588413
+            }
+          },
+          {
+            "chainage": 184.7458,
+            "bed_elevation": 0.08221652,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.169746947373214
+            }
+          },
+          {
+            "chainage": 185.8757,
+            "bed_elevation": 0.07652211,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.208813095450108
+            }
+          },
+          {
+            "chainage": 187.0056,
+            "bed_elevation": 0.07075297,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.246522178562042
+            }
+          },
+          {
+            "chainage": 188.1356,
+            "bed_elevation": 0.06491233,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.282895056519505
+            }
+          },
+          {
+            "chainage": 189.2655,
+            "bed_elevation": 0.05900333,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.317944645944728
+            }
+          },
+          {
+            "chainage": 190.3955,
+            "bed_elevation": 0.053029,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.351698032942798
+            }
+          },
+          {
+            "chainage": 191.5254,
+            "bed_elevation": 0.04699229,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.384171521894777
+            }
+          },
+          {
+            "chainage": 192.6554,
+            "bed_elevation": 0.04089606,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.415394416196193
+            }
+          },
+          {
+            "chainage": 193.7853,
+            "bed_elevation": 0.03474305,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.445385894006606
+            }
+          },
+          {
+            "chainage": 194.9153,
+            "bed_elevation": 0.02853591,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.474177003319712
+            }
+          },
+          {
+            "chainage": 196.0452,
+            "bed_elevation": 0.0222772,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.5017892996311
+            }
+          },
+          {
+            "chainage": 197.1751,
+            "bed_elevation": 0.01596936,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.52825283418761
+            }
+          },
+          {
+            "chainage": 198.3051,
+            "bed_elevation": 0.009614736,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.553597942606121
+            }
+          },
+          {
+            "chainage": 199.435,
+            "bed_elevation": 0.003215592,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.577848866926464
+            }
+          }
+        ]
+      },
+      "rows": [
+        {
+          "chainage": 0.5649718,
+          "depth": 0.9021385,
+          "bed_elevation": 1.972404,
+          "water_elevation": 2.874543
+        },
+        {
+          "chainage": 1.694915,
+          "depth": 0.9023913,
+          "bed_elevation": 1.963031,
+          "water_elevation": 2.865422
+        },
+        {
+          "chainage": 2.824859,
+          "depth": 0.9026705,
+          "bed_elevation": 1.953537,
+          "water_elevation": 2.856207
+        },
+        {
+          "chainage": 3.954802,
+          "depth": 0.9029786,
+          "bed_elevation": 1.943916,
+          "water_elevation": 2.846895
+        },
+        {
+          "chainage": 5.084746,
+          "depth": 0.9033179,
+          "bed_elevation": 1.934164,
+          "water_elevation": 2.837482
+        },
+        {
+          "chainage": 6.214689,
+          "depth": 0.9036912,
+          "bed_elevation": 1.924274,
+          "water_elevation": 2.827965
+        },
+        {
+          "chainage": 7.344633,
+          "depth": 0.9041012,
+          "bed_elevation": 1.91424,
+          "water_elevation": 2.818341
+        },
+        {
+          "chainage": 8.474576,
+          "depth": 0.9045509,
+          "bed_elevation": 1.904057,
+          "water_elevation": 2.808608
+        },
+        {
+          "chainage": 9.60452,
+          "depth": 0.9050436,
+          "bed_elevation": 1.893718,
+          "water_elevation": 2.798762
+        },
+        {
+          "chainage": 10.73446,
+          "depth": 0.9055824,
+          "bed_elevation": 1.883217,
+          "water_elevation": 2.7888
+        },
+        {
+          "chainage": 11.86441,
+          "depth": 0.9061709,
+          "bed_elevation": 1.872548,
+          "water_elevation": 2.778719
+        },
+        {
+          "chainage": 12.99435,
+          "depth": 0.9068127,
+          "bed_elevation": 1.861703,
+          "water_elevation": 2.768516
+        },
+        {
+          "chainage": 14.12429,
+          "depth": 0.9075117,
+          "bed_elevation": 1.850677,
+          "water_elevation": 2.758188
+        },
+        {
+          "chainage": 15.25424,
+          "depth": 0.9082719,
+          "bed_elevation": 1.839462,
+          "water_elevation": 2.747734
+        },
+        {
+          "chainage": 16.38418,
+          "depth": 0.9090973,
+          "bed_elevation": 1.828052,
+          "water_elevation": 2.737149
+        },
+        {
+          "chainage": 17.51412,
+          "depth": 0.9099924,
+          "bed_elevation": 1.816439,
+          "water_elevation": 2.726432
+        },
+        {
+          "chainage": 18.64407,
+          "depth": 0.9109615,
+          "bed_elevation": 1.804618,
+          "water_elevation": 2.715579
+        },
+        {
+          "chainage": 19.77401,
+          "depth": 0.9120093,
+          "bed_elevation": 1.792581,
+          "water_elevation": 2.70459
+        },
+        {
+          "chainage": 20.90395,
+          "depth": 0.9131404,
+          "bed_elevation": 1.78032,
+          "water_elevation": 2.693461
+        },
+        {
+          "chainage": 22.0339,
+          "depth": 0.9143597,
+          "bed_elevation": 1.76783,
+          "water_elevation": 2.68219
+        },
+        {
+          "chainage": 23.16384,
+          "depth": 0.9156721,
+          "bed_elevation": 1.755103,
+          "water_elevation": 2.670776
+        },
+        {
+          "chainage": 24.29379,
+          "depth": 0.9170827,
+          "bed_elevation": 1.742133,
+          "water_elevation": 2.659216
+        },
+        {
+          "chainage": 25.42373,
+          "depth": 0.9185965,
+          "bed_elevation": 1.728913,
+          "water_elevation": 2.647509
+        },
+        {
+          "chainage": 26.55367,
+          "depth": 0.9202186,
+          "bed_elevation": 1.715436,
+          "water_elevation": 2.635654
+        },
+        {
+          "chainage": 27.68362,
+          "depth": 0.9219541,
+          "bed_elevation": 1.701695,
+          "water_elevation": 2.623649
+        },
+        {
+          "chainage": 28.81356,
+          "depth": 0.9238081,
+          "bed_elevation": 1.687685,
+          "water_elevation": 2.611493
+        },
+        {
+          "chainage": 29.9435,
+          "depth": 0.9257859,
+          "bed_elevation": 1.673399,
+          "water_elevation": 2.599185
+        },
+        {
+          "chainage": 31.07345,
+          "depth": 0.9278922,
+          "bed_elevation": 1.658832,
+          "water_elevation": 2.586724
+        },
+        {
+          "chainage": 32.20339,
+          "depth": 0.9301321,
+          "bed_elevation": 1.643977,
+          "water_elevation": 2.574109
+        },
+        {
+          "chainage": 33.33333,
+          "depth": 0.9325104,
+          "bed_elevation": 1.62883,
+          "water_elevation": 2.56134
+        },
+        {
+          "chainage": 34.46328,
+          "depth": 0.9350316,
+          "bed_elevation": 1.613384,
+          "water_elevation": 2.548416
+        },
+        {
+          "chainage": 35.59322,
+          "depth": 0.9377002,
+          "bed_elevation": 1.597636,
+          "water_elevation": 2.535336
+        },
+        {
+          "chainage": 36.72316,
+          "depth": 0.9405203,
+          "bed_elevation": 1.581581,
+          "water_elevation": 2.522101
+        },
+        {
+          "chainage": 37.85311,
+          "depth": 0.9434958,
+          "bed_elevation": 1.565214,
+          "water_elevation": 2.50871
+        },
+        {
+          "chainage": 38.98305,
+          "depth": 0.9466302,
+          "bed_elevation": 1.548533,
+          "water_elevation": 2.495163
+        },
+        {
+          "chainage": 40.11299,
+          "depth": 0.9499267,
+          "bed_elevation": 1.531534,
+          "water_elevation": 2.48146
+        },
+        {
+          "chainage": 41.24294,
+          "depth": 0.953388,
+          "bed_elevation": 1.514213,
+          "water_elevation": 2.467601
+        },
+        {
+          "chainage": 42.37288,
+          "depth": 0.9570165,
+          "bed_elevation": 1.49657,
+          "water_elevation": 2.453586
+        },
+        {
+          "chainage": 43.50282,
+          "depth": 0.9608138,
+          "bed_elevation": 1.478601,
+          "water_elevation": 2.439415
+        },
+        {
+          "chainage": 44.63277,
+          "depth": 0.9647813,
+          "bed_elevation": 1.460306,
+          "water_elevation": 2.425088
+        },
+        {
+          "chainage": 45.76271,
+          "depth": 0.9689196,
+          "bed_elevation": 1.441685,
+          "water_elevation": 2.410604
+        },
+        {
+          "chainage": 46.89266,
+          "depth": 0.9732287,
+          "bed_elevation": 1.422736,
+          "water_elevation": 2.395965
+        },
+        {
+          "chainage": 48.0226,
+          "depth": 0.9777079,
+          "bed_elevation": 1.403462,
+          "water_elevation": 2.38117
+        },
+        {
+          "chainage": 49.15254,
+          "depth": 0.9823559,
+          "bed_elevation": 1.383862,
+          "water_elevation": 2.366218
+        },
+        {
+          "chainage": 50.28249,
+          "depth": 0.9871706,
+          "bed_elevation": 1.36394,
+          "water_elevation": 2.35111
+        },
+        {
+          "chainage": 51.41243,
+          "depth": 0.992149,
+          "bed_elevation": 1.343697,
+          "water_elevation": 2.335846
+        },
+        {
+          "chainage": 52.54237,
+          "depth": 0.9972874,
+          "bed_elevation": 1.323139,
+          "water_elevation": 2.320426
+        },
+        {
+          "chainage": 53.67232,
+          "depth": 1.002581,
+          "bed_elevation": 1.302268,
+          "water_elevation": 2.304849
+        },
+        {
+          "chainage": 54.80226,
+          "depth": 1.008025,
+          "bed_elevation": 1.281091,
+          "water_elevation": 2.289116
+        },
+        {
+          "chainage": 55.9322,
+          "depth": 1.013613,
+          "bed_elevation": 1.259614,
+          "water_elevation": 2.273227
+        },
+        {
+          "chainage": 57.06215,
+          "depth": 1.019337,
+          "bed_elevation": 1.237844,
+          "water_elevation": 2.257181
+        },
+        {
+          "chainage": 58.19209,
+          "depth": 1.02519,
+          "bed_elevation": 1.215789,
+          "water_elevation": 2.240979
+        },
+        {
+          "chainage": 59.32203,
+          "depth": 1.031162,
+          "bed_elevation": 1.193459,
+          "water_elevation": 2.224622
+        },
+        {
+          "chainage": 60.45198,
+          "depth": 1.037244,
+          "bed_elevation": 1.170866,
+          "water_elevation": 2.208109
+        },
+        {
+          "chainage": 61.58192,
+          "depth": 1.043424,
+          "bed_elevation": 1.148019,
+          "water_elevation": 2.191444
+        },
+        {
+          "chainage": 62.71186,
+          "depth": 1.049692,
+          "bed_elevation": 1.124934,
+          "water_elevation": 2.174626
+        },
+        {
+          "chainage": 63.84181,
+          "depth": 1.056034,
+          "bed_elevation": 1.101623,
+          "water_elevation": 2.157658
+        },
+        {
+          "chainage": 64.97175,
+          "depth": 1.062438,
+          "bed_elevation": 1.078104,
+          "water_elevation": 2.140542
+        },
+        {
+          "chainage": 66.10169,
+          "depth": 1.068888,
+          "bed_elevation": 1.054394,
+          "water_elevation": 2.123282
+        },
+        {
+          "chainage": 67.23164,
+          "depth": 1.07537,
+          "bed_elevation": 1.030511,
+          "water_elevation": 2.105881
+        },
+        {
+          "chainage": 68.36158,
+          "depth": 1.081869,
+          "bed_elevation": 1.006475,
+          "water_elevation": 2.088344
+        },
+        {
+          "chainage": 69.49153,
+          "depth": 1.088368,
+          "bed_elevation": 0.9823097,
+          "water_elevation": 2.070678
+        },
+        {
+          "chainage": 70.62147,
+          "depth": 1.094851,
+          "bed_elevation": 0.9580375,
+          "water_elevation": 2.052888
+        },
+        {
+          "chainage": 71.75141,
+          "depth": 1.101299,
+          "bed_elevation": 0.933684,
+          "water_elevation": 2.034983
+        },
+        {
+          "chainage": 72.88136,
+          "depth": 1.107695,
+          "bed_elevation": 0.909276,
+          "water_elevation": 2.016971
+        },
+        {
+          "chainage": 74.0113,
+          "depth": 1.114021,
+          "bed_elevation": 0.884842,
+          "water_elevation": 1.998863
+        },
+        {
+          "chainage": 75.14124,
+          "depth": 1.120259,
+          "bed_elevation": 0.8604121,
+          "water_elevation": 1.980671
+        },
+        {
+          "chainage": 76.27119,
+          "depth": 1.126389,
+          "bed_elevation": 0.8360179,
+          "water_elevation": 1.962407
+        },
+        {
+          "chainage": 77.40113,
+          "depth": 1.132393,
+          "bed_elevation": 0.8116926,
+          "water_elevation": 1.944085
+        },
+        {
+          "chainage": 78.53107,
+          "depth": 1.138251,
+          "bed_elevation": 0.7874708,
+          "water_elevation": 1.925722
+        },
+        {
+          "chainage": 79.66102,
+          "depth": 1.143946,
+          "bed_elevation": 0.7633882,
+          "water_elevation": 1.907334
+        },
+        {
+          "chainage": 80.79096,
+          "depth": 1.149458,
+          "bed_elevation": 0.7394818,
+          "water_elevation": 1.888939
+        },
+        {
+          "chainage": 81.9209,
+          "depth": 1.154769,
+          "bed_elevation": 0.7157897,
+          "water_elevation": 1.870558
+        },
+        {
+          "chainage": 83.05085,
+          "depth": 1.159861,
+          "bed_elevation": 0.6923506,
+          "water_elevation": 1.852211
+        },
+        {
+          "chainage": 84.18079,
+          "depth": 1.164716,
+          "bed_elevation": 0.6692037,
+          "water_elevation": 1.83392
+        },
+        {
+          "chainage": 85.31073,
+          "depth": 1.169319,
+          "bed_elevation": 0.6463888,
+          "water_elevation": 1.815707
+        },
+        {
+          "chainage": 86.44068,
+          "depth": 1.173651,
+          "bed_elevation": 0.6239456,
+          "water_elevation": 1.797597
+        },
+        {
+          "chainage": 87.57062,
+          "depth": 1.177699,
+          "bed_elevation": 0.6019133,
+          "water_elevation": 1.779612
+        },
+        {
+          "chainage": 88.70056,
+          "depth": 1.181447,
+          "bed_elevation": 0.5803309,
+          "water_elevation": 1.761778
+        },
+        {
+          "chainage": 89.83051,
+          "depth": 1.184881,
+          "bed_elevation": 0.5592363,
+          "water_elevation": 1.744118
+        },
+        {
+          "chainage": 90.96045,
+          "depth": 1.18799,
+          "bed_elevation": 0.5386662,
+          "water_elevation": 1.726656
+        },
+        {
+          "chainage": 92.0904,
+          "depth": 1.190761,
+          "bed_elevation": 0.5186556,
+          "water_elevation": 1.709417
+        },
+        {
+          "chainage": 93.22034,
+          "depth": 1.193184,
+          "bed_elevation": 0.4992377,
+          "water_elevation": 1.692422
+        },
+        {
+          "chainage": 94.35028,
+          "depth": 1.19525,
+          "bed_elevation": 0.4804434,
+          "water_elevation": 1.675693
+        },
+        {
+          "chainage": 95.48023,
+          "depth": 1.196951,
+          "bed_elevation": 0.4623008,
+          "water_elevation": 1.659252
+        },
+        {
+          "chainage": 96.61017,
+          "depth": 1.198281,
+          "bed_elevation": 0.4448353,
+          "water_elevation": 1.643117
+        },
+        {
+          "chainage": 97.74011,
+          "depth": 1.199235,
+          "bed_elevation": 0.4280689,
+          "water_elevation": 1.627304
+        },
+        {
+          "chainage": 98.87006,
+          "depth": 1.199809,
+          "bed_elevation": 0.4120205,
+          "water_elevation": 1.611829
+        },
+        {
+          "chainage": 100.0,
+          "depth": 1.2,
+          "bed_elevation": 0.3967049,
+          "water_elevation": 1.596705
+        },
+        {
+          "chainage": 101.1299,
+          "depth": 1.199809,
+          "bed_elevation": 0.3821337,
+          "water_elevation": 1.581942
+        },
+        {
+          "chainage": 102.2599,
+          "depth": 1.199235,
+          "bed_elevation": 0.368314,
+          "water_elevation": 1.567549
+        },
+        {
+          "chainage": 103.3898,
+          "depth": 1.198281,
+          "bed_elevation": 0.3552495,
+          "water_elevation": 1.553531
+        },
+        {
+          "chainage": 104.5198,
+          "depth": 1.196951,
+          "bed_elevation": 0.3429396,
+          "water_elevation": 1.539891
+        },
+        {
+          "chainage": 105.6497,
+          "depth": 1.19525,
+          "bed_elevation": 0.3313801,
+          "water_elevation": 1.52663
+        },
+        {
+          "chainage": 106.7797,
+          "depth": 1.193184,
+          "bed_elevation": 0.3205627,
+          "water_elevation": 1.513747
+        },
+        {
+          "chainage": 107.9096,
+          "depth": 1.190761,
+          "bed_elevation": 0.3104757,
+          "water_elevation": 1.501237
+        },
+        {
+          "chainage": 109.0395,
+          "depth": 1.18799,
+          "bed_elevation": 0.301104,
+          "water_elevation": 1.489094
+        },
+        {
+          "chainage": 110.1695,
+          "depth": 1.184881,
+          "bed_elevation": 0.2924289,
+          "water_elevation": 1.47731
+        },
+        {
+          "chainage": 111.2994,
+          "depth": 1.181447,
+          "bed_elevation": 0.2844292,
+          "water_elevation": 1.465876
+        },
+        {
+          "chainage": 112.4294,
+          "depth": 1.177699,
+          "bed_elevation": 0.2770808,
+          "water_elevation": 1.45478
+        },
+        {
+          "chainage": 113.5593,
+          "depth": 1.173651,
+          "bed_elevation": 0.2703572,
+          "water_elevation": 1.444009
+        },
+        {
+          "chainage": 114.6893,
+          "depth": 1.169319,
+          "bed_elevation": 0.2642299,
+          "water_elevation": 1.433549
+        },
+        {
+          "chainage": 115.8192,
+          "depth": 1.164716,
+          "bed_elevation": 0.2586686,
+          "water_elevation": 1.423385
+        },
+        {
+          "chainage": 116.9492,
+          "depth": 1.159861,
+          "bed_elevation": 0.2536417,
+          "water_elevation": 1.413502
+        },
+        {
+          "chainage": 118.0791,
+          "depth": 1.154769,
+          "bed_elevation": 0.2491163,
+          "water_elevation": 1.403885
+        },
+        {
+          "chainage": 119.209,
+          "depth": 1.149458,
+          "bed_elevation": 0.2450591,
+          "water_elevation": 1.394517
+        },
+        {
+          "chainage": 120.339,
+          "depth": 1.143946,
+          "bed_elevation": 0.2414359,
+          "water_elevation": 1.385381
+        },
+        {
+          "chainage": 121.4689,
+          "depth": 1.138251,
+          "bed_elevation": 0.2382124,
+          "water_elevation": 1.376463
+        },
+        {
+          "chainage": 122.5989,
+          "depth": 1.132393,
+          "bed_elevation": 0.2353545,
+          "water_elevation": 1.367747
+        },
+        {
+          "chainage": 123.7288,
+          "depth": 1.126389,
+          "bed_elevation": 0.2328283,
+          "water_elevation": 1.359217
+        },
+        {
+          "chainage": 124.8588,
+          "depth": 1.120259,
+          "bed_elevation": 0.2306004,
+          "water_elevation": 1.350859
+        },
+        {
+          "chainage": 125.9887,
+          "depth": 1.114021,
+          "bed_elevation": 0.228638,
+          "water_elevation": 1.342659
+        },
+        {
+          "chainage": 127.1186,
+          "depth": 1.107695,
+          "bed_elevation": 0.2269093,
+          "water_elevation": 1.334605
+        },
+        {
+          "chainage": 128.2486,
+          "depth": 1.101299,
+          "bed_elevation": 0.2253834,
+          "water_elevation": 1.326682
+        },
+        {
+          "chainage": 129.3785,
+          "depth": 1.094851,
+          "bed_elevation": 0.2240307,
+          "water_elevation": 1.318881
+        },
+        {
+          "chainage": 130.5085,
+          "depth": 1.088368,
+          "bed_elevation": 0.2228226,
+          "water_elevation": 1.311191
+        },
+        {
+          "chainage": 131.6384,
+          "depth": 1.081869,
+          "bed_elevation": 0.2217321,
+          "water_elevation": 1.303601
+        },
+        {
+          "chainage": 132.7684,
+          "depth": 1.07537,
+          "bed_elevation": 0.2207334,
+          "water_elevation": 1.296104
+        },
+        {
+          "chainage": 133.8983,
+          "depth": 1.068888,
+          "bed_elevation": 0.2198021,
+          "water_elevation": 1.28869
+        },
+        {
+          "chainage": 135.0282,
+          "depth": 1.062438,
+          "bed_elevation": 0.2189152,
+          "water_elevation": 1.281353
+        },
+        {
+          "chainage": 136.1582,
+          "depth": 1.056034,
+          "bed_elevation": 0.2180515,
+          "water_elevation": 1.274086
+        },
+        {
+          "chainage": 137.2881,
+          "depth": 1.049692,
+          "bed_elevation": 0.217191,
+          "water_elevation": 1.266883
+        },
+        {
+          "chainage": 138.4181,
+          "depth": 1.043424,
+          "bed_elevation": 0.216315,
+          "water_elevation": 1.259739
+        },
+        {
+          "chainage": 139.548,
+          "depth": 1.037244,
+          "bed_elevation": 0.2154067,
+          "water_elevation": 1.252651
+        },
+        {
+          "chainage": 140.678,
+          "depth": 1.031162,
+          "bed_elevation": 0.2144503,
+          "water_elevation": 1.245612
+        },
+        {
+          "chainage": 141.8079,
+          "depth": 1.02519,
+          "bed_elevation": 0.2134316,
+          "water_elevation": 1.238622
+        },
+        {
+          "chainage": 142.9379,
+          "depth": 1.019337,
+          "bed_elevation": 0.2123376,
+          "water_elevation": 1.231675
+        },
+        {
+          "chainage": 144.0678,
+          "depth": 1.013613,
+          "bed_elevation": 0.2111567,
+          "water_elevation": 1.22477
+        },
+        {
+          "chainage": 145.1977,
+          "depth": 1.008025,
+          "bed_elevation": 0.2098784,
+          "water_elevation": 1.217904
+        },
+        {
+          "chainage": 146.3277,
+          "depth": 1.002581,
+          "bed_elevation": 0.2084936,
+          "water_elevation": 1.211075
+        },
+        {
+          "chainage": 147.4576,
+          "depth": 0.9972874,
+          "bed_elevation": 0.2069939,
+          "water_elevation": 1.204281
+        },
+        {
+          "chainage": 148.5876,
+          "depth": 0.992149,
+          "bed_elevation": 0.2053725,
+          "water_elevation": 1.197522
+        },
+        {
+          "chainage": 149.7175,
+          "depth": 0.9871706,
+          "bed_elevation": 0.2036233,
+          "water_elevation": 1.190794
+        },
+        {
+          "chainage": 150.8475,
+          "depth": 0.9823559,
+          "bed_elevation": 0.201741,
+          "water_elevation": 1.184097
+        },
+        {
+          "chainage": 151.9774,
+          "depth": 0.9777079,
+          "bed_elevation": 0.1997214,
+          "water_elevation": 1.177429
+        },
+        {
+          "chainage": 153.1073,
+          "depth": 0.9732287,
+          "bed_elevation": 0.1975613,
+          "water_elevation": 1.17079
+        },
+        {
+          "chainage": 154.2373,
+          "depth": 0.9689196,
+          "bed_elevation": 0.1952578,
+          "water_elevation": 1.164177
+        },
+        {
+          "chainage": 155.3672,
+          "depth": 0.9647813,
+          "bed_elevation": 0.192809,
+          "water_elevation": 1.15759
+        },
+        {
+          "chainage": 156.4972,
+          "depth": 0.9608138,
+          "bed_elevation": 0.1902138,
+          "water_elevation": 1.151028
+        },
+        {
+          "chainage": 157.6271,
+          "depth": 0.9570165,
+          "bed_elevation": 0.1874713,
+          "water_elevation": 1.144488
+        },
+        {
+          "chainage": 158.7571,
+          "depth": 0.953388,
+          "bed_elevation": 0.1845815,
+          "water_elevation": 1.13797
+        },
+        {
+          "chainage": 159.887,
+          "depth": 0.9499267,
+          "bed_elevation": 0.1815448,
+          "water_elevation": 1.131471
+        },
+        {
+          "chainage": 161.0169,
+          "depth": 0.9466302,
+          "bed_elevation": 0.1783619,
+          "water_elevation": 1.124992
+        },
+        {
+          "chainage": 162.1469,
+          "depth": 0.9434958,
+          "bed_elevation": 0.1750343,
+          "water_elevation": 1.11853
+        },
+        {
+          "chainage": 163.2768,
+          "depth": 0.9405203,
+          "bed_elevation": 0.1715634,
+          "water_elevation": 1.112084
+        },
+        {
+          "chainage": 164.4068,
+          "depth": 0.9377002,
+          "bed_elevation": 0.1679514,
+          "water_elevation": 1.105652
+        },
+        {
+          "chainage": 165.5367,
+          "depth": 0.9350316,
+          "bed_elevation": 0.1642004,
+          "water_elevation": 1.099232
+        },
+        {
+          "chainage": 166.6667,
+          "depth": 0.9325104,
+          "bed_elevation": 0.160313,
+          "water_elevation": 1.092823
+        },
+        {
+          "chainage": 167.7966,
+          "depth": 0.9301321,
+          "bed_elevation": 0.156292,
+          "water_elevation": 1.086424
+        },
+        {
+          "chainage": 168.9266,
+          "depth": 0.9278922,
+          "bed_elevation": 0.1521403,
+          "water_elevation": 1.080032
+        },
+        {
+          "chainage": 170.0565,
+          "depth": 0.9257859,
+          "bed_elevation": 0.1478611,
+          "water_elevation": 1.073647
+        },
+        {
+          "chainage": 171.1864,
+          "depth": 0.9238081,
+          "bed_elevation": 0.1434576,
+          "water_elevation": 1.067266
+        },
+        {
+          "chainage": 172.3164,
+          "depth": 0.9219541,
+          "bed_elevation": 0.1389333,
+          "water_elevation": 1.060887
+        },
+        {
+          "chainage": 173.4463,
+          "depth": 0.9202186,
+          "bed_elevation": 0.1342917,
+          "water_elevation": 1.05451
+        },
+        {
+          "chainage": 174.5763,
+          "depth": 0.9185965,
+          "bed_elevation": 0.1295363,
+          "water_elevation": 1.048133
+        },
+        {
+          "chainage": 175.7062,
+          "depth": 0.9170827,
+          "bed_elevation": 0.1246707,
+          "water_elevation": 1.041753
+        },
+        {
+          "chainage": 176.8362,
+          "depth": 0.9156721,
+          "bed_elevation": 0.1196986,
+          "water_elevation": 1.035371
+        },
+        {
+          "chainage": 177.9661,
+          "depth": 0.9143597,
+          "bed_elevation": 0.1146236,
+          "water_elevation": 1.028983
+        },
+        {
+          "chainage": 179.096,
+          "depth": 0.9131404,
+          "bed_elevation": 0.1094494,
+          "water_elevation": 1.02259
+        },
+        {
+          "chainage": 180.226,
+          "depth": 0.9120093,
+          "bed_elevation": 0.1041797,
+          "water_elevation": 1.016189
+        },
+        {
+          "chainage": 181.3559,
+          "depth": 0.9109615,
+          "bed_elevation": 0.09881795,
+          "water_elevation": 1.009779
+        },
+        {
+          "chainage": 182.4859,
+          "depth": 0.9099924,
+          "bed_elevation": 0.09336786,
+          "water_elevation": 1.00336
+        },
+        {
+          "chainage": 183.6158,
+          "depth": 0.9090973,
+          "bed_elevation": 0.0878329,
+          "water_elevation": 0.9969302
+        },
+        {
+          "chainage": 184.7458,
+          "depth": 0.9082719,
+          "bed_elevation": 0.08221652,
+          "water_elevation": 0.9904884
+        },
+        {
+          "chainage": 185.8757,
+          "depth": 0.9075117,
+          "bed_elevation": 0.07652211,
+          "water_elevation": 0.9840338
+        },
+        {
+          "chainage": 187.0056,
+          "depth": 0.9068127,
+          "bed_elevation": 0.07075297,
+          "water_elevation": 0.9775657
+        },
+        {
+          "chainage": 188.1356,
+          "depth": 0.9061709,
+          "bed_elevation": 0.06491233,
+          "water_elevation": 0.9710832
+        },
+        {
+          "chainage": 189.2655,
+          "depth": 0.9055824,
+          "bed_elevation": 0.05900333,
+          "water_elevation": 0.9645857
+        },
+        {
+          "chainage": 190.3955,
+          "depth": 0.9050436,
+          "bed_elevation": 0.053029,
+          "water_elevation": 0.9580726
+        },
+        {
+          "chainage": 191.5254,
+          "depth": 0.9045509,
+          "bed_elevation": 0.04699229,
+          "water_elevation": 0.9515432
+        },
+        {
+          "chainage": 192.6554,
+          "depth": 0.9041012,
+          "bed_elevation": 0.04089606,
+          "water_elevation": 0.9449972
+        },
+        {
+          "chainage": 193.7853,
+          "depth": 0.9036912,
+          "bed_elevation": 0.03474305,
+          "water_elevation": 0.9384342
+        },
+        {
+          "chainage": 194.9153,
+          "depth": 0.9033179,
+          "bed_elevation": 0.02853591,
+          "water_elevation": 0.9318538
+        },
+        {
+          "chainage": 196.0452,
+          "depth": 0.9029786,
+          "bed_elevation": 0.0222772,
+          "water_elevation": 0.9252558
+        },
+        {
+          "chainage": 197.1751,
+          "depth": 0.9026705,
+          "bed_elevation": 0.01596936,
+          "water_elevation": 0.9186399
+        },
+        {
+          "chainage": 198.3051,
+          "depth": 0.9023913,
+          "bed_elevation": 0.009614736,
+          "water_elevation": 0.912006
+        },
+        {
+          "chainage": 199.435,
+          "depth": 0.9021385,
+          "bed_elevation": 0.003215592,
+          "water_elevation": 0.9053541
+        }
+      ],
+      "coarse_stride": 4,
+      "depth_tolerance_m": 0.0001,
+      "minimum_improvement": 4.0,
+      "external_bed_refinement_m": 2.9999999999752447e-06,
+      "external_coarse": {
+        "arguments": [
+          "1.5",
+          "1",
+          "1",
+          "1",
+          "362673"
+        ],
+        "stdout_sha256": "31c3b015b0eb8692a4b7b304861c3cf9854ecc2b1108e5b03c21a0c15dea4451"
+      },
+      "external_fine": {
+        "arguments": [
+          "1.5",
+          "1",
+          "1",
+          "1",
+          "725169"
+        ],
+        "stdout_sha256": "c6134993a42412a0979a7691ba904e38c02a897a0cd9f90dd965b6e7c8b8ce19"
+      }
+    },
+    {
+      "id": "swashes_b1_supercritical",
+      "river": {
+        "discharge": 19.99658482564192,
+        "normal_slope": 0.01,
+        "boundary": {
+          "regime": "supercritical",
+          "depth": 0.5035642
+        },
+        "stations": [
+          {
+            "chainage": 0.5649718,
+            "bed_elevation": 6.985468,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.577849458796164
+            }
+          },
+          {
+            "chainage": 1.694915,
+            "bed_elevation": 6.932122,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.553597613479033
+            }
+          },
+          {
+            "chainage": 2.824859,
+            "bed_elevation": 6.878526,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.528253773949473
+            }
+          },
+          {
+            "chainage": 3.954802,
+            "bed_elevation": 6.824683,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.501789251780353
+            }
+          },
+          {
+            "chainage": 5.084746,
+            "bed_elevation": 6.770597,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.474175855419844
+            }
+          },
+          {
+            "chainage": 6.214689,
+            "bed_elevation": 6.716272,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.445386180087125
+            }
+          },
+          {
+            "chainage": 7.344633,
+            "bed_elevation": 6.661717,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.415393522442411
+            }
+          },
+          {
+            "chainage": 8.474576,
+            "bed_elevation": 6.60694,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.384172198261867
+            }
+          },
+          {
+            "chainage": 9.60452,
+            "bed_elevation": 6.551952,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.351697446906792
+            }
+          },
+          {
+            "chainage": 10.73446,
+            "bed_elevation": 6.496765,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.317945863624157
+            }
+          },
+          {
+            "chainage": 11.86441,
+            "bed_elevation": 6.441393,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.28289474050708
+            }
+          },
+          {
+            "chainage": 12.99435,
+            "bed_elevation": 6.385854,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.24652381748048
+            }
+          },
+          {
+            "chainage": 14.12429,
+            "bed_elevation": 6.330165,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.2088134351687
+            }
+          },
+          {
+            "chainage": 15.25424,
+            "bed_elevation": 6.274348,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.169745540163172
+            }
+          },
+          {
+            "chainage": 16.38418,
+            "bed_elevation": 6.218424,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.129304904627473
+            }
+          },
+          {
+            "chainage": 17.51412,
+            "bed_elevation": 6.16242,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.08747718163386
+            }
+          },
+          {
+            "chainage": 18.64407,
+            "bed_elevation": 6.106362,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.044250016918218
+            }
+          },
+          {
+            "chainage": 19.77401,
+            "bed_elevation": 6.05028,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.999614381104067
+            }
+          },
+          {
+            "chainage": 20.90395,
+            "bed_elevation": 5.994203,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.953562402891798
+            }
+          },
+          {
+            "chainage": 22.0339,
+            "bed_elevation": 5.938165,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.906088587294901
+            }
+          },
+          {
+            "chainage": 23.16384,
+            "bed_elevation": 5.882199,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.857191257348603
+            }
+          },
+          {
+            "chainage": 24.29379,
+            "bed_elevation": 5.826343,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.806869703950722
+            }
+          },
+          {
+            "chainage": 25.42373,
+            "bed_elevation": 5.770632,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.755127766873269
+            }
+          },
+          {
+            "chainage": 26.55367,
+            "bed_elevation": 5.715103,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.701970864070601
+            }
+          },
+          {
+            "chainage": 27.68362,
+            "bed_elevation": 5.659797,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.647407382201084
+            }
+          },
+          {
+            "chainage": 28.81356,
+            "bed_elevation": 5.60475,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.591450287338631
+            }
+          },
+          {
+            "chainage": 29.9435,
+            "bed_elevation": 5.550001,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.534114327551922
+            }
+          },
+          {
+            "chainage": 31.07345,
+            "bed_elevation": 5.495589,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.475417520394513
+            }
+          },
+          {
+            "chainage": 32.20339,
+            "bed_elevation": 5.44155,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.415382852931499
+            }
+          },
+          {
+            "chainage": 33.33333,
+            "bed_elevation": 5.38792,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.35403524384546
+            }
+          },
+          {
+            "chainage": 34.46328,
+            "bed_elevation": 5.334734,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.29140312056861
+            }
+          },
+          {
+            "chainage": 35.59322,
+            "bed_elevation": 5.282023,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.227520196604537
+            }
+          },
+          {
+            "chainage": 36.72316,
+            "bed_elevation": 5.229817,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.162422198175083
+            }
+          },
+          {
+            "chainage": 37.85311,
+            "bed_elevation": 5.178143,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.096148521635278
+            }
+          },
+          {
+            "chainage": 38.98305,
+            "bed_elevation": 5.127026,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.028744073795872
+            }
+          },
+          {
+            "chainage": 40.11299,
+            "bed_elevation": 5.076484,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.960255773662686
+            }
+          },
+          {
+            "chainage": 41.24294,
+            "bed_elevation": 5.026536,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.890734278837211
+            }
+          },
+          {
+            "chainage": 42.37288,
+            "bed_elevation": 4.977195,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.8202358724828525
+            }
+          },
+          {
+            "chainage": 43.50282,
+            "bed_elevation": 4.928469,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.748818756767149
+            }
+          },
+          {
+            "chainage": 44.63277,
+            "bed_elevation": 4.880365,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.6765448351641234
+            }
+          },
+          {
+            "chainage": 45.76271,
+            "bed_elevation": 4.832883,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.6034816279279465
+            }
+          },
+          {
+            "chainage": 46.89266,
+            "bed_elevation": 4.786022,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.529697724331914
+            }
+          },
+          {
+            "chainage": 48.0226,
+            "bed_elevation": 4.739776,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.4552678859828
+            }
+          },
+          {
+            "chainage": 49.15254,
+            "bed_elevation": 4.694136,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.380268411673778
+            }
+          },
+          {
+            "chainage": 50.28249,
+            "bed_elevation": 4.649088,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.304778979584617
+            }
+          },
+          {
+            "chainage": 51.41243,
+            "bed_elevation": 4.604619,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.2288845662508985
+            }
+          },
+          {
+            "chainage": 52.54237,
+            "bed_elevation": 4.560709,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.152671315279891
+            }
+          },
+          {
+            "chainage": 53.67232,
+            "bed_elevation": 4.517338,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.076228393488803
+            }
+          },
+          {
+            "chainage": 54.80226,
+            "bed_elevation": 4.474487,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.9996498841041275
+            }
+          },
+          {
+            "chainage": 55.9322,
+            "bed_elevation": 4.43213,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.923030564045532
+            }
+          },
+          {
+            "chainage": 57.06215,
+            "bed_elevation": 4.390246,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.846467756379606
+            }
+          },
+          {
+            "chainage": 58.19209,
+            "bed_elevation": 4.348808,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.770063176381393
+            }
+          },
+          {
+            "chainage": 59.32203,
+            "bed_elevation": 4.307795,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.693918664109611
+            }
+          },
+          {
+            "chainage": 60.45198,
+            "bed_elevation": 4.267182,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.618138014988535
+            }
+          },
+          {
+            "chainage": 61.58192,
+            "bed_elevation": 4.226947,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.5428287575055855
+            }
+          },
+          {
+            "chainage": 62.71186,
+            "bed_elevation": 4.187069,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.468097893224282
+            }
+          },
+          {
+            "chainage": 63.84181,
+            "bed_elevation": 4.147528,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.39405368704832
+            }
+          },
+          {
+            "chainage": 64.97175,
+            "bed_elevation": 4.108306,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.320807355909561
+            }
+          },
+          {
+            "chainage": 66.10169,
+            "bed_elevation": 4.069389,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.248468872863432
+            }
+          },
+          {
+            "chainage": 67.23164,
+            "bed_elevation": 4.030763,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.177148698628544
+            }
+          },
+          {
+            "chainage": 68.36158,
+            "bed_elevation": 3.992419,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.106959361610806
+            }
+          },
+          {
+            "chainage": 69.49153,
+            "bed_elevation": 3.954349,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.038010781686721
+            }
+          },
+          {
+            "chainage": 70.62147,
+            "bed_elevation": 3.916548,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.970414946787954
+            }
+          },
+          {
+            "chainage": 71.75141,
+            "bed_elevation": 3.879016,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.904281322255981
+            }
+          },
+          {
+            "chainage": 72.88136,
+            "bed_elevation": 3.841753,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.839718444590493
+            }
+          },
+          {
+            "chainage": 74.0113,
+            "bed_elevation": 3.804765,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.776835280531606
+            }
+          },
+          {
+            "chainage": 75.14124,
+            "bed_elevation": 3.768059,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.715737499864616
+            }
+          },
+          {
+            "chainage": 76.27119,
+            "bed_elevation": 3.731645,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.656528963611328
+            }
+          },
+          {
+            "chainage": 77.40113,
+            "bed_elevation": 3.695535,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.599312929522835
+            }
+          },
+          {
+            "chainage": 78.53107,
+            "bed_elevation": 3.659746,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.544188614152836
+            }
+          },
+          {
+            "chainage": 79.66102,
+            "bed_elevation": 3.624295,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.491252559443564
+            }
+          },
+          {
+            "chainage": 80.79096,
+            "bed_elevation": 3.589201,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.440599671349121
+            }
+          },
+          {
+            "chainage": 81.9209,
+            "bed_elevation": 3.554486,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.392320130425762
+            }
+          },
+          {
+            "chainage": 83.05085,
+            "bed_elevation": 3.520172,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.3465006218944096
+            }
+          },
+          {
+            "chainage": 84.18079,
+            "bed_elevation": 3.486283,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.3032251963376185
+            }
+          },
+          {
+            "chainage": 85.31073,
+            "bed_elevation": 3.452844,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.262572583902169
+            }
+          },
+          {
+            "chainage": 86.44068,
+            "bed_elevation": 3.419878,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.224617274210473
+            }
+          },
+          {
+            "chainage": 87.57062,
+            "bed_elevation": 3.387412,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.189430190389044
+            }
+          },
+          {
+            "chainage": 88.70056,
+            "bed_elevation": 3.355468,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.157076456154181
+            }
+          },
+          {
+            "chainage": 89.83051,
+            "bed_elevation": 3.32407,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.12761631337495
+            }
+          },
+          {
+            "chainage": 90.96045,
+            "bed_elevation": 3.293239,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.101105603043035
+            }
+          },
+          {
+            "chainage": 92.0904,
+            "bed_elevation": 3.262996,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0775938324752685
+            }
+          },
+          {
+            "chainage": 93.22034,
+            "bed_elevation": 3.233359,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0571258932436765
+            }
+          },
+          {
+            "chainage": 94.35028,
+            "bed_elevation": 3.204341,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.03974039832537
+            }
+          },
+          {
+            "chainage": 95.48023,
+            "bed_elevation": 3.175956,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.025470306257313
+            }
+          },
+          {
+            "chainage": 96.61017,
+            "bed_elevation": 3.148213,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.014343072485649
+            }
+          },
+          {
+            "chainage": 97.74011,
+            "bed_elevation": 3.121116,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.006379804858535
+            }
+          },
+          {
+            "chainage": 98.87006,
+            "bed_elevation": 3.094667,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0015957008242005
+            }
+          },
+          {
+            "chainage": 100.0,
+            "bed_elevation": 3.068863,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0
+            }
+          },
+          {
+            "chainage": 101.1299,
+            "bed_elevation": 3.043697,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.00159558786826
+            }
+          },
+          {
+            "chainage": 102.2599,
+            "bed_elevation": 3.019158,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.006379861283821
+            }
+          },
+          {
+            "chainage": 103.3898,
+            "bed_elevation": 2.995229,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.014342818978823
+            }
+          },
+          {
+            "chainage": 104.5198,
+            "bed_elevation": 2.97189,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.025470643514372
+            }
+          },
+          {
+            "chainage": 105.6497,
+            "bed_elevation": 2.949116,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.03974011808508
+            }
+          },
+          {
+            "chainage": 106.7797,
+            "bed_elevation": 2.926877,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.057126563465726
+            }
+          },
+          {
+            "chainage": 107.9096,
+            "bed_elevation": 2.90514,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.0775938324752685
+            }
+          },
+          {
+            "chainage": 109.0395,
+            "bed_elevation": 2.883867,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.10110449595095
+            }
+          },
+          {
+            "chainage": 110.1695,
+            "bed_elevation": 2.863016,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.127616561123352
+            }
+          },
+          {
+            "chainage": 111.2994,
+            "bed_elevation": 2.842542,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.157075361709515
+            }
+          },
+          {
+            "chainage": 112.4294,
+            "bed_elevation": 2.822396,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.18943078831349
+            }
+          },
+          {
+            "chainage": 113.5593,
+            "bed_elevation": 2.802528,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.224616626701482
+            }
+          },
+          {
+            "chainage": 114.6893,
+            "bed_elevation": 2.782884,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.262573627743376
+            }
+          },
+          {
+            "chainage": 115.8192,
+            "bed_elevation": 2.763406,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.3032248248413865
+            }
+          },
+          {
+            "chainage": 116.9492,
+            "bed_elevation": 2.744037,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.346502593718375
+            }
+          },
+          {
+            "chainage": 118.0791,
+            "bed_elevation": 2.724719,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.392320130425762
+            }
+          },
+          {
+            "chainage": 119.209,
+            "bed_elevation": 2.705389,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.440597919716542
+            }
+          },
+          {
+            "chainage": 120.339,
+            "bed_elevation": 2.685988,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.491253476477161
+            }
+          },
+          {
+            "chainage": 121.4689,
+            "bed_elevation": 2.666455,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.544187179231067
+            }
+          },
+          {
+            "chainage": 122.5989,
+            "bed_elevation": 2.646728,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.599314421281897
+            }
+          },
+          {
+            "chainage": 123.7288,
+            "bed_elevation": 2.626746,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.656528448284413
+            }
+          },
+          {
+            "chainage": 124.8588,
+            "bed_elevation": 2.606452,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.715739629894866
+            }
+          },
+          {
+            "chainage": 125.9887,
+            "bed_elevation": 2.585786,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.776835280531606
+            }
+          },
+          {
+            "chainage": 127.1186,
+            "bed_elevation": 2.564693,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.839716188167989
+            }
+          },
+          {
+            "chainage": 128.2486,
+            "bed_elevation": 2.543119,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.9042819007474305
+            }
+          },
+          {
+            "chainage": 129.3785,
+            "bed_elevation": 2.521011,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 5.970413171039188
+            }
+          },
+          {
+            "chainage": 130.5085,
+            "bed_elevation": 2.498322,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.038012594800636
+            }
+          },
+          {
+            "chainage": 131.6384,
+            "bed_elevation": 2.475004,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.106958129914453
+            }
+          },
+          {
+            "chainage": 132.7684,
+            "bed_elevation": 2.451015,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.177151204000607
+            }
+          },
+          {
+            "chainage": 133.8983,
+            "bed_elevation": 2.426317,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.248468237010647
+            }
+          },
+          {
+            "chainage": 135.0282,
+            "bed_elevation": 2.400873,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.320804134018456
+            }
+          },
+          {
+            "chainage": 136.1582,
+            "bed_elevation": 2.374653,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.394054338970809
+            }
+          },
+          {
+            "chainage": 137.2881,
+            "bed_elevation": 2.347629,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.4680952592635075
+            }
+          },
+          {
+            "chainage": 138.4181,
+            "bed_elevation": 2.319778,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.542830085684491
+            }
+          },
+          {
+            "chainage": 139.548,
+            "bed_elevation": 2.291081,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.618136677529154
+            }
+          },
+          {
+            "chainage": 140.678,
+            "bed_elevation": 2.261525,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.6939206813799
+            }
+          },
+          {
+            "chainage": 141.8079,
+            "bed_elevation": 2.2311,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.770062501196862
+            }
+          },
+          {
+            "chainage": 142.9379,
+            "bed_elevation": 2.199801,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.846471141527122
+            }
+          },
+          {
+            "chainage": 144.0678,
+            "bed_elevation": 2.167626,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.923030564045533
+            }
+          },
+          {
+            "chainage": 145.1977,
+            "bed_elevation": 2.134579,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 6.999647171923213
+            }
+          },
+          {
+            "chainage": 146.3277,
+            "bed_elevation": 2.100669,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.076229748004335
+            }
+          },
+          {
+            "chainage": 147.4576,
+            "bed_elevation": 2.065906,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.152669288367743
+            }
+          },
+          {
+            "chainage": 148.5876,
+            "bed_elevation": 2.030307,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.228886585877263
+            }
+          },
+          {
+            "chainage": 149.7175,
+            "bed_elevation": 1.993892,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.30477830958621
+            }
+          },
+          {
+            "chainage": 150.8475,
+            "bed_elevation": 1.956681,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.380271075807414
+            }
+          },
+          {
+            "chainage": 151.9774,
+            "bed_elevation": 1.918702,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.4552678859828
+            }
+          },
+          {
+            "chainage": 153.1073,
+            "bed_elevation": 1.879983,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.529695100507851
+            }
+          },
+          {
+            "chainage": 154.2373,
+            "bed_elevation": 1.840553,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.603482277831228
+            }
+          },
+          {
+            "chainage": 155.3672,
+            "bed_elevation": 1.800447,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.676542905514697
+            }
+          },
+          {
+            "chainage": 156.4972,
+            "bed_elevation": 1.759699,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.748820028620934
+            }
+          },
+          {
+            "chainage": 157.6271,
+            "bed_elevation": 1.718344,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.82023461634742
+            }
+          },
+          {
+            "chainage": 158.7571,
+            "bed_elevation": 1.676418,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.890736757521649
+            }
+          },
+          {
+            "chainage": 159.887,
+            "bed_elevation": 1.633959,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 7.960255162891731
+            }
+          },
+          {
+            "chainage": 161.0169,
+            "bed_elevation": 1.591005,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.028741066794204
+            }
+          },
+          {
+            "chainage": 162.1469,
+            "bed_elevation": 1.547591,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.096149113227476
+            }
+          },
+          {
+            "chainage": 163.2768,
+            "bed_elevation": 1.503756,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.162419872652016
+            }
+          },
+          {
+            "chainage": 164.4068,
+            "bed_elevation": 1.459534,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.227521338201514
+            }
+          },
+          {
+            "chainage": 165.5367,
+            "bed_elevation": 1.414961,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.291402000810061
+            }
+          },
+          {
+            "chainage": 166.6667,
+            "bed_elevation": 1.370071,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.354036889809844
+            }
+          },
+          {
+            "chainage": 167.7966,
+            "bed_elevation": 1.324896,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.415382315773094
+            }
+          },
+          {
+            "chainage": 168.9266,
+            "bed_elevation": 1.279466,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.475420147498467
+            }
+          },
+          {
+            "chainage": 170.0565,
+            "bed_elevation": 1.233811,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.534114327551924
+            }
+          },
+          {
+            "chainage": 171.1864,
+            "bed_elevation": 1.187958,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.591448281944974
+            }
+          },
+          {
+            "chainage": 172.3164,
+            "bed_elevation": 1.141933,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.647408360346883
+            }
+          },
+          {
+            "chainage": 173.4463,
+            "bed_elevation": 1.09576,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.701969434037961
+            }
+          },
+          {
+            "chainage": 174.5763,
+            "bed_elevation": 1.04946,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.755129159441687
+            }
+          },
+          {
+            "chainage": 175.7062,
+            "bed_elevation": 1.003053,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.806869252313803
+            }
+          },
+          {
+            "chainage": 176.8362,
+            "bed_elevation": 0.9565571,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.85719301352842
+            }
+          },
+          {
+            "chainage": 177.9661,
+            "bed_elevation": 0.9099892,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.906088587294901
+            }
+          },
+          {
+            "chainage": 179.096,
+            "bed_elevation": 0.8633638,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.953560333663395
+            }
+          },
+          {
+            "chainage": 180.226,
+            "bed_elevation": 0.8166939,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 8.999614782388644
+            }
+          },
+          {
+            "chainage": 181.3559,
+            "bed_elevation": 0.7699911,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.04424885057879
+            }
+          },
+          {
+            "chainage": 182.4859,
+            "bed_elevation": 0.7232656,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.087477934336118
+            }
+          },
+          {
+            "chainage": 183.6158,
+            "bed_elevation": 0.676526,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.129304176588413
+            }
+          },
+          {
+            "chainage": 184.7458,
+            "bed_elevation": 0.62978,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.169746947373214
+            }
+          },
+          {
+            "chainage": 185.8757,
+            "bed_elevation": 0.5830339,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.208813095450108
+            }
+          },
+          {
+            "chainage": 187.0056,
+            "bed_elevation": 0.5362932,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.246522178562042
+            }
+          },
+          {
+            "chainage": 188.1356,
+            "bed_elevation": 0.4895622,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.282895056519505
+            }
+          },
+          {
+            "chainage": 189.2655,
+            "bed_elevation": 0.4428445,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.317944645944728
+            }
+          },
+          {
+            "chainage": 190.3955,
+            "bed_elevation": 0.3961429,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.351698032942798
+            }
+          },
+          {
+            "chainage": 191.5254,
+            "bed_elevation": 0.3494596,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.384171521894777
+            }
+          },
+          {
+            "chainage": 192.6554,
+            "bed_elevation": 0.3027962,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.415394416196193
+            }
+          },
+          {
+            "chainage": 193.7853,
+            "bed_elevation": 0.2561535,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.445385894006606
+            }
+          },
+          {
+            "chainage": 194.9153,
+            "bed_elevation": 0.2095324,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.474177003319712
+            }
+          },
+          {
+            "chainage": 196.0452,
+            "bed_elevation": 0.1629328,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.5017892996311
+            }
+          },
+          {
+            "chainage": 197.1751,
+            "bed_elevation": 0.1163547,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.52825283418761
+            }
+          },
+          {
+            "chainage": 198.3051,
+            "bed_elevation": 0.06979764,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.553597942606121
+            }
+          },
+          {
+            "chainage": 199.435,
+            "bed_elevation": 0.02326096,
+            "roughness": 0.03000512363644271,
+            "section": {
+              "kind": "rectangle",
+              "bank_height": 8,
+              "width": 9.577848866926464
+            }
+          }
+        ]
+      },
+      "rows": [
+        {
+          "chainage": 0.5649718,
+          "depth": 0.5035642,
+          "bed_elevation": 6.985468,
+          "water_elevation": 7.489032
+        },
+        {
+          "chainage": 1.694915,
+          "depth": 0.5039855,
+          "bed_elevation": 6.932122,
+          "water_elevation": 7.436107
+        },
+        {
+          "chainage": 2.824859,
+          "depth": 0.5044509,
+          "bed_elevation": 6.878526,
+          "water_elevation": 7.382977
+        },
+        {
+          "chainage": 3.954802,
+          "depth": 0.5049643,
+          "bed_elevation": 6.824683,
+          "water_elevation": 7.329647
+        },
+        {
+          "chainage": 5.084746,
+          "depth": 0.5055298,
+          "bed_elevation": 6.770597,
+          "water_elevation": 7.276127
+        },
+        {
+          "chainage": 6.214689,
+          "depth": 0.5061519,
+          "bed_elevation": 6.716272,
+          "water_elevation": 7.222424
+        },
+        {
+          "chainage": 7.344633,
+          "depth": 0.5068353,
+          "bed_elevation": 6.661717,
+          "water_elevation": 7.168553
+        },
+        {
+          "chainage": 8.474576,
+          "depth": 0.5075849,
+          "bed_elevation": 6.60694,
+          "water_elevation": 7.114525
+        },
+        {
+          "chainage": 9.60452,
+          "depth": 0.5084059,
+          "bed_elevation": 6.551952,
+          "water_elevation": 7.060358
+        },
+        {
+          "chainage": 10.73446,
+          "depth": 0.509304,
+          "bed_elevation": 6.496765,
+          "water_elevation": 7.006069
+        },
+        {
+          "chainage": 11.86441,
+          "depth": 0.5102848,
+          "bed_elevation": 6.441393,
+          "water_elevation": 6.951678
+        },
+        {
+          "chainage": 12.99435,
+          "depth": 0.5113545,
+          "bed_elevation": 6.385854,
+          "water_elevation": 6.897208
+        },
+        {
+          "chainage": 14.12429,
+          "depth": 0.5125195,
+          "bed_elevation": 6.330165,
+          "water_elevation": 6.842684
+        },
+        {
+          "chainage": 15.25424,
+          "depth": 0.5137864,
+          "bed_elevation": 6.274348,
+          "water_elevation": 6.788134
+        },
+        {
+          "chainage": 16.38418,
+          "depth": 0.5151622,
+          "bed_elevation": 6.218424,
+          "water_elevation": 6.733587
+        },
+        {
+          "chainage": 17.51412,
+          "depth": 0.516654,
+          "bed_elevation": 6.16242,
+          "water_elevation": 6.679074
+        },
+        {
+          "chainage": 18.64407,
+          "depth": 0.5182692,
+          "bed_elevation": 6.106362,
+          "water_elevation": 6.624632
+        },
+        {
+          "chainage": 19.77401,
+          "depth": 0.5200154,
+          "bed_elevation": 6.05028,
+          "water_elevation": 6.570295
+        },
+        {
+          "chainage": 20.90395,
+          "depth": 0.5219006,
+          "bed_elevation": 5.994203,
+          "water_elevation": 6.516103
+        },
+        {
+          "chainage": 22.0339,
+          "depth": 0.5239328,
+          "bed_elevation": 5.938165,
+          "water_elevation": 6.462097
+        },
+        {
+          "chainage": 23.16384,
+          "depth": 0.5261202,
+          "bed_elevation": 5.882199,
+          "water_elevation": 6.40832
+        },
+        {
+          "chainage": 24.29379,
+          "depth": 0.5284712,
+          "bed_elevation": 5.826343,
+          "water_elevation": 6.354814
+        },
+        {
+          "chainage": 25.42373,
+          "depth": 0.5309941,
+          "bed_elevation": 5.770632,
+          "water_elevation": 6.301626
+        },
+        {
+          "chainage": 26.55367,
+          "depth": 0.5336976,
+          "bed_elevation": 5.715103,
+          "water_elevation": 6.248801
+        },
+        {
+          "chainage": 27.68362,
+          "depth": 0.5365901,
+          "bed_elevation": 5.659797,
+          "water_elevation": 6.196387
+        },
+        {
+          "chainage": 28.81356,
+          "depth": 0.5396802,
+          "bed_elevation": 5.60475,
+          "water_elevation": 6.14443
+        },
+        {
+          "chainage": 29.9435,
+          "depth": 0.5429764,
+          "bed_elevation": 5.550001,
+          "water_elevation": 6.092978
+        },
+        {
+          "chainage": 31.07345,
+          "depth": 0.546487,
+          "bed_elevation": 5.495589,
+          "water_elevation": 6.042076
+        },
+        {
+          "chainage": 32.20339,
+          "depth": 0.5502202,
+          "bed_elevation": 5.44155,
+          "water_elevation": 5.99177
+        },
+        {
+          "chainage": 33.33333,
+          "depth": 0.554184,
+          "bed_elevation": 5.38792,
+          "water_elevation": 5.942104
+        },
+        {
+          "chainage": 34.46328,
+          "depth": 0.5583861,
+          "bed_elevation": 5.334734,
+          "water_elevation": 5.89312
+        },
+        {
+          "chainage": 35.59322,
+          "depth": 0.5628337,
+          "bed_elevation": 5.282023,
+          "water_elevation": 5.844857
+        },
+        {
+          "chainage": 36.72316,
+          "depth": 0.5675339,
+          "bed_elevation": 5.229817,
+          "water_elevation": 5.797351
+        },
+        {
+          "chainage": 37.85311,
+          "depth": 0.572493,
+          "bed_elevation": 5.178143,
+          "water_elevation": 5.750636
+        },
+        {
+          "chainage": 38.98305,
+          "depth": 0.577717,
+          "bed_elevation": 5.127026,
+          "water_elevation": 5.704743
+        },
+        {
+          "chainage": 40.11299,
+          "depth": 0.5832112,
+          "bed_elevation": 5.076484,
+          "water_elevation": 5.659695
+        },
+        {
+          "chainage": 41.24294,
+          "depth": 0.58898,
+          "bed_elevation": 5.026536,
+          "water_elevation": 5.615516
+        },
+        {
+          "chainage": 42.37288,
+          "depth": 0.5950274,
+          "bed_elevation": 4.977195,
+          "water_elevation": 5.572222
+        },
+        {
+          "chainage": 43.50282,
+          "depth": 0.6013564,
+          "bed_elevation": 4.928469,
+          "water_elevation": 5.529825
+        },
+        {
+          "chainage": 44.63277,
+          "depth": 0.6079689,
+          "bed_elevation": 4.880365,
+          "water_elevation": 5.488334
+        },
+        {
+          "chainage": 45.76271,
+          "depth": 0.614866,
+          "bed_elevation": 4.832883,
+          "water_elevation": 5.447749
+        },
+        {
+          "chainage": 46.89266,
+          "depth": 0.6220478,
+          "bed_elevation": 4.786022,
+          "water_elevation": 5.40807
+        },
+        {
+          "chainage": 48.0226,
+          "depth": 0.6295132,
+          "bed_elevation": 4.739776,
+          "water_elevation": 5.36929
+        },
+        {
+          "chainage": 49.15254,
+          "depth": 0.6372599,
+          "bed_elevation": 4.694136,
+          "water_elevation": 5.331396
+        },
+        {
+          "chainage": 50.28249,
+          "depth": 0.6452843,
+          "bed_elevation": 4.649088,
+          "water_elevation": 5.294373
+        },
+        {
+          "chainage": 51.41243,
+          "depth": 0.6535816,
+          "bed_elevation": 4.604619,
+          "water_elevation": 5.2582
+        },
+        {
+          "chainage": 52.54237,
+          "depth": 0.6621456,
+          "bed_elevation": 4.560709,
+          "water_elevation": 5.222854
+        },
+        {
+          "chainage": 53.67232,
+          "depth": 0.6709688,
+          "bed_elevation": 4.517338,
+          "water_elevation": 5.188307
+        },
+        {
+          "chainage": 54.80226,
+          "depth": 0.680042,
+          "bed_elevation": 4.474487,
+          "water_elevation": 5.154529
+        },
+        {
+          "chainage": 55.9322,
+          "depth": 0.6893548,
+          "bed_elevation": 4.43213,
+          "water_elevation": 5.121485
+        },
+        {
+          "chainage": 57.06215,
+          "depth": 0.6988953,
+          "bed_elevation": 4.390246,
+          "water_elevation": 5.089141
+        },
+        {
+          "chainage": 58.19209,
+          "depth": 0.7086498,
+          "bed_elevation": 4.348808,
+          "water_elevation": 5.057458
+        },
+        {
+          "chainage": 59.32203,
+          "depth": 0.7186035,
+          "bed_elevation": 4.307795,
+          "water_elevation": 5.026399
+        },
+        {
+          "chainage": 60.45198,
+          "depth": 0.7287398,
+          "bed_elevation": 4.267182,
+          "water_elevation": 4.995922
+        },
+        {
+          "chainage": 61.58192,
+          "depth": 0.7390407,
+          "bed_elevation": 4.226947,
+          "water_elevation": 4.965988
+        },
+        {
+          "chainage": 62.71186,
+          "depth": 0.7494867,
+          "bed_elevation": 4.187069,
+          "water_elevation": 4.936556
+        },
+        {
+          "chainage": 63.84181,
+          "depth": 0.760057,
+          "bed_elevation": 4.147528,
+          "water_elevation": 4.907585
+        },
+        {
+          "chainage": 64.97175,
+          "depth": 0.7707292,
+          "bed_elevation": 4.108306,
+          "water_elevation": 4.879035
+        },
+        {
+          "chainage": 66.10169,
+          "depth": 0.7814798,
+          "bed_elevation": 4.069389,
+          "water_elevation": 4.850869
+        },
+        {
+          "chainage": 67.23164,
+          "depth": 0.7922838,
+          "bed_elevation": 4.030763,
+          "water_elevation": 4.823047
+        },
+        {
+          "chainage": 68.36158,
+          "depth": 0.8031153,
+          "bed_elevation": 3.992419,
+          "water_elevation": 4.795534
+        },
+        {
+          "chainage": 69.49153,
+          "depth": 0.8139471,
+          "bed_elevation": 3.954349,
+          "water_elevation": 4.768296
+        },
+        {
+          "chainage": 70.62147,
+          "depth": 0.8247511,
+          "bed_elevation": 3.916548,
+          "water_elevation": 4.741299
+        },
+        {
+          "chainage": 71.75141,
+          "depth": 0.8354983,
+          "bed_elevation": 3.879016,
+          "water_elevation": 4.714514
+        },
+        {
+          "chainage": 72.88136,
+          "depth": 0.8461588,
+          "bed_elevation": 3.841753,
+          "water_elevation": 4.687912
+        },
+        {
+          "chainage": 74.0113,
+          "depth": 0.8567024,
+          "bed_elevation": 3.804765,
+          "water_elevation": 4.661468
+        },
+        {
+          "chainage": 75.14124,
+          "depth": 0.8670981,
+          "bed_elevation": 3.768059,
+          "water_elevation": 4.635157
+        },
+        {
+          "chainage": 76.27119,
+          "depth": 0.8773148,
+          "bed_elevation": 3.731645,
+          "water_elevation": 4.608959
+        },
+        {
+          "chainage": 77.40113,
+          "depth": 0.8873209,
+          "bed_elevation": 3.695535,
+          "water_elevation": 4.582856
+        },
+        {
+          "chainage": 78.53107,
+          "depth": 0.8970851,
+          "bed_elevation": 3.659746,
+          "water_elevation": 4.556831
+        },
+        {
+          "chainage": 79.66102,
+          "depth": 0.906576,
+          "bed_elevation": 3.624295,
+          "water_elevation": 4.530871
+        },
+        {
+          "chainage": 80.79096,
+          "depth": 0.9157626,
+          "bed_elevation": 3.589201,
+          "water_elevation": 4.504963
+        },
+        {
+          "chainage": 81.9209,
+          "depth": 0.9246143,
+          "bed_elevation": 3.554486,
+          "water_elevation": 4.4791
+        },
+        {
+          "chainage": 83.05085,
+          "depth": 0.9331011,
+          "bed_elevation": 3.520172,
+          "water_elevation": 4.453273
+        },
+        {
+          "chainage": 84.18079,
+          "depth": 0.9411939,
+          "bed_elevation": 3.486283,
+          "water_elevation": 4.427477
+        },
+        {
+          "chainage": 85.31073,
+          "depth": 0.9488644,
+          "bed_elevation": 3.452844,
+          "water_elevation": 4.401708
+        },
+        {
+          "chainage": 86.44068,
+          "depth": 0.9560856,
+          "bed_elevation": 3.419878,
+          "water_elevation": 4.375964
+        },
+        {
+          "chainage": 87.57062,
+          "depth": 0.9628316,
+          "bed_elevation": 3.387412,
+          "water_elevation": 4.350243
+        },
+        {
+          "chainage": 88.70056,
+          "depth": 0.9690782,
+          "bed_elevation": 3.355468,
+          "water_elevation": 4.324546
+        },
+        {
+          "chainage": 89.83051,
+          "depth": 0.9748024,
+          "bed_elevation": 3.32407,
+          "water_elevation": 4.298872
+        },
+        {
+          "chainage": 90.96045,
+          "depth": 0.9799833,
+          "bed_elevation": 3.293239,
+          "water_elevation": 4.273223
+        },
+        {
+          "chainage": 92.0904,
+          "depth": 0.9846016,
+          "bed_elevation": 3.262996,
+          "water_elevation": 4.247598
+        },
+        {
+          "chainage": 93.22034,
+          "depth": 0.9886401,
+          "bed_elevation": 3.233359,
+          "water_elevation": 4.221999
+        },
+        {
+          "chainage": 94.35028,
+          "depth": 0.9920835,
+          "bed_elevation": 3.204341,
+          "water_elevation": 4.196425
+        },
+        {
+          "chainage": 95.48023,
+          "depth": 0.9949189,
+          "bed_elevation": 3.175956,
+          "water_elevation": 4.170875
+        },
+        {
+          "chainage": 96.61017,
+          "depth": 0.9971355,
+          "bed_elevation": 3.148213,
+          "water_elevation": 4.145348
+        },
+        {
+          "chainage": 97.74011,
+          "depth": 0.9987249,
+          "bed_elevation": 3.121116,
+          "water_elevation": 4.119841
+        },
+        {
+          "chainage": 98.87006,
+          "depth": 0.9996809,
+          "bed_elevation": 3.094667,
+          "water_elevation": 4.094348
+        },
+        {
+          "chainage": 100.0,
+          "depth": 1.0,
+          "bed_elevation": 3.068863,
+          "water_elevation": 4.068863
+        },
+        {
+          "chainage": 101.1299,
+          "depth": 0.9996809,
+          "bed_elevation": 3.043697,
+          "water_elevation": 4.043378
+        },
+        {
+          "chainage": 102.2599,
+          "depth": 0.9987249,
+          "bed_elevation": 3.019158,
+          "water_elevation": 4.017883
+        },
+        {
+          "chainage": 103.3898,
+          "depth": 0.9971355,
+          "bed_elevation": 2.995229,
+          "water_elevation": 3.992365
+        },
+        {
+          "chainage": 104.5198,
+          "depth": 0.9949189,
+          "bed_elevation": 2.97189,
+          "water_elevation": 3.966809
+        },
+        {
+          "chainage": 105.6497,
+          "depth": 0.9920835,
+          "bed_elevation": 2.949116,
+          "water_elevation": 3.941199
+        },
+        {
+          "chainage": 106.7797,
+          "depth": 0.9886401,
+          "bed_elevation": 2.926877,
+          "water_elevation": 3.915517
+        },
+        {
+          "chainage": 107.9096,
+          "depth": 0.9846016,
+          "bed_elevation": 2.90514,
+          "water_elevation": 3.889741
+        },
+        {
+          "chainage": 109.0395,
+          "depth": 0.9799833,
+          "bed_elevation": 2.883867,
+          "water_elevation": 3.86385
+        },
+        {
+          "chainage": 110.1695,
+          "depth": 0.9748024,
+          "bed_elevation": 2.863016,
+          "water_elevation": 3.837818
+        },
+        {
+          "chainage": 111.2994,
+          "depth": 0.9690782,
+          "bed_elevation": 2.842542,
+          "water_elevation": 3.81162
+        },
+        {
+          "chainage": 112.4294,
+          "depth": 0.9628316,
+          "bed_elevation": 2.822396,
+          "water_elevation": 3.785228
+        },
+        {
+          "chainage": 113.5593,
+          "depth": 0.9560856,
+          "bed_elevation": 2.802528,
+          "water_elevation": 3.758614
+        },
+        {
+          "chainage": 114.6893,
+          "depth": 0.9488644,
+          "bed_elevation": 2.782884,
+          "water_elevation": 3.731748
+        },
+        {
+          "chainage": 115.8192,
+          "depth": 0.9411939,
+          "bed_elevation": 2.763406,
+          "water_elevation": 3.7046
+        },
+        {
+          "chainage": 116.9492,
+          "depth": 0.9331011,
+          "bed_elevation": 2.744037,
+          "water_elevation": 3.677139
+        },
+        {
+          "chainage": 118.0791,
+          "depth": 0.9246143,
+          "bed_elevation": 2.724719,
+          "water_elevation": 3.649333
+        },
+        {
+          "chainage": 119.209,
+          "depth": 0.9157626,
+          "bed_elevation": 2.705389,
+          "water_elevation": 3.621152
+        },
+        {
+          "chainage": 120.339,
+          "depth": 0.906576,
+          "bed_elevation": 2.685988,
+          "water_elevation": 3.592564
+        },
+        {
+          "chainage": 121.4689,
+          "depth": 0.8970851,
+          "bed_elevation": 2.666455,
+          "water_elevation": 3.56354
+        },
+        {
+          "chainage": 122.5989,
+          "depth": 0.8873209,
+          "bed_elevation": 2.646728,
+          "water_elevation": 3.534048
+        },
+        {
+          "chainage": 123.7288,
+          "depth": 0.8773148,
+          "bed_elevation": 2.626746,
+          "water_elevation": 3.504061
+        },
+        {
+          "chainage": 124.8588,
+          "depth": 0.8670981,
+          "bed_elevation": 2.606452,
+          "water_elevation": 3.47355
+        },
+        {
+          "chainage": 125.9887,
+          "depth": 0.8567024,
+          "bed_elevation": 2.585786,
+          "water_elevation": 3.442489
+        },
+        {
+          "chainage": 127.1186,
+          "depth": 0.8461588,
+          "bed_elevation": 2.564693,
+          "water_elevation": 3.410852
+        },
+        {
+          "chainage": 128.2486,
+          "depth": 0.8354983,
+          "bed_elevation": 2.543119,
+          "water_elevation": 3.378617
+        },
+        {
+          "chainage": 129.3785,
+          "depth": 0.8247511,
+          "bed_elevation": 2.521011,
+          "water_elevation": 3.345763
+        },
+        {
+          "chainage": 130.5085,
+          "depth": 0.8139471,
+          "bed_elevation": 2.498322,
+          "water_elevation": 3.312269
+        },
+        {
+          "chainage": 131.6384,
+          "depth": 0.8031153,
+          "bed_elevation": 2.475004,
+          "water_elevation": 3.278119
+        },
+        {
+          "chainage": 132.7684,
+          "depth": 0.7922838,
+          "bed_elevation": 2.451015,
+          "water_elevation": 3.243299
+        },
+        {
+          "chainage": 133.8983,
+          "depth": 0.7814798,
+          "bed_elevation": 2.426317,
+          "water_elevation": 3.207797
+        },
+        {
+          "chainage": 135.0282,
+          "depth": 0.7707292,
+          "bed_elevation": 2.400873,
+          "water_elevation": 3.171602
+        },
+        {
+          "chainage": 136.1582,
+          "depth": 0.760057,
+          "bed_elevation": 2.374653,
+          "water_elevation": 3.13471
+        },
+        {
+          "chainage": 137.2881,
+          "depth": 0.7494867,
+          "bed_elevation": 2.347629,
+          "water_elevation": 3.097115
+        },
+        {
+          "chainage": 138.4181,
+          "depth": 0.7390407,
+          "bed_elevation": 2.319778,
+          "water_elevation": 3.058818
+        },
+        {
+          "chainage": 139.548,
+          "depth": 0.7287398,
+          "bed_elevation": 2.291081,
+          "water_elevation": 3.019821
+        },
+        {
+          "chainage": 140.678,
+          "depth": 0.7186035,
+          "bed_elevation": 2.261525,
+          "water_elevation": 2.980129
+        },
+        {
+          "chainage": 141.8079,
+          "depth": 0.7086498,
+          "bed_elevation": 2.2311,
+          "water_elevation": 2.93975
+        },
+        {
+          "chainage": 142.9379,
+          "depth": 0.6988953,
+          "bed_elevation": 2.199801,
+          "water_elevation": 2.898696
+        },
+        {
+          "chainage": 144.0678,
+          "depth": 0.6893548,
+          "bed_elevation": 2.167626,
+          "water_elevation": 2.856981
+        },
+        {
+          "chainage": 145.1977,
+          "depth": 0.680042,
+          "bed_elevation": 2.134579,
+          "water_elevation": 2.814621
+        },
+        {
+          "chainage": 146.3277,
+          "depth": 0.6709688,
+          "bed_elevation": 2.100669,
+          "water_elevation": 2.771637
+        },
+        {
+          "chainage": 147.4576,
+          "depth": 0.6621456,
+          "bed_elevation": 2.065906,
+          "water_elevation": 2.728052
+        },
+        {
+          "chainage": 148.5876,
+          "depth": 0.6535816,
+          "bed_elevation": 2.030307,
+          "water_elevation": 2.683889
+        },
+        {
+          "chainage": 149.7175,
+          "depth": 0.6452843,
+          "bed_elevation": 1.993892,
+          "water_elevation": 2.639176
+        },
+        {
+          "chainage": 150.8475,
+          "depth": 0.6372599,
+          "bed_elevation": 1.956681,
+          "water_elevation": 2.593941
+        },
+        {
+          "chainage": 151.9774,
+          "depth": 0.6295132,
+          "bed_elevation": 1.918702,
+          "water_elevation": 2.548215
+        },
+        {
+          "chainage": 153.1073,
+          "depth": 0.6220478,
+          "bed_elevation": 1.879983,
+          "water_elevation": 2.50203
+        },
+        {
+          "chainage": 154.2373,
+          "depth": 0.614866,
+          "bed_elevation": 1.840553,
+          "water_elevation": 2.45542
+        },
+        {
+          "chainage": 155.3672,
+          "depth": 0.6079689,
+          "bed_elevation": 1.800447,
+          "water_elevation": 2.408416
+        },
+        {
+          "chainage": 156.4972,
+          "depth": 0.6013564,
+          "bed_elevation": 1.759699,
+          "water_elevation": 2.361055
+        },
+        {
+          "chainage": 157.6271,
+          "depth": 0.5950274,
+          "bed_elevation": 1.718344,
+          "water_elevation": 2.313371
+        },
+        {
+          "chainage": 158.7571,
+          "depth": 0.58898,
+          "bed_elevation": 1.676418,
+          "water_elevation": 2.265398
+        },
+        {
+          "chainage": 159.887,
+          "depth": 0.5832112,
+          "bed_elevation": 1.633959,
+          "water_elevation": 2.217171
+        },
+        {
+          "chainage": 161.0169,
+          "depth": 0.577717,
+          "bed_elevation": 1.591005,
+          "water_elevation": 2.168722
+        },
+        {
+          "chainage": 162.1469,
+          "depth": 0.572493,
+          "bed_elevation": 1.547591,
+          "water_elevation": 2.120084
+        },
+        {
+          "chainage": 163.2768,
+          "depth": 0.5675339,
+          "bed_elevation": 1.503756,
+          "water_elevation": 2.07129
+        },
+        {
+          "chainage": 164.4068,
+          "depth": 0.5628337,
+          "bed_elevation": 1.459534,
+          "water_elevation": 2.022368
+        },
+        {
+          "chainage": 165.5367,
+          "depth": 0.5583861,
+          "bed_elevation": 1.414961,
+          "water_elevation": 1.973347
+        },
+        {
+          "chainage": 166.6667,
+          "depth": 0.554184,
+          "bed_elevation": 1.370071,
+          "water_elevation": 1.924255
+        },
+        {
+          "chainage": 167.7966,
+          "depth": 0.5502202,
+          "bed_elevation": 1.324896,
+          "water_elevation": 1.875116
+        },
+        {
+          "chainage": 168.9266,
+          "depth": 0.546487,
+          "bed_elevation": 1.279466,
+          "water_elevation": 1.825953
+        },
+        {
+          "chainage": 170.0565,
+          "depth": 0.5429764,
+          "bed_elevation": 1.233811,
+          "water_elevation": 1.776787
+        },
+        {
+          "chainage": 171.1864,
+          "depth": 0.5396802,
+          "bed_elevation": 1.187958,
+          "water_elevation": 1.727639
+        },
+        {
+          "chainage": 172.3164,
+          "depth": 0.5365901,
+          "bed_elevation": 1.141933,
+          "water_elevation": 1.678524
+        },
+        {
+          "chainage": 173.4463,
+          "depth": 0.5336976,
+          "bed_elevation": 1.09576,
+          "water_elevation": 1.629458
+        },
+        {
+          "chainage": 174.5763,
+          "depth": 0.5309941,
+          "bed_elevation": 1.04946,
+          "water_elevation": 1.580454
+        },
+        {
+          "chainage": 175.7062,
+          "depth": 0.5284712,
+          "bed_elevation": 1.003053,
+          "water_elevation": 1.531524
+        },
+        {
+          "chainage": 176.8362,
+          "depth": 0.5261202,
+          "bed_elevation": 0.9565571,
+          "water_elevation": 1.482677
+        },
+        {
+          "chainage": 177.9661,
+          "depth": 0.5239328,
+          "bed_elevation": 0.9099892,
+          "water_elevation": 1.433922
+        },
+        {
+          "chainage": 179.096,
+          "depth": 0.5219006,
+          "bed_elevation": 0.8633638,
+          "water_elevation": 1.385264
+        },
+        {
+          "chainage": 180.226,
+          "depth": 0.5200154,
+          "bed_elevation": 0.8166939,
+          "water_elevation": 1.336709
+        },
+        {
+          "chainage": 181.3559,
+          "depth": 0.5182692,
+          "bed_elevation": 0.7699911,
+          "water_elevation": 1.28826
+        },
+        {
+          "chainage": 182.4859,
+          "depth": 0.516654,
+          "bed_elevation": 0.7232656,
+          "water_elevation": 1.23992
+        },
+        {
+          "chainage": 183.6158,
+          "depth": 0.5151622,
+          "bed_elevation": 0.676526,
+          "water_elevation": 1.191688
+        },
+        {
+          "chainage": 184.7458,
+          "depth": 0.5137864,
+          "bed_elevation": 0.62978,
+          "water_elevation": 1.143566
+        },
+        {
+          "chainage": 185.8757,
+          "depth": 0.5125195,
+          "bed_elevation": 0.5830339,
+          "water_elevation": 1.095553
+        },
+        {
+          "chainage": 187.0056,
+          "depth": 0.5113545,
+          "bed_elevation": 0.5362932,
+          "water_elevation": 1.047648
+        },
+        {
+          "chainage": 188.1356,
+          "depth": 0.5102848,
+          "bed_elevation": 0.4895622,
+          "water_elevation": 0.999847
+        },
+        {
+          "chainage": 189.2655,
+          "depth": 0.509304,
+          "bed_elevation": 0.4428445,
+          "water_elevation": 0.9521484
+        },
+        {
+          "chainage": 190.3955,
+          "depth": 0.5084059,
+          "bed_elevation": 0.3961429,
+          "water_elevation": 0.9045488
+        },
+        {
+          "chainage": 191.5254,
+          "depth": 0.5075849,
+          "bed_elevation": 0.3494596,
+          "water_elevation": 0.8570445
+        },
+        {
+          "chainage": 192.6554,
+          "depth": 0.5068353,
+          "bed_elevation": 0.3027962,
+          "water_elevation": 0.8096314
+        },
+        {
+          "chainage": 193.7853,
+          "depth": 0.5061519,
+          "bed_elevation": 0.2561535,
+          "water_elevation": 0.7623055
+        },
+        {
+          "chainage": 194.9153,
+          "depth": 0.5055298,
+          "bed_elevation": 0.2095324,
+          "water_elevation": 0.7150622
+        },
+        {
+          "chainage": 196.0452,
+          "depth": 0.5049643,
+          "bed_elevation": 0.1629328,
+          "water_elevation": 0.6678971
+        },
+        {
+          "chainage": 197.1751,
+          "depth": 0.5044509,
+          "bed_elevation": 0.1163547,
+          "water_elevation": 0.6208056
+        },
+        {
+          "chainage": 198.3051,
+          "depth": 0.5039855,
+          "bed_elevation": 0.06979764,
+          "water_elevation": 0.5737831
+        },
+        {
+          "chainage": 199.435,
+          "depth": 0.5035642,
+          "bed_elevation": 0.02326096,
+          "water_elevation": 0.5268252
+        }
+      ],
+      "coarse_stride": 4,
+      "depth_tolerance_m": 0.0001,
+      "minimum_improvement": 4.0,
+      "external_bed_refinement_m": 4.000000000115023e-06,
+      "external_coarse": {
+        "arguments": [
+          "1.5",
+          "1",
+          "1",
+          "2",
+          "362673"
+        ],
+        "stdout_sha256": "1e9463fb677a2d47dd8c4f76273c5b50d4c73cc14038846a8303ba8f8bbec213"
+      },
+      "external_fine": {
+        "arguments": [
+          "1.5",
+          "1",
+          "1",
+          "2",
+          "725169"
+        ],
+        "stdout_sha256": "4a31d7aacbb22b96b267dacb649f89b7be0679ff244c06d6a9556fcea23f3a37"
+      }
+    }
+  ]
+}

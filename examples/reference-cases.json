@@ -1,0 +1,3163 @@
+{
+  "method": "Independent continuous-energy GVF ODE, fixed-step RK4 .01m verified against .02m",
+  "equation": "dy/dx=(S0-Sf+Q^2*A_x/(g*A^3))/(1-Fr^2); A_x at fixed y",
+  "assumptions": "SI; g=9.80665; alpha=1; constant Q/n; hydrostatic; no local losses; synthetic data",
+  "cases": [
+    {
+      "id": "rectangle_supercritical",
+      "description": "Nonuniform supercritical flow on a steep rectangular bed",
+      "river": {
+        "discharge": 20,
+        "normal_slope": 0.02,
+        "boundary": {
+          "regime": "supercritical",
+          "depth": 0.5
+        },
+        "stations": [
+          {
+            "chainage": 0,
+            "bed_elevation": 20.0,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 5,
+            "bed_elevation": 19.9,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 10,
+            "bed_elevation": 19.8,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 15,
+            "bed_elevation": 19.7,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 20,
+            "bed_elevation": 19.6,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 25,
+            "bed_elevation": 19.5,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 30,
+            "bed_elevation": 19.4,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 35,
+            "bed_elevation": 19.3,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 40,
+            "bed_elevation": 19.2,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 45,
+            "bed_elevation": 19.1,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 50,
+            "bed_elevation": 19.0,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 55,
+            "bed_elevation": 18.9,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 60,
+            "bed_elevation": 18.8,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 65,
+            "bed_elevation": 18.7,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 70,
+            "bed_elevation": 18.6,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 75,
+            "bed_elevation": 18.5,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 80,
+            "bed_elevation": 18.4,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 85,
+            "bed_elevation": 18.3,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 90,
+            "bed_elevation": 18.2,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 95,
+            "bed_elevation": 18.1,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 100,
+            "bed_elevation": 18.0,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10,
+              "bank_height": 8
+            }
+          }
+        ]
+      },
+      "fine_dx": 1,
+      "depth_tolerance_m": 0.0001,
+      "minimum_improvement": 10,
+      "reference_refinement_m": 4.551914400963142e-15,
+      "rows": [
+        {
+          "chainage": 0,
+          "depth": 0.5,
+          "water_elevation": 20.5,
+          "area": 5.0,
+          "perimeter": 11.0,
+          "top_width": 10,
+          "velocity": 4.0,
+          "froude": 1.8064030230071502,
+          "friction_slope": 0.041202737036251935
+        },
+        {
+          "chainage": 10,
+          "depth": 0.5750801351322806,
+          "water_elevation": 20.375080135132283,
+          "area": 5.7508013513228065,
+          "perimeter": 11.15016027026456,
+          "top_width": 10,
+          "velocity": 3.477776187730702,
+          "froude": 1.4644586335208343,
+          "friction_slope": 0.02631779058828368
+        },
+        {
+          "chainage": 20,
+          "depth": 0.6116448399067451,
+          "water_elevation": 20.211644839906747,
+          "area": 6.116448399067451,
+          "perimeter": 11.22328967981349,
+          "top_width": 10,
+          "velocity": 3.269871450734272,
+          "froude": 1.3351211741434739,
+          "friction_slope": 0.02161714538552013
+        },
+        {
+          "chainage": 30,
+          "depth": 0.6231989399648054,
+          "water_elevation": 20.023198939964804,
+          "area": 6.231989399648054,
+          "perimeter": 11.24639787992961,
+          "top_width": 10,
+          "velocity": 3.2092480775287395,
+          "froude": 1.2981641124399963,
+          "friction_slope": 0.020365640493692102
+        },
+        {
+          "chainage": 40,
+          "depth": 0.6259788260428676,
+          "water_elevation": 19.825978826042867,
+          "area": 6.259788260428676,
+          "perimeter": 11.251957652085736,
+          "top_width": 10,
+          "velocity": 3.1949962471462863,
+          "froude": 1.2895262670356797,
+          "friction_slope": 0.02007895663502923
+        },
+        {
+          "chainage": 50,
+          "depth": 0.6265879575166592,
+          "water_elevation": 19.62658795751666,
+          "area": 6.265879575166592,
+          "perimeter": 11.253175915033319,
+          "top_width": 10,
+          "velocity": 3.1918902621852987,
+          "froude": 1.287646323222663,
+          "friction_slope": 0.020016854480806406
+        },
+        {
+          "chainage": 60,
+          "depth": 0.6267184007884491,
+          "water_elevation": 19.42671840078845,
+          "area": 6.267184007884491,
+          "perimeter": 11.253436801576898,
+          "top_width": 10,
+          "velocity": 3.191225911803261,
+          "froude": 1.2872443339268158,
+          "friction_slope": 0.02000358867839043
+        },
+        {
+          "chainage": 70,
+          "depth": 0.6267461938795709,
+          "water_elevation": 19.22674619387957,
+          "area": 6.267461938795709,
+          "perimeter": 11.253492387759142,
+          "top_width": 10,
+          "velocity": 3.191084396731573,
+          "froude": 1.2871587105051159,
+          "friction_slope": 0.02000076368811976
+        },
+        {
+          "chainage": 80,
+          "depth": 0.6267521092425592,
+          "water_elevation": 19.026752109242558,
+          "area": 6.267521092425592,
+          "perimeter": 11.25350421848512,
+          "top_width": 10,
+          "velocity": 3.191054278887126,
+          "froude": 1.2871404880063357,
+          "friction_slope": 0.02000016249756936
+        },
+        {
+          "chainage": 90,
+          "depth": 0.6267533679524748,
+          "water_elevation": 18.826753367952474,
+          "area": 6.267533679524748,
+          "perimeter": 11.25350673590495,
+          "top_width": 10,
+          "velocity": 3.1910478702870813,
+          "froude": 1.2871366105584485,
+          "friction_slope": 0.020000034575376743
+        },
+        {
+          "chainage": 100,
+          "depth": 0.6267536357759012,
+          "water_elevation": 18.626753635775902,
+          "area": 6.2675363577590115,
+          "perimeter": 11.253507271551802,
+          "top_width": 10,
+          "velocity": 3.191046506693277,
+          "froude": 1.2871357855325993,
+          "friction_slope": 0.020000007356727564
+        }
+      ]
+    },
+    {
+      "id": "trapezoid_supercritical",
+      "description": "Nonuniform supercritical flow in a trapezoidal channel",
+      "river": {
+        "discharge": 15,
+        "normal_slope": 0.02,
+        "boundary": {
+          "regime": "supercritical",
+          "depth": 0.5
+        },
+        "stations": [
+          {
+            "chainage": 0,
+            "bed_elevation": 20.0,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 5,
+            "bed_elevation": 19.9,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 10,
+            "bed_elevation": 19.8,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 15,
+            "bed_elevation": 19.7,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 20,
+            "bed_elevation": 19.6,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 25,
+            "bed_elevation": 19.5,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 30,
+            "bed_elevation": 19.4,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 35,
+            "bed_elevation": 19.3,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 40,
+            "bed_elevation": 19.2,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 45,
+            "bed_elevation": 19.1,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 50,
+            "bed_elevation": 19.0,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 55,
+            "bed_elevation": 18.9,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 60,
+            "bed_elevation": 18.8,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 65,
+            "bed_elevation": 18.7,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 70,
+            "bed_elevation": 18.6,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 75,
+            "bed_elevation": 18.5,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 80,
+            "bed_elevation": 18.4,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 85,
+            "bed_elevation": 18.3,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 90,
+            "bed_elevation": 18.2,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 95,
+            "bed_elevation": 18.1,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 100,
+            "bed_elevation": 18.0,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 6,
+              "side_slope": 1,
+              "bank_height": 8
+            }
+          }
+        ]
+      },
+      "fine_dx": 1,
+      "depth_tolerance_m": 0.0001,
+      "minimum_improvement": 10,
+      "reference_refinement_m": 2.220446049250313e-15,
+      "rows": [
+        {
+          "chainage": 0,
+          "depth": 0.5,
+          "water_elevation": 20.5,
+          "area": 3.25,
+          "perimeter": 7.414213562373095,
+          "top_width": 7.0,
+          "velocity": 4.615384615384615,
+          "froude": 2.1629919334454266,
+          "friction_slope": 0.03998263885546926
+        },
+        {
+          "chainage": 10,
+          "depth": 0.5462006632059844,
+          "water_elevation": 20.346200663205984,
+          "area": 3.575539143722563,
+          "perimeter": 7.544888771366164,
+          "top_width": 7.092401326411968,
+          "velocity": 4.195171524365752,
+          "froude": 1.886753946569875,
+          "friction_slope": 0.029771076225055246
+        },
+        {
+          "chainage": 20,
+          "depth": 0.5769780994106604,
+          "water_elevation": 20.17697809941066,
+          "area": 3.7947723236635,
+          "perimeter": 7.631940506757616,
+          "top_width": 7.153956198821321,
+          "velocity": 3.952806313691804,
+          "froude": 1.7331073853031587,
+          "friction_slope": 0.024790774149407682
+        },
+        {
+          "chainage": 30,
+          "depth": 0.5953263407441993,
+          "water_elevation": 19.9953263407442,
+          "area": 3.9263714964490743,
+          "perimeter": 7.683837170236787,
+          "top_width": 7.190652681488398,
+          "velocity": 3.82032113200844,
+          "froude": 1.6509274740776267,
+          "friction_slope": 0.022328631782804923
+        },
+        {
+          "chainage": 40,
+          "depth": 0.60530875851739,
+          "water_elevation": 19.805308758517388,
+          "area": 3.998251244242204,
+          "perimeter": 7.712071711437027,
+          "top_width": 7.21061751703478,
+          "velocity": 3.7516401755895603,
+          "froude": 1.6088369396346835,
+          "friction_slope": 0.021121447475681586
+        },
+        {
+          "chainage": 50,
+          "depth": 0.6104140179263245,
+          "water_elevation": 19.610414017926324,
+          "area": 4.035089380838906,
+          "perimeter": 7.726511565628123,
+          "top_width": 7.220828035852649,
+          "velocity": 3.71738977362664,
+          "froude": 1.5879787397798262,
+          "friction_slope": 0.020536666484973577
+        },
+        {
+          "chainage": 60,
+          "depth": 0.6129325571053051,
+          "water_elevation": 19.412932557105307,
+          "area": 4.053281662191479,
+          "perimeter": 7.733635070156688,
+          "top_width": 7.2258651142106105,
+          "velocity": 3.7007050706389806,
+          "froude": 1.5778498417271232,
+          "friction_slope": 0.020255897430579376
+        },
+        {
+          "chainage": 70,
+          "depth": 0.6141515136536638,
+          "water_elevation": 19.214151513653665,
+          "area": 4.06209116364507,
+          "perimeter": 7.737082799921953,
+          "top_width": 7.228303027307327,
+          "velocity": 3.6926793111506457,
+          "froude": 1.5729850606295324,
+          "friction_slope": 0.02012179138323907
+        },
+        {
+          "chainage": 80,
+          "depth": 0.614735853513366,
+          "water_elevation": 19.014735853513365,
+          "area": 4.066315290675003,
+          "perimeter": 7.738735562631205,
+          "top_width": 7.2294717070267325,
+          "velocity": 3.688843320732766,
+          "froude": 1.5706616072267179,
+          "friction_slope": 0.020057911583472438
+        },
+        {
+          "chainage": 90,
+          "depth": 0.6150146653566411,
+          "water_elevation": 18.81501466535664,
+          "area": 4.068331030743588,
+          "perimeter": 7.739524161611425,
+          "top_width": 7.230029330713283,
+          "velocity": 3.6870156058216286,
+          "froude": 1.5695549538657623,
+          "friction_slope": 0.020027524507731657
+        },
+        {
+          "chainage": 100,
+          "depth": 0.6151473984066204,
+          "water_elevation": 18.61514739840662,
+          "area": 4.069290712206155,
+          "perimeter": 7.739899587370337,
+          "top_width": 7.230294796813241,
+          "velocity": 3.6861460782357796,
+          "froude": 1.5690285567861675,
+          "friction_slope": 0.02001307917229463
+        }
+      ]
+    },
+    {
+      "id": "trapezoid_subcritical",
+      "description": "M1 backwater in a trapezoidal channel",
+      "river": {
+        "discharge": 30,
+        "normal_slope": 0.001,
+        "boundary": {
+          "regime": "subcritical",
+          "depth": 3
+        },
+        "stations": [
+          {
+            "chainage": 0,
+            "bed_elevation": 20.0,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 20,
+            "bed_elevation": 19.98,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 40,
+            "bed_elevation": 19.96,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 60,
+            "bed_elevation": 19.94,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 80,
+            "bed_elevation": 19.92,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 100,
+            "bed_elevation": 19.9,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 120,
+            "bed_elevation": 19.88,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 140,
+            "bed_elevation": 19.86,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 160,
+            "bed_elevation": 19.84,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 180,
+            "bed_elevation": 19.82,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 200,
+            "bed_elevation": 19.8,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 220,
+            "bed_elevation": 19.78,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 240,
+            "bed_elevation": 19.76,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 260,
+            "bed_elevation": 19.74,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 280,
+            "bed_elevation": 19.72,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 300,
+            "bed_elevation": 19.7,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 320,
+            "bed_elevation": 19.68,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 340,
+            "bed_elevation": 19.66,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 360,
+            "bed_elevation": 19.64,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 380,
+            "bed_elevation": 19.62,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 400,
+            "bed_elevation": 19.6,
+            "roughness": 0.025,
+            "section": {
+              "kind": "trapezoid",
+              "bottom_width": 8,
+              "side_slope": 1.25,
+              "bank_height": 8
+            }
+          }
+        ]
+      },
+      "fine_dx": 4,
+      "depth_tolerance_m": 5e-05,
+      "minimum_improvement": 15,
+      "reference_refinement_m": 4.929390229335695e-14,
+      "rows": [
+        {
+          "chainage": 0,
+          "depth": 2.676164627400593,
+          "water_elevation": 22.676164627400592,
+          "area": 30.361638410392434,
+          "perimeter": 16.567907294534592,
+          "top_width": 14.690411568501482,
+          "velocity": 0.9880889691951324,
+          "froude": 0.2194775445991293,
+          "friction_slope": 0.0002721001128972909
+        },
+        {
+          "chainage": 40,
+          "depth": 2.706957888974736,
+          "water_elevation": 22.666957888974736,
+          "area": 30.815189377651087,
+          "perimeter": 16.666493834302095,
+          "top_width": 14.76739472243684,
+          "velocity": 0.9735458585809533,
+          "froude": 0.21521156072773312,
+          "friction_slope": 0.00026103498539240856
+        },
+        {
+          "chainage": 80,
+          "depth": 2.7381471661768932,
+          "water_elevation": 22.658147166176896,
+          "area": 31.276989708968333,
+          "perimeter": 16.76634824270267,
+          "top_width": 14.845367915442234,
+          "velocity": 0.959171591612534,
+          "froude": 0.21101774549795965,
+          "friction_slope": 0.00025039405452064367
+        },
+        {
+          "chainage": 120,
+          "depth": 2.769715567212729,
+          "water_elevation": 22.649715567212727,
+          "area": 31.74687994177749,
+          "perimeter": 16.867416439607446,
+          "top_width": 14.924288918031822,
+          "velocity": 0.9449747520077186,
+          "froude": 0.20689793994707836,
+          "friction_slope": 0.00024016909296951006
+        },
+        {
+          "chainage": 160,
+          "depth": 2.8016466995423333,
+          "water_elevation": 22.641646699542335,
+          "area": 32.22470388265923,
+          "perimeter": 16.96964594328163,
+          "top_width": 15.004116748855832,
+          "velocity": 0.9309627827532533,
+          "froude": 0.20285360560919305,
+          "friction_slope": 0.00023035083149952325
+        },
+        {
+          "chainage": 200,
+          "depth": 2.833924691670383,
+          "water_elevation": 22.633924691670384,
+          "area": 32.71030898093691,
+          "perimeter": 17.07298594014702,
+          "top_width": 15.084811729175957,
+          "velocity": 0.9171420550470362,
+          "froude": 0.1988858539128076,
+          "friction_slope": 0.00022092914682447174
+        },
+        {
+          "chainage": 240,
+          "depth": 2.866534208481277,
+          "water_elevation": 22.626534208481278,
+          "area": 33.20354662834194,
+          "perimeter": 17.177387333878425,
+          "top_width": 15.166335521203191,
+          "velocity": 0.903517938484094,
+          "froude": 0.1949954752090894,
+          "friction_slope": 0.00021189323311714557
+        },
+        {
+          "chainage": 280,
+          "depth": 2.8994604608846917,
+          "water_elevation": 22.61946046088469,
+          "area": 33.70427239236962,
+          "perimeter": 17.28280277628449,
+          "top_width": 15.248651152211728,
+          "velocity": 0.8900948713787326,
+          "froude": 0.19118296708986007,
+          "friction_slope": 0.00020323175710918454
+        },
+        {
+          "chainage": 320,
+          "depth": 2.932689210495538,
+          "water_elevation": 22.61268921049554,
+          "area": 34.21234619066049,
+          "perimeter": 17.38918668229089,
+          "top_width": 15.331723026238846,
+          "velocity": 0.8768764303042624,
+          "froude": 0.18744856172706556,
+          "friction_slope": 0.00019493299709690326
+        },
+        {
+          "chainage": 360,
+          "depth": 2.9662067700240806,
+          "water_elevation": 22.60620677002408,
+          "area": 34.72763241336351,
+          "perimeter": 17.496495231189297,
+          "top_width": 15.415516925060201,
+          "velocity": 0.8638653981045862,
+          "froude": 0.18379225203008823,
+          "friction_slope": 0.00018698496642885568
+        },
+        {
+          "chainage": 400,
+          "depth": 3,
+          "water_elevation": 22.6,
+          "area": 35.25,
+          "perimeter": 17.604686356149273,
+          "top_width": 15.5,
+          "velocity": 0.851063829787234,
+          "froude": 0.18021381647363785,
+          "friction_slope": 0.0001793755222452511
+        }
+      ]
+    },
+    {
+      "id": "survey_subcritical",
+      "description": "Asymmetric single-valley survey with changing side slopes",
+      "river": {
+        "discharge": 15,
+        "normal_slope": 0.001,
+        "boundary": {
+          "regime": "subcritical",
+          "depth": 3.6
+        },
+        "stations": [
+          {
+            "chainage": 0,
+            "bed_elevation": 20.0,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 20,
+            "bed_elevation": 19.98,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 40,
+            "bed_elevation": 19.96,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 60,
+            "bed_elevation": 19.94,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 80,
+            "bed_elevation": 19.92,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 100,
+            "bed_elevation": 19.9,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 120,
+            "bed_elevation": 19.88,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 140,
+            "bed_elevation": 19.86,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 160,
+            "bed_elevation": 19.84,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 180,
+            "bed_elevation": 19.82,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 200,
+            "bed_elevation": 19.8,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 220,
+            "bed_elevation": 19.78,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 240,
+            "bed_elevation": 19.76,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 260,
+            "bed_elevation": 19.74,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 280,
+            "bed_elevation": 19.72,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 300,
+            "bed_elevation": 19.7,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 320,
+            "bed_elevation": 19.68,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 340,
+            "bed_elevation": 19.66,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 360,
+            "bed_elevation": 19.64,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 380,
+            "bed_elevation": 19.62,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 400,
+            "bed_elevation": 19.6,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "fine_dx": 4,
+      "depth_tolerance_m": 5e-05,
+      "minimum_improvement": 15,
+      "reference_refinement_m": 4.1744385725905886e-14,
+      "rows": [
+        {
+          "chainage": 0,
+          "depth": 3.2245689659365357,
+          "water_elevation": 23.224568965936534,
+          "area": 36.13849155340019,
+          "perimeter": 18.199730524940286,
+          "top_width": 16.404224138685763,
+          "velocity": 0.4150698979185445,
+          "froude": 0.08930046849451143,
+          "friction_slope": 8.456133178258695e-05
+        },
+        {
+          "chainage": 40,
+          "depth": 3.2615553303493687,
+          "water_elevation": 23.221555330349368,
+          "area": 36.74645535734065,
+          "perimeter": 18.299402800401058,
+          "top_width": 16.470799594628865,
+          "velocity": 0.408202637618584,
+          "froude": 0.08727002172865811,
+          "friction_slope": 8.057178546590405e-05
+        },
+        {
+          "chainage": 80,
+          "depth": 3.2986849085908285,
+          "water_elevation": 23.21868490859083,
+          "area": 37.35924994461118,
+          "perimeter": 18.39946101398803,
+          "top_width": 16.53763283546349,
+          "velocity": 0.4015069901627843,
+          "froude": 0.08530419156547492,
+          "friction_slope": 7.680654808481944e-05
+        },
+        {
+          "chainage": 120,
+          "depth": 3.3359495499229226,
+          "water_elevation": 23.21594954992292,
+          "area": 37.97676868885083,
+          "perimeter": 18.4998832007794,
+          "top_width": 16.60470918986126,
+          "velocity": 0.39497831221232044,
+          "froude": 0.08340067088399564,
+          "friction_slope": 7.325161838892597e-05
+        },
+        {
+          "chainage": 160,
+          "depth": 3.373341623217995,
+          "water_elevation": 23.213341623217996,
+          "area": 38.59891154235226,
+          "perimeter": 18.600648796119252,
+          "top_width": 16.67201492179239,
+          "velocity": 0.38861199449993306,
+          "froude": 0.08155721352176215,
+          "friction_slope": 6.989388861741994e-05
+        },
+        {
+          "chainage": 200,
+          "depth": 3.410853982451653,
+          "water_elevation": 23.210853982451653,
+          "area": 39.22558461463319,
+          "perimeter": 18.701738542626565,
+          "top_width": 16.739537168412976,
+          "velocity": 0.382403478427807,
+          "froude": 0.07977163744980591,
+          "friction_slope": 6.67210949712739e-05
+        },
+        {
+          "chainage": 240,
+          "depth": 3.448479934304706,
+          "water_elevation": 23.20847993430471,
+          "area": 39.856699775201854,
+          "perimeter": 18.803134402887704,
+          "top_width": 16.80726388174847,
+          "velocity": 0.3763482697915882,
+          "froude": 0.07804182696495283,
+          "friction_slope": 6.37217688679924e-05
+        },
+        {
+          "chainage": 280,
+          "depth": 3.4862132078023396,
+          "water_elevation": 23.20621320780234,
+          "area": 40.49217427993473,
+          "perimeter": 18.904819477638867,
+          "top_width": 16.87518377404421,
+          "velocity": 0.370441950000028,
+          "froude": 0.07636573405446244,
+          "friction_slope": 6.08851894403007e-05
+        },
+        {
+          "chainage": 320,
+          "depth": 3.5240479259076367,
+          "water_elevation": 23.204047925907638,
+          "area": 41.13193042030547,
+          "perimeter": 19.006777929215236,
+          "top_width": 16.943286266633745,
+          "velocity": 0.3646801851195148,
+          "froude": 0.07474137906790325,
+          "friction_slope": 5.820133761730597e-05
+        },
+        {
+          "chainage": 360,
+          "depth": 3.5619785789794447,
+          "water_elevation": 23.201978578979446,
+          "area": 41.7758951945797,
+          "perimeter": 19.108994910024204,
+          "top_width": 17.011561442163,
+          "velocity": 0.3590587330357485,
+          "froude": 0.0731668508131976,
+          "friction_slope": 5.566085202692355e-05
+        },
+        {
+          "chainage": 400,
+          "depth": 3.6,
+          "water_elevation": 23.200000000000003,
+          "area": 42.424,
+          "perimeter": 19.211456495787843,
+          "top_width": 17.08,
+          "velocity": 0.3535734489911371,
+          "froude": 0.07164030617783565,
+          "friction_slope": 5.325498687807784e-05
+        }
+      ]
+    },
+    {
+      "id": "survey_vertex_crossing",
+      "description": "Backwater whose wetted edge crosses a survey side-slope vertex",
+      "river": {
+        "discharge": 15,
+        "normal_slope": 0.001,
+        "boundary": {
+          "regime": "subcritical",
+          "depth": 2.5
+        },
+        "stations": [
+          {
+            "chainage": 0,
+            "bed_elevation": 20.0,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 50,
+            "bed_elevation": 19.95,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 100,
+            "bed_elevation": 19.9,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 150,
+            "bed_elevation": 19.85,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 200,
+            "bed_elevation": 19.8,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 250,
+            "bed_elevation": 19.75,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 300,
+            "bed_elevation": 19.7,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 350,
+            "bed_elevation": 19.65,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 400,
+            "bed_elevation": 19.6,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 450,
+            "bed_elevation": 19.55,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 500,
+            "bed_elevation": 19.5,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 550,
+            "bed_elevation": 19.45,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 600,
+            "bed_elevation": 19.4,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 650,
+            "bed_elevation": 19.35,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 700,
+            "bed_elevation": 19.3,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 750,
+            "bed_elevation": 19.25,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 800,
+            "bed_elevation": 19.2,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 850,
+            "bed_elevation": 19.15,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 900,
+            "bed_elevation": 19.1,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 950,
+            "bed_elevation": 19.05,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          },
+          {
+            "chainage": 1000,
+            "bed_elevation": 19.0,
+            "roughness": 0.035,
+            "section": {
+              "kind": "survey",
+              "points": [
+                {
+                  "x": -12,
+                  "z": 8
+                },
+                {
+                  "x": -6,
+                  "z": 2
+                },
+                {
+                  "x": -2,
+                  "z": 0
+                },
+                {
+                  "x": 3,
+                  "z": 0
+                },
+                {
+                  "x": 9,
+                  "z": 3
+                },
+                {
+                  "x": 13,
+                  "z": 8
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "fine_dx": 6.25,
+      "depth_tolerance_m": 0.0001,
+      "minimum_improvement": 20,
+      "reference_refinement_m": 8.193445921733655e-14,
+      "rows": [
+        {
+          "chainage": 0,
+          "depth": 1.9319867659465337,
+          "water_elevation": 21.931986765946533,
+          "area": 17.12507955731776,
+          "perimeter": 13.640107480572851,
+          "top_width": 12.727947063786136,
+          "velocity": 0.8759083395668262,
+          "froude": 0.24113552934689073,
+          "friction_slope": 0.0006939055124553271
+        },
+        {
+          "chainage": 100,
+          "depth": 1.9669075683825672,
+          "water_elevation": 21.866907568382565,
+          "area": 17.571988607034083,
+          "perimeter": 13.796278056724475,
+          "top_width": 12.86763027353027,
+          "velocity": 0.8536313296945507,
+          "froude": 0.2332646015798887,
+          "friction_slope": 0.0006465440933159592
+        },
+        {
+          "chainage": 200,
+          "depth": 2.0068037007309187,
+          "water_elevation": 21.80680370073092,
+          "area": 18.088517545017396,
+          "perimeter": 13.969107333180052,
+          "top_width": 13.020411102192755,
+          "velocity": 0.8292553528872161,
+          "froude": 0.22466675182676726,
+          "friction_slope": 0.0005968523310289751
+        },
+        {
+          "chainage": 300,
+          "depth": 2.051905699506216,
+          "water_elevation": 21.751905699506217,
+          "area": 18.678815396042655,
+          "perimeter": 14.133742326720888,
+          "top_width": 13.15571709851865,
+          "velocity": 0.8030487845164925,
+          "froude": 0.21521086309877877,
+          "friction_slope": 0.0005447079737812157
+        },
+        {
+          "chainage": 400,
+          "depth": 2.1022512203960306,
+          "water_elevation": 21.702251220396032,
+          "area": 19.344948833257114,
+          "perimeter": 14.317517652240262,
+          "top_width": 13.306753661188093,
+          "velocity": 0.775396209588963,
+          "froude": 0.20535987995821423,
+          "friction_slope": 0.000493079513231748
+        },
+        {
+          "chainage": 500,
+          "depth": 2.157682234978763,
+          "water_elevation": 21.657682234978765,
+          "area": 20.087164585565766,
+          "perimeter": 14.519856461508034,
+          "top_width": 13.473046704936287,
+          "velocity": 0.7467455118468387,
+          "froude": 0.1952926380108571,
+          "friction_slope": 0.00044313859620664876
+        },
+        {
+          "chainage": 600,
+          "depth": 2.217938491325446,
+          "water_elevation": 21.617938491325443,
+          "area": 20.904446166232614,
+          "perimeter": 14.739808761712183,
+          "top_width": 13.653815473976337,
+          "velocity": 0.7175507009714427,
+          "froude": 0.18518249743834495,
+          "friction_slope": 0.00039583317083038017
+        },
+        {
+          "chainage": 700,
+          "depth": 2.282685527671858,
+          "water_elevation": 21.58268552767186,
+          "area": 21.79477852106683,
+          "perimeter": 14.97615367324897,
+          "top_width": 13.848056583015573,
+          "velocity": 0.68823823951691,
+          "froude": 0.17518489042987015,
+          "friction_slope": 0.0003518391182697693
+        },
+        {
+          "chainage": 800,
+          "depth": 2.3515436790319,
+          "water_elevation": 21.551543679031898,
+          "area": 22.755442264815628,
+          "perimeter": 15.227505312028303,
+          "top_width": 14.054631037095701,
+          "velocity": 0.6591829693063334,
+          "froude": 0.16542941147911044,
+          "friction_slope": 0.00031155831815050873
+        },
+        {
+          "chainage": 900,
+          "depth": 2.424114160808423,
+          "water_elevation": 21.524114160808423,
+          "area": 23.78329332260685,
+          "perimeter": 15.492408001996825,
+          "top_width": 14.27234248242527,
+          "velocity": 0.6306948241580143,
+          "froude": 0.15601651130452115,
+          "friction_slope": 0.0002751506443967464
+        },
+        {
+          "chainage": 1000,
+          "depth": 2.5,
+          "water_elevation": 21.5,
+          "area": 24.875,
+          "perimeter": 15.769412679935602,
+          "top_width": 14.5,
+          "velocity": 0.6030150753768844,
+          "froude": 0.1470179247971897,
+          "friction_slope": 0.00024258410093895382
+        }
+      ]
+    },
+    {
+      "id": "widening_rectangle_subcritical",
+      "description": "Gradual rectangular widening from 8 to 12m",
+      "river": {
+        "discharge": 25,
+        "normal_slope": 0.001,
+        "boundary": {
+          "regime": "subcritical",
+          "depth": 3
+        },
+        "stations": [
+          {
+            "chainage": 0,
+            "bed_elevation": 20.0,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 8.0,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 20,
+            "bed_elevation": 19.98,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 8.2,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 40,
+            "bed_elevation": 19.96,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 8.4,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 60,
+            "bed_elevation": 19.94,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 8.6,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 80,
+            "bed_elevation": 19.92,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 8.8,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 100,
+            "bed_elevation": 19.9,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 9.0,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 120,
+            "bed_elevation": 19.88,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 9.2,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 140,
+            "bed_elevation": 19.86,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 9.4,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 160,
+            "bed_elevation": 19.84,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 9.6,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 180,
+            "bed_elevation": 19.82,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 9.8,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 200,
+            "bed_elevation": 19.8,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10.0,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 220,
+            "bed_elevation": 19.78,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10.2,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 240,
+            "bed_elevation": 19.76,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10.4,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 260,
+            "bed_elevation": 19.74,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10.6,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 280,
+            "bed_elevation": 19.72,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 10.8,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 300,
+            "bed_elevation": 19.7,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 11.0,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 320,
+            "bed_elevation": 19.68,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 11.2,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 340,
+            "bed_elevation": 19.66,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 11.4,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 360,
+            "bed_elevation": 19.64,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 11.6,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 380,
+            "bed_elevation": 19.62,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 11.8,
+              "bank_height": 8
+            }
+          },
+          {
+            "chainage": 400,
+            "bed_elevation": 19.6,
+            "roughness": 0.03,
+            "section": {
+              "kind": "rectangle",
+              "width": 12.0,
+              "bank_height": 8
+            }
+          }
+        ]
+      },
+      "fine_dx": 4,
+      "depth_tolerance_m": 5e-05,
+      "minimum_improvement": 15,
+      "reference_refinement_m": 5.3734794391857577e-14,
+      "rows": [
+        {
+          "chainage": 0,
+          "depth": 2.6948035606252128,
+          "water_elevation": 22.694803560625214,
+          "area": 21.558428485001702,
+          "perimeter": 13.389607121250425,
+          "top_width": 8.0,
+          "velocity": 1.1596392574436776,
+          "froude": 0.22557918077872932,
+          "friction_slope": 0.0006413414468914507
+        },
+        {
+          "chainage": 40,
+          "depth": 2.7184152837753564,
+          "water_elevation": 22.678415283775358,
+          "area": 22.834688383712994,
+          "perimeter": 13.836830567550713,
+          "top_width": 8.4,
+          "velocity": 1.0948255382294347,
+          "froude": 0.21204433774635123,
+          "friction_slope": 0.0005531646172819004
+        },
+        {
+          "chainage": 80,
+          "depth": 2.744287476537667,
+          "water_elevation": 22.66428747653767,
+          "area": 24.14972979353147,
+          "perimeter": 14.288574953075335,
+          "top_width": 8.8,
+          "velocity": 1.035208269978088,
+          "froude": 0.19955039562110996,
+          "friction_slope": 0.0004790713104820428
+        },
+        {
+          "chainage": 120,
+          "depth": 2.772054715130102,
+          "water_elevation": 22.652054715130102,
+          "area": 25.502903379196937,
+          "perimeter": 14.744109430260202,
+          "top_width": 9.2,
+          "velocity": 0.9802805440729874,
+          "froude": 0.18801354852429664,
+          "friction_slope": 0.00041653212545251795
+        },
+        {
+          "chainage": 160,
+          "depth": 2.801418739678067,
+          "water_elevation": 22.641418739678066,
+          "area": 26.893619900909446,
+          "perimeter": 15.202837479356134,
+          "top_width": 9.6,
+          "velocity": 0.9295885080592884,
+          "froude": 0.1773541656936527,
+          "friction_slope": 0.0003635168297561769
+        },
+        {
+          "chainage": 200,
+          "depth": 2.8321347266598145,
+          "water_elevation": 22.632134726659814,
+          "area": 28.321347266598146,
+          "perimeter": 15.66426945331963,
+          "top_width": 10.0,
+          "velocity": 0.8827263676641788,
+          "froude": 0.16749768426014267,
+          "friction_slope": 0.0003183877547270622
+        },
+        {
+          "chainage": 240,
+          "depth": 2.86400063252465,
+          "water_elevation": 22.624000632524652,
+          "area": 29.78560657825636,
+          "perimeter": 16.1280012650493,
+          "top_width": 10.4,
+          "velocity": 0.8393315722584654,
+          "froude": 0.1583750143557402,
+          "friction_slope": 0.0002798176440730798
+        },
+        {
+          "chainage": 280,
+          "depth": 2.8968488642915204,
+          "water_elevation": 22.61684886429152,
+          "area": 31.28596773434842,
+          "perimeter": 16.59369772858304,
+          "top_width": 10.8,
+          "velocity": 0.7990802845632565,
+          "froude": 0.1499226185549885,
+          "friction_slope": 0.0002467259232654292
+        },
+        {
+          "chainage": 320,
+          "depth": 2.9305397270949567,
+          "water_elevation": 22.610539727094956,
+          "area": 32.82204494346351,
+          "perimeter": 17.061079454189912,
+          "top_width": 11.2,
+          "velocity": 0.7616831932033149,
+          "froude": 0.14208238169546394,
+          "friction_slope": 0.00021822897593935946
+        },
+        {
+          "chainage": 360,
+          "depth": 2.9649562383607715,
+          "water_elevation": 22.60495623836077,
+          "area": 34.39349236498495,
+          "perimeter": 17.52991247672154,
+          "top_width": 11.6,
+          "velocity": 0.7268816942082857,
+          "froude": 0.13480135263960366,
+          "friction_slope": 0.00019360115055424022
+        },
+        {
+          "chainage": 400,
+          "depth": 3,
+          "water_elevation": 22.6,
+          "area": 36.0,
+          "perimeter": 18.0,
+          "top_width": 12.0,
+          "velocity": 0.6944444444444444,
+          "froude": 0.12803141424156653,
+          "friction_slope": 0.0001722440377569661
+        }
+      ]
+    }
+  ]
+}

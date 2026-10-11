@@ -1,0 +1,268 @@
+import { useState } from 'react';
+import { Plus, Trash2 } from 'lucide-react';
+import type { Project, Section, Station } from './types';
+import { ground } from './types';
+import { SectionChart } from './Charts';
+
+export function NumberField({
+  label,
+  value,
+  onChange,
+  step = 'any',
+}: {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  step?: string | number;
+}) {
+  return (
+    <label className="field">
+      <span>{label}</span>
+      <input
+        type="number"
+        step={step}
+        value={Number.isFinite(value) ? value : ''}
+        onChange={(e) => onChange(e.target.value === '' ? NaN : Number(e.target.value))}
+      />
+    </label>
+  );
+}
+export function SectionFields({
+  section,
+  onChange,
+}: {
+  section: Section;
+  onChange: (s: Section) => void;
+}) {
+  const [text, setText] = useState('');
+  const [error, setError] = useState('');
+  const update = (v: Partial<Section>) => onChange({ ...section, ...v } as Section);
+  return (
+    <>
+      <label className="field">
+        <span>断面形式</span>
+        <select
+          aria-label="断面形式"
+          value={section.kind}
+          onChange={(e) => {
+            const kind = e.target.value;
+            const points = ground(section, 0);
+            if (points[0].x === points[1].x) points[0].x -= 0.1;
+            if (points.at(-1)!.x === points.at(-2)!.x) points.at(-1)!.x += 0.1;
+            onChange(
+              kind === 'rectangle'
+                ? { kind, width: 20, bank_height: 8 }
+                : kind === 'trapezoid'
+                  ? { kind, bottom_width: 20, side_slope: 1.5, bank_height: 8 }
+                  : { kind: 'survey', points },
+            );
+            setText('');
+            setError('');
+          }}
+        >
+          <option value="rectangle">矩形断面</option>
+          <option value="trapezoid">台形断面</option>
+          <option value="survey">任意横断面（測量点）</option>
+        </select>
+      </label>
+      {section.kind === 'rectangle' && (
+        <NumberField label="幅 (m)" value={section.width} onChange={(width) => update({ width })} />
+      )}
+      {section.kind === 'trapezoid' && (
+        <>
+          <NumberField
+            label="底幅 (m)"
+            value={section.bottom_width}
+            onChange={(bottom_width) => update({ bottom_width })}
+          />
+          <NumberField
+            label="法勾配 (水平 / 鉛直)"
+            value={section.side_slope}
+            onChange={(side_slope) => update({ side_slope })}
+          />
+        </>
+      )}
+      {section.kind !== 'survey' && (
+        <NumberField
+          label="堤岸高・河床から (m)"
+          value={section.bank_height}
+          onChange={(bank_height) => update({ bank_height })}
+        />
+      )}
+      {section.kind === 'survey' && (
+        <div className="survey-input">
+          <label className="field">
+            <span>測量点 x, 相対高さ z (m) / 1行1点</span>
+            <textarea
+              aria-label="測量点"
+              rows={6}
+              value={text || section.points.map((p) => `${p.x}, ${p.z}`).join('\n')}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </label>
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => {
+              try {
+                const points = (text || section.points.map((p) => `${p.x},${p.z}`).join('\n'))
+                  .trim()
+                  .split('\n')
+                  .map((line) => {
+                    const fields = line.split(',').map((v) => v.trim());
+                    if (
+                      fields.length !== 2 ||
+                      fields.some((v) => v === '' || !Number.isFinite(Number(v)))
+                    )
+                      throw new Error('各行に有限値の x,z を入力してください');
+                    return { x: Number(fields[0]), z: Number(fields[1]) };
+                  });
+                onChange({ kind: 'survey', points });
+                setText('');
+                setError('');
+              } catch (e) {
+                setError((e as Error).message);
+              }
+            }}
+          >
+            測量点を反映
+          </button>
+          {error && (
+            <p role="alert" className="inline-error">
+              {error}
+            </p>
+          )}
+          <p className="muted">最低点 z=0、x は昇順、単一谷形。両端は堤岸です。</p>
+        </div>
+      )}
+    </>
+  );
+}
+
+export function Editor({ project, edit }: { project: Project; edit: (p: Project) => void }) {
+  const [index, setIndex] = useState(0);
+  const [all, setAll] = useState(false);
+  const idx = Math.min(index, project.river.stations.length - 1);
+  const station = project.river.stations[idx];
+  function update(patch: Partial<Station>) {
+    const stations = project.river.stations.map((s, i) =>
+      i === idx || (all && patch.section) ? { ...s, ...patch } : s,
+    );
+    edit({ ...project, river: { ...project.river, stations } });
+  }
+  return (
+    <div className="editor-layout">
+      <section className="panel station-list">
+        <div className="panel-heading">
+          <h2>測点一覧</h2>
+          <span className="badge">{project.river.stations.length} 断面</span>
+        </div>
+        <p className="muted">上流から下流へ距離が増加します。</p>
+        {project.river.stations.map((s, i) => (
+          <button
+            type="button"
+            key={i}
+            className={`station ${idx === i ? 'selected' : ''}`}
+            onClick={() => setIndex(i)}
+          >
+            <span>
+              No.{String(i + 1).padStart(2, '0')}
+              <strong>{s.chainage.toFixed(1)} m</strong>
+            </span>
+            <small>河床 {s.bed_elevation.toFixed(2)} m</small>
+          </button>
+        ))}
+        <button
+          type="button"
+          className="secondary full"
+          disabled={project.river.stations.length >= 200}
+          onClick={() => {
+            const last = project.river.stations.at(-1)!;
+            edit({
+              ...project,
+              river: {
+                ...project.river,
+                stations: [
+                  ...project.river.stations,
+                  {
+                    ...structuredClone(last),
+                    chainage: last.chainage + 100,
+                    bed_elevation: last.bed_elevation - project.river.normal_slope * 100,
+                  },
+                ],
+              },
+            });
+            setIndex(project.river.stations.length);
+          }}
+        >
+          <Plus size={15} />
+          下流に断面を追加
+        </button>
+      </section>
+      <div>
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <div className="eyebrow">CROSS SECTION / No.{idx + 1}</div>
+              <h2>横断面を編集</h2>
+            </div>
+            <button
+              type="button"
+              className="icon-button danger"
+              aria-label="選択断面を削除"
+              disabled={project.river.stations.length <= 2}
+              onClick={() => {
+                edit({
+                  ...project,
+                  river: {
+                    ...project.river,
+                    stations: project.river.stations.filter((_, i) => i !== idx),
+                  },
+                });
+                setIndex(Math.max(0, idx - 1));
+              }}
+            >
+              <Trash2 size={17} />
+            </button>
+          </div>
+          <div className="form-grid">
+            <NumberField
+              label="縦断距離 (m)"
+              value={station.chainage}
+              onChange={(chainage) => update({ chainage })}
+            />
+            <NumberField
+              label="河床標高 (m / 共通基準高)"
+              value={station.bed_elevation}
+              onChange={(bed_elevation) => update({ bed_elevation })}
+            />
+            <NumberField
+              label="粗度係数 n"
+              value={station.roughness}
+              onChange={(roughness) => update({ roughness })}
+            />
+          </div>
+          <label className="check">
+            <input type="checkbox" checked={all} onChange={(e) => setAll(e.target.checked)} />
+            断面形状の変更を全測点に反映
+          </label>
+          <div className="form-grid">
+            <SectionFields
+              key={`${idx}-${station.section.kind}`}
+              section={station.section}
+              onChange={(section) => update({ section })}
+            />
+          </div>
+        </section>
+        <section className="panel">
+          <div className="panel-heading">
+            <h2>断面プレビュー</h2>
+            <span className="muted">共通基準高 / SI</span>
+          </div>
+          <SectionChart station={station} analysis={null} index={idx} />
+          <p className="muted">変更後は「計算を実行」で新しい水位を確認してください。</p>
+        </section>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,20 @@
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.90"
+publish = false
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["float_roundtrip"] }
+thiserror = "2"
+doboku-core = { path = "crates/doboku-core" }
+doboku-geometry = { path = "crates/doboku-geometry" }
+doboku-hydraulics = { path = "crates/doboku-hydraulics" }
+doboku-earthwork = { path = "crates/doboku-earthwork" }
+doboku-planning = { path = "crates/doboku-planning" }
+doboku-agent = { path = "crates/doboku-agent" }

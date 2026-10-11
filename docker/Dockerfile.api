@@ -1,0 +1,15 @@
+FROM rust:1.90.0-slim-bookworm AS builder
+ENV RUSTUP_TOOLCHAIN=1.90.0
+WORKDIR /build
+COPY Cargo.toml Cargo.lock rust-toolchain.toml ./
+COPY crates ./crates
+COPY examples ./examples
+RUN --mount=type=secret,id=build_ca --mount=type=cache,target=/usr/local/cargo/registry --mount=type=cache,target=/build/target if [ -f /run/secrets/build_ca ]; then export CARGO_HTTP_CAINFO=/run/secrets/build_ca SSL_CERT_FILE=/run/secrets/build_ca; fi; cargo build --release --locked -p doboku-api -j 4 && cp target/release/doboku-api /build/doboku-api
+
+FROM debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl && rm -rf /var/lib/apt/lists/* && useradd -u 10001 -m app && mkdir /data && chown app:app /data
+COPY --from=builder /build/doboku-api /usr/local/bin/doboku-api
+USER app
+ENV API_BIND=0.0.0.0:3001 DATABASE_PATH=/data/doboku.sqlite
+EXPOSE 3001
+CMD ["doboku-api"]

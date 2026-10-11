@@ -1,0 +1,12 @@
+[package]
+name = "doboku-planning"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+doboku-core.workspace = true
+doboku-geometry.workspace = true
+doboku-hydraulics.workspace = true
+doboku-earthwork.workspace = true

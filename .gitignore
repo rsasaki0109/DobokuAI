@@ -1,0 +1,11 @@
+/target/
+node_modules/
+dist/
+*.sqlite*
+.local/
+playwright-report/
+test-results/
+.env
+!.env.example
+__pycache__/
+*.py[cod]

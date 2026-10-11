@@ -1,0 +1,145 @@
+{
+  "id": "sample-river",
+  "name": "青葉川・河道改修検討",
+  "river": {
+    "discharge": 100.0,
+    "normal_slope": 0.001,
+    "boundary": {
+      "regime": "subcritical",
+      "depth": 3.2
+    },
+    "stations": [
+      {
+        "chainage": 0.0,
+        "bed_elevation": 10.0,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 100.0,
+        "bed_elevation": 9.9,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 200.0,
+        "bed_elevation": 9.8,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 300.0,
+        "bed_elevation": 9.7,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 400.0,
+        "bed_elevation": 9.6,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 500.0,
+        "bed_elevation": 9.5,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 600.0,
+        "bed_elevation": 9.4,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 700.0,
+        "bed_elevation": 9.3,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 800.0,
+        "bed_elevation": 9.2,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 900.0,
+        "bed_elevation": 9.1,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      },
+      {
+        "chainage": 1000.0,
+        "bed_elevation": 9.0,
+        "roughness": 0.03,
+        "section": {
+          "kind": "trapezoid",
+          "bottom_width": 20.0,
+          "side_slope": 1.5,
+          "bank_height": 8.0
+        }
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "河道掘削 1.0 m",
+      "modification": {
+        "kind": "excavate",
+        "depth": 1.0
+      }
+    }
+  ],
+  "staged": false
+}

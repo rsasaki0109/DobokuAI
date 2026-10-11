@@ -1,0 +1,49 @@
+{
+  "method": "Independent GVF ODE RK4, dx=0.025m; checked against dx=0.05m",
+  "rows": [
+    {
+      "chainage": 0,
+      "depth": 1.9242781371806816
+    },
+    {
+      "chainage": 100,
+      "depth": 1.9657949338490592
+    },
+    {
+      "chainage": 200,
+      "depth": 2.011210905909566
+    },
+    {
+      "chainage": 300,
+      "depth": 2.0604705720452245
+    },
+    {
+      "chainage": 400,
+      "depth": 2.1134682957755606
+    },
+    {
+      "chainage": 500,
+      "depth": 2.170056838126069
+    },
+    {
+      "chainage": 600,
+      "depth": 2.230057047567421
+    },
+    {
+      "chainage": 700,
+      "depth": 2.2932676595875945
+    },
+    {
+      "chainage": 800,
+      "depth": 2.35947440199157
+    },
+    {
+      "chainage": 900,
+      "depth": 2.428457882028377
+    },
+    {
+      "chainage": 1000,
+      "depth": 2.5
+    }
+  ]
+}

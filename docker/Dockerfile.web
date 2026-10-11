@@ -1,0 +1,11 @@
+FROM node:24-bookworm-slim AS builder
+WORKDIR /build
+COPY apps/web/package.json apps/web/package-lock.json ./
+RUN --mount=type=secret,id=build_ca --mount=type=cache,target=/root/.npm if [ -f /run/secrets/build_ca ]; then export NODE_EXTRA_CA_CERTS=/run/secrets/build_ca; fi; npm ci --strict-ssl=true --no-audit --no-fund
+COPY apps/web ./
+RUN npm run build
+
+FROM nginx:1.28-alpine
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /build/dist /usr/share/nginx/html
+EXPOSE 80

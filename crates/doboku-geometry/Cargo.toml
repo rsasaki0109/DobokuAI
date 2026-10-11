@@ -1,0 +1,9 @@
+[package]
+name = "doboku-geometry"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+doboku-core.workspace = true
