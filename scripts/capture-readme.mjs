@@ -176,12 +176,26 @@ try {
     await shot();
     await page.getByLabel('測点間を線形補間する前提を確認しました').check();
     await shot(1.5);
+    const pending = page.waitForResponse(r => r.url().endsWith('/api/resolution/runs') && r.request().method() === 'POST');
     await page.getByRole('button', {name:'基本条件を保持して測点間隔を比較',exact:true}).click();
+    const stored = await (await pending).json();
     await page.getByText('測点間隔の比較完了: 成功 2 / 失敗 0。基本条件は変更していません。').waitFor();
     await focus(page, page.locator('.resolution-panel'));
     await shot(3);
     await focus(page, page.locator('.resolution-panel .table-scroll'));
     await shot(3);
+    await page.reload();
+    await page.getByRole('heading', {name:'青葉川・河道改修検討'}).waitFor();
+    await nav(page, '水理計算');
+    await page.getByRole('button', {name:`測点間隔履歴 #${stored.id} を開く`,exact:true}).click();
+    await page.getByText('測点間隔の比較完了: 成功 2 / 失敗 0。基本条件は変更していません。').waitFor();
+    await focus(page, page.locator('.resolution-history'));
+    await shot(3);
+    const reportPage = await page.context().newPage();
+    await reportPage.goto(new URL(`/api/resolution/runs/${stored.id}/reports/html`, baseURL).href);
+    await focus(reportPage, reportPage.getByRole('heading', {name:'元測点の水位差',exact:true}));
+    await shot(4, reportPage);
+    await reportPage.close();
   });
   await clip('survey-provenance', async (page, shot) => {
     await nav(page, '横断面エディタ');

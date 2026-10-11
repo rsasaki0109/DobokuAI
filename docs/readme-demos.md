@@ -8,7 +8,7 @@
 ## 再生成
 
 開発依存関係、Chromium、FFmpegが必要です。撮影には**専用の新規SQLiteパス**を指定し、
-既存プロジェクトのデータベースは使わないでください。撮影操作により計算・感度比較の履歴が作られます。
+既存プロジェクトのデータベースは使わないでください。撮影操作により計算・感度比較・測点間隔比較の履歴が作られます。
 
 3つのターミナルで次を実行します。ポートが使用中ならAPI・Web・撮影URLを一緒に変更します。
 
@@ -41,5 +41,5 @@ CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-readme.mjs http://127.0.0.1
 | `construction.gif` | 0.5 m/1 m掘削を再計算し、水位・土量・横断形状を確認 |
 | `sensitivity.gif` | 流量/粗度比較、SQLite履歴、実際のHTMLレポート |
 | `ai-assistant.gif` | キー不要のローカル提案、確認、Rust再計算、比較図 |
-| `station-spacing.gif` | 補間の前提確認、2/4分割、元測点の水位差・数値比較 |
+| `station-spacing.gif` | 補間の前提確認、2/4分割、元測点の水位差・数値比較、再読込み後の履歴・実際のHTML |
 | `survey-provenance.gif` | 合成CSVの出典記録、未確認項目、プレビュー/確認、実際の保存結果HTML |

@@ -11,6 +11,19 @@ spec.loader.exec_module(database)
 
 
 class RecoveryFailures(unittest.TestCase):
+    def test_resolution_snapshots_are_counted_and_corruption_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, backup, target = [Path(tmp)/name for name in ('source.sqlite','backup.sqlite','restore.sqlite')]
+            with sqlite3.connect(source) as connection:
+                for table in ('projects','runs','resolution_runs'):
+                    connection.execute(f'CREATE TABLE {table} (body TEXT)')
+                connection.execute('INSERT INTO resolution_runs VALUES (?)', ('{"study":{"cases":[]}}',))
+            self.assertEqual(database.copy_database(source, backup)['counts'], {'projects':0,'runs':0,'resolution_runs':1})
+            with sqlite3.connect(source) as connection:
+                connection.execute('UPDATE resolution_runs SET body=?', ('invalid json',))
+            with self.assertRaises(ValueError):
+                database.copy_database(source, target)
+            self.assertFalse(target.exists())
     def test_legacy_schema_restores_and_corrupt_sensitivity_snapshots_are_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, legacy, target = Path(tmp)/'source.sqlite', Path(tmp)/'legacy.sqlite', Path(tmp)/'restore.sqlite'

@@ -48,7 +48,12 @@ piecewise-linear intermediate stations, so refinement cannot evade abrupt-change
 2-way and 4-way splits through the same bounded blocking pool. Its response retains the
 project, full interpolated rivers/profiles, original-station differences, diagnostics,
 engine version and UTC study timestamp. This operation does not write SQLite or change
-projects/scenarios. The UI exports the displayed response as JSON/CSV without recomputing.
+projects/scenarios. The UI uses `POST /api/resolution/runs` to compute and append a server-created
+snapshot to its own `resolution_runs` table. It pages project-scoped summaries, reopens original
+conditions/results without changing the working project, and exports saved JSON/CSV/HTML without
+recomputing. Reports include a separate scientific-scale difference plot, representative sections,
+all successful profiles and explicit failure diagnostics. Recovery checks/copies this optional table;
+old databases gain the table on startup. No client-provided numerical results are accepted for storage.
 See [station spacing](station-spacing.md) for compatibility restrictions and validation.
 
 Excavation preserves bank coordinates/elevations and lowers the bottom: rectangle walls

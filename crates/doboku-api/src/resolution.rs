@@ -23,6 +23,10 @@ pub async fn compare(
     State(s): State<AppState>,
     Json(req): Json<Request>,
 ) -> ApiResult<Json<Response>> {
+    Ok(Json(calculate(&s, req).await?))
+}
+
+pub async fn calculate(s: &AppState, req: Request) -> ApiResult<Response> {
     if !req.confirmed_interpolation {
         return Err(Error::Invalid("測点間の補間条件を確認してください".into()).into());
     }
@@ -30,17 +34,15 @@ pub async fn compare(
     base.scenarios.clear();
     base.staged = false;
     validate_project(&base)?;
-    Ok(Json(
-        compute(&s, move || {
-            let result = study(&req.project.river)?;
-            Ok(Response {
-                project: req.project,
-                engine_version: ENGINE_VERSION.into(),
-                executed_at: chrono::Utc::now().to_rfc3339(),
-                study: result,
-                note: METHOD.into(),
-            })
+    compute(s, move || {
+        let result = study(&req.project.river)?;
+        Ok(Response {
+            project: req.project,
+            engine_version: ENGINE_VERSION.into(),
+            executed_at: chrono::Utc::now().to_rfc3339(),
+            study: result,
+            note: METHOD.into(),
         })
-        .await?,
-    ))
+    })
+    .await
 }

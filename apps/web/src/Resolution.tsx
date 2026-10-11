@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ResolutionHistory } from './ResolutionHistory';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { api, colors, saveBlob, type Project, type River, type Profile } from './types';
 
@@ -11,36 +12,19 @@ export type ResolutionResult = {
   project: Project; engine_version: string; executed_at: string; note: string;
   study: { baseline: Profile; cases: Outcome[] };
 };
-function csv(result: ResolutionResult) {
-  // Text cells are quoted and formula-protected; signed numerical values stay numbers.
-  const text = (value: string) => `"${(/^[=+\-@\t\r]/.test(value) ? "'" + value : value).replaceAll('"', '""')}"`;
-  const prefix = [result.engine_version, result.executed_at, result.project.name, result.project.reference.vertical_datum].map(text);
-  const suffix = [JSON.stringify(result.project), result.note].map(text);
-  const lines = ['engine_version,study_executed_at,project,vertical_datum,subdivisions,status,error,chainage_m,water_elevation_m,water_change_m,depth_change_m,velocity_change_m,conditions_json,project_json,note'];
-  const add = (factor: number, profile: Profile | null, river: River | null, differences: Difference[], error = '') => {
-    if (!profile) {
-      lines.push([...prefix, factor, 'failed', text(error), '', '', '', '', '', '', ...suffix].join(','));
-      return;
-    }
-    result.study.baseline.rows.forEach((_, i) => {
-      const row = profile.rows[i * factor];
-      const d = differences[i];
-      lines.push([...prefix, factor, 'ok', text(''), row.chainage, row.water_elevation,
-        d?.water_change ?? 0, d?.depth_change ?? 0, d?.velocity_change ?? 0,
-        text(JSON.stringify(river)), ...suffix].join(','));
-    });
-  };
-  add(1, result.study.baseline, result.project.river, []);
-  for (const outcome of result.study.cases) {
-    if (outcome.status === 'ok') add(outcome.subdivisions, outcome.profile, outcome.river, outcome.differences);
-    else add(outcome.subdivisions, null, null, [], outcome.error);
-  }
-  return '\uFEFF' + lines.join('\r\n') + '\r\n';
-}
+type Stored = { id: number; comparison: ResolutionResult };
 
 export function Resolution({ project, task }: {
   project: Project; task: (fn: () => Promise<void>) => Promise<void>;
 }) {
+  const [savedId, setSavedId] = useState<number | null>(null);
+  const [revision, setRevision] = useState(0);
+  async function exportReport(kind: 'html' | 'csv') {
+    if (savedId === null) return;
+    const response = await fetch(`/api/resolution/runs/${savedId}/reports/${kind}`);
+    if (!response.ok) throw new Error(await response.text());
+    saveBlob(await response.blob(), `doboku-resolution.${kind}`);
+  }
   const [confirmed, setConfirmed] = useState(false);
   const [result, setResult] = useState<ResolutionResult | null>(null);
   const successful = result?.study.cases.filter((c): c is Extract<Outcome, {status: 'ok'}> => c.status === 'ok') ?? [];
@@ -69,12 +53,16 @@ export function Resolution({ project, task }: {
       </label>
       <button className="secondary" disabled={!confirmed} onClick={() => void task(async () => {
         setResult(null);
-        setResult(await api<ResolutionResult>('/resolution', {project, confirmed_interpolation: true}));
+        setSavedId(null);
+        const stored = await api<Stored>('/resolution/runs', {project, confirmed_interpolation: true});
+        setResult(stored.comparison);
+        setSavedId(stored.id);
+        setRevision(n => n + 1);
       })}>基本条件を保持して測点間隔を比較</button>
       {result && <>
         <p role="status">測点間隔の比較完了: 成功 {successful.length} / 失敗 {result.study.cases.length - successful.length}。基本条件は変更していません。</p>
         <p className="muted">{result.note}</p>
-        <p className="muted">比較日時 {result.executed_at} · engine {result.engine_version} · 元の断面数 {result.project.river.stations.length}</p>
+        <p className="muted">測点間隔比較の保存結果 #{savedId} · {result.project.name} · 比較日時 {result.executed_at} · engine {result.engine_version} · 元の断面数 {result.project.river.stations.length}<br />保存時の標高系: {result.project.reference.vertical_datum} / 水平座標: {result.project.reference.horizontal_reference}</p>
         {successful.length > 0 && <div className="chart" aria-label="測点細分化による元測点の水位差">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={rows} margin={{top:15,right:20,bottom:12,left:8}}>
@@ -94,10 +82,16 @@ export function Resolution({ project, task }: {
             <td>{c.status === 'ok' ? c.previous_max_abs_water_change?.toExponential(6) ?? '前の分割が失敗したため未比較' : c.error}</td>
           </tr>)}</tbody>
         </table></div>
-        <p className="muted">2分割の直前は元の計算、4分割の直前は2分割です。すべて元測点で比較します。SQLite履歴には保存しません。再計算せず、この表示結果を出力します。</p>
+        <p className="muted">2分割の直前は元の計算、4分割の直前は2分割です。すべて元測点で比較します。条件・基準高・全分割結果・版・日時・失敗理由をSQLite履歴に保存します。再計算せず、保存結果を出力します。</p>
         <button className="secondary" onClick={() => saveBlob(new Blob([JSON.stringify(result,null,2)],{type:'application/json'}),'doboku-resolution.json')}>測点間隔比較JSONを保存</button>
-        <button className="secondary" onClick={() => saveBlob(new Blob([csv(result)],{type:'text/csv;charset=utf-8'}),'doboku-resolution.csv')}>測点間隔比較CSVを保存</button>
+        <button className="secondary" onClick={() => void task(() => exportReport('csv'))}>測点間隔比較CSVを保存</button>
+        <button className="secondary" onClick={() => void task(() => exportReport('html'))}>測点間隔比較HTMLを保存</button>
       </>}
+      <ResolutionHistory projectId={project.id} revision={revision} activeId={savedId} onOpen={id => void task(async () => {
+        const stored = await api<Stored>(`/resolution/runs/${id}`);
+        setResult(stored.comparison);
+        setSavedId(stored.id);
+      })} />
     </section>
   );
 }

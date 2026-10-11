@@ -17,6 +17,8 @@ pub mod history;
 mod provenance;
 pub mod report;
 pub mod resolution;
+pub mod resolution_history;
+pub mod resolution_report;
 pub mod sensitivity;
 pub mod sensitivity_history;
 pub mod sensitivity_report;
@@ -33,6 +35,7 @@ pub fn state(path: &str) -> std::result::Result<AppState, rusqlite::Error> {
     db.execute_batch("PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS projects(id TEXT PRIMARY KEY, name TEXT NOT NULL, body TEXT NOT NULL);")?;
     history::initialize(&db)?;
     sensitivity_history::initialize(&db)?;
+    resolution_history::initialize(&db)?;
     let p = doboku_core::sample();
     db.execute(
         "INSERT OR IGNORE INTO projects(id,name,body) VALUES (?1,?2,?3)",
@@ -82,6 +85,20 @@ pub fn app(state: AppState) -> Router {
         .route("/api/imports/survey/apply", post(survey::apply))
         .route("/api/sensitivity", post(sensitivity::compare))
         .route("/api/resolution", post(resolution::compare))
+        .route("/api/resolution/runs", post(resolution_history::create))
+        .route(
+            "/api/projects/{id}/resolution-runs",
+            get(resolution_history::list),
+        )
+        .route("/api/resolution/runs/{id}", get(resolution_history::load))
+        .route(
+            "/api/resolution/runs/{id}/reports/html",
+            get(resolution_history::html),
+        )
+        .route(
+            "/api/resolution/runs/{id}/reports/csv",
+            get(resolution_history::csv),
+        )
         .route("/api/sensitivity/runs", post(sensitivity_history::create))
         .route(
             "/api/projects/{id}/sensitivity-runs",

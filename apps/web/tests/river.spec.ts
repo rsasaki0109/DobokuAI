@@ -15,25 +15,25 @@ test('station spacing requires review, exports exact displayed results and clear
   const compare=page.getByRole('button',{name:'基本条件を保持して測点間隔を比較',exact:true});
   await expect(compare).toBeDisabled();
   await page.getByLabel('測点間を線形補間する前提を確認しました').check();
-  const pending=page.waitForResponse(r=>r.url().endsWith('/api/resolution')&&r.request().method()==='POST');
+  const pending=page.waitForResponse(r=>r.url().endsWith('/api/resolution/runs')&&r.request().method()==='POST');
   await compare.click();
-  const response=await pending;expect(response.ok()).toBeTruthy();const result=await response.json();
+  const response=await pending;expect(response.ok()).toBeTruthy();const result=(await response.json()).comparison;
   await expect(page.getByText('測点間隔の比較完了: 成功 2 / 失敗 0。基本条件は変更していません。')).toBeVisible();
   await expect(page.getByLabel('流量 Q (m³/s)')).toHaveValue('100');
   await expect(page.locator('.resolution-panel tbody tr')).toHaveCount(2);
   await expect(page.getByLabel('測点細分化による元測点の水位差')).toBeVisible();
   const requests:string[]=[];page.on('request',r=>{if(r.method()==='POST')requests.push(r.url());});
-  for (const kind of ['JSON','CSV']) {
+  for (const kind of ['JSON','CSV','HTML']) {
     const pending=page.waitForEvent('download');
     await page.getByRole('button',{name:`測点間隔比較${kind}を保存`,exact:true}).click();
     const text=await readFile((await (await pending).path())!,'utf8');
     expect(text).toContain(result.executed_at);
     if(kind==='JSON')expect(JSON.parse(text)).toEqual(result);
-    else {
+    else if(kind==='CSV') {
       const rows=csvRows(text);expect(rows).toHaveLength(33);
       rows.forEach(row=>{expect(row).not.toHaveProperty('null');expect(row.study_executed_at).toBe(result.executed_at);});
       expect(Number(rows[11].water_change_m)).toBe(result.study.cases[0].differences[0].water_change);
-    }
+    } else {expect(text).toContain('<svg');expect(text).toContain('水位差の軸は指数表記');expect(text).toContain('代表横断図');}
   }
   expect(requests).toEqual([]);
   await page.getByLabel('流量 Q (m³/s)').fill('110');
@@ -65,6 +65,41 @@ test('station spacing preserves a failed refinement in CSV without invented nume
   const failed=rows.filter(r=>r.status==='failed');expect(failed).toHaveLength(1);
   for(const key of ['chainage_m','water_elevation_m','water_change_m','depth_change_m','velocity_change_m','conditions_json'])expect(failed[0][key]).toBe('');
   expect(failed[0].error).toContain('上限200');
+});
+
+test('station-spacing history reopens original results after edits and reload without recalculating',async({page})=>{
+  await page.goto('/');
+  await expect(page.getByRole('heading',{name:'青葉川・河道改修検討'})).toBeVisible();
+  await page.getByRole('button',{name:'複製して新規作成',exact:true}).click();
+  await page.getByLabel('プロジェクト名',{exact:true}).fill('E2E 測点間隔履歴');
+  await page.getByRole('button',{name:'プロジェクトを保存',exact:true}).click();
+  await expect(page.getByText('プロジェクトを SQLite に保存しました')).toBeVisible();
+  await page.getByRole('button',{name:'水理計算',exact:true}).click();
+  await page.getByLabel('測点間を線形補間する前提を確認しました').check();
+  const pending=page.waitForResponse(r=>r.url().endsWith('/api/resolution/runs')&&r.request().method()==='POST');
+  await page.getByRole('button',{name:'基本条件を保持して測点間隔を比較',exact:true}).click();
+  const stored=await (await pending).json();
+  await expect(page.getByText(`測点間隔比較の保存結果 #${stored.id}`,{exact:false})).toBeVisible();
+  await page.reload();
+  await page.getByLabel('保存済みプロジェクト').selectOption({label:'E2E 測点間隔履歴'});
+  await page.getByRole('button',{name:'水理計算',exact:true}).click();
+  await page.getByLabel('流量 Q (m³/s)').fill('125');
+  const requests:string[]=[];page.on('request',r=>{if(r.method()==='POST')requests.push(r.url());});
+  await page.getByRole('button',{name:`測点間隔履歴 #${stored.id} を開く`,exact:true}).click();
+  await expect(page.getByText('測点間隔の比較完了: 成功 2 / 失敗 0。基本条件は変更していません。')).toBeVisible();
+  await expect(page.getByLabel('流量 Q (m³/s)')).toHaveValue('125');
+  await expect(page.getByRole('button',{name:'基本条件を保持して測点間隔を比較',exact:true})).toBeDisabled();
+  for(const kind of ['JSON','CSV','HTML']) {
+    const pending=page.waitForEvent('download');
+    await page.getByRole('button',{name:`測点間隔比較${kind}を保存`,exact:true}).click();
+    const text=await readFile((await (await pending).path())!,'utf8');
+    expect(text).toContain(stored.comparison.executed_at);
+    if(kind==='JSON')expect(JSON.parse(text)).toEqual(stored.comparison);
+    if(kind==='CSV')csvRows(text).forEach(row=>expect(JSON.parse(row.project_json).river.discharge).toBe(100));
+    if(kind==='HTML'){expect(text).toContain('Q=100 m³/s');expect(text).toContain('水位差の軸は指数表記');}
+  }
+  expect(requests).toEqual([]);
+  await expect(page.locator('.resolution-history .history-item')).toHaveCount(1);
 });
 
 test('sensitivity history retains failed cases and original exports after project edits and reload', async ({page}) => {

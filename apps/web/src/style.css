@@ -18,6 +18,15 @@
 .history-panel {
   margin-bottom: 24px;
 }
+.resolution-history {
+  border-top: 1px solid #dfe6d6;
+  margin-top: 24px;
+  padding-top: 24px;
+}
+.resolution-history .history-item small {
+  display: block;
+  margin-top: 7px;
+}
 .history-panel h2 {
   display: flex;
   align-items: center;

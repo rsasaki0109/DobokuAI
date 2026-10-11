@@ -20,9 +20,10 @@ def inspect(connection):
         raise ValueError("DobokuAI projects/runs schema is required")
     counts = {}
     snapshot_tables = ["projects", "runs"]
-    # Older databases remain recoverable; the API adds this table on startup.
-    if "sensitivity_runs" in tables:
-        snapshot_tables.append("sensitivity_runs")
+    # Older databases remain recoverable; the API adds optional tables on startup.
+    for table in ("sensitivity_runs", "resolution_runs"):
+        if table in tables:
+            snapshot_tables.append(table)
     for table in snapshot_tables:
         counts[table] = connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
     # Parse every stored JSON snapshot before treating it as recoverable.

@@ -740,6 +740,15 @@ async fn online_backup_restores_projects_and_original_run_snapshots() {
     assert_eq!(code, StatusCode::OK);
     let sensitivity: Value = serde_json::from_str(&text).unwrap();
     let script = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../scripts/database.py");
+    let (code, text) = call(
+        api.clone(),
+        "POST",
+        "/api/resolution/runs",
+        json!({"project":doboku_core::sample(),"confirmed_interpolation":true}),
+    )
+    .await;
+    assert_eq!(code, StatusCode::OK);
+    let resolution: Value = serde_json::from_str(&text).unwrap();
     let output = std::process::Command::new("python3")
         .arg(&script)
         .args(["backup", "--source"])
@@ -756,6 +765,7 @@ async fn online_backup_restores_projects_and_original_run_snapshots() {
     let manifest: Value = serde_json::from_slice(&output.stdout).unwrap();
     assert_eq!(manifest["counts"]["runs"], 1);
     assert_eq!(manifest["counts"]["sensitivity_runs"], 1);
+    assert_eq!(manifest["counts"]["resolution_runs"], 1);
     let mut changed = request()["project"].clone();
     changed["river"]["discharge"] = json!(150.0);
     call(api.clone(), "POST", "/api/projects", changed).await;
@@ -791,6 +801,21 @@ async fn online_backup_restores_projects_and_original_run_snapshots() {
     )
     .await;
     assert_eq!(serde_json::from_str::<Value>(&text).unwrap(), sensitivity);
+    let (code, text) = call(
+        restored_api.clone(),
+        "GET",
+        &format!("/api/resolution/runs/{}", resolution["id"]),
+        Value::Null,
+    )
+    .await;
+    assert_eq!(code, StatusCode::OK);
+    assert_eq!(serde_json::from_str::<Value>(&text).unwrap(), resolution);
+    for kind in ["csv", "html"] {
+        let url = format!("/api/resolution/runs/{}/reports/{kind}", resolution["id"]);
+        let original = call(api.clone(), "GET", &url, Value::Null).await;
+        let restored = call(restored_api.clone(), "GET", &url, Value::Null).await;
+        assert_eq!(original, restored);
+    }
     let (_, text) = call(
         restored_api.clone(),
         "GET",

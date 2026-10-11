@@ -294,3 +294,54 @@ An eighth actual UI GIF was recorded on the dedicated synthetic database, includ
 stored-results HTML. Its four source screenshots were visually inspected. Local evidence
 and source hashes are in `.local/provenance-verification.json` and `.local/readme-capture/`;
 raw research/database files are ignored by Git.
+
+## Station-spacing snapshots, reports and Compose recovery — 2026-10-11
+
+`POST /api/resolution/runs` appends server-computed comparisons; project-scoped pages,
+loads and CSV/HTML reports use immutable snapshots without invoking the solver.
+The existing unsaved `/api/resolution` remains available. Old databases gain an optional
+`resolution_runs` table/index; the backup CLI counts and checks its saved JSON.
+Opening a spacing history leaves working project conditions unchanged. Results include
+full interpolated profiles, original-station differences, source metadata, version/time
+and partial/total refinement failures; unsuccessful baseline calculations are not saved.
+
+- `scripts/check.sh` passed: workspace formatting, Clippy with warnings denied, **55 Rust
+  tests**, six independent reference-case regeneration, **4 Python recovery tests**,
+  TypeScript/Vite build and all **8 development E2E tests**. No assertions were disabled.
+- Three additional API tests verify exact saved numbers/source metadata after project
+  edits and SQLite reopening, stable scoped pagination, missing-record errors, forbidden
+  client-provided results, partial/total refinement diagnostics and empty failed CSV
+  numerical cells. An independent Python CSV reader checks column alignment/quoting.
+- The API backup/restore test now includes spacing history and checks restored CSV/HTML
+  against original report bodies exactly. Python recovery rejects invalid spacing JSON.
+- Dedicated Compose startup/smoke and all **8 Docker E2E tests** passed through Nginx.
+  After correcting a cramped history timestamp, the Web was rebuilt and the focused
+  spacing export/confirmation E2E passed again. The API binary before/after that cached
+  rebuild has the same SHA-256, recorded below. Vite's existing size advisory remains.
+- On a live disposable Compose volume, the online backup contained **7 projects, 6
+  calculation histories, 2 sensitivity histories and 4 spacing histories**. A hash-checked
+  restoration into a separate new volume and API returned all **12 snapshots and 24
+  CSV/HTML reports byte-for-byte identically**. Post-backup additions were excluded.
+  SHA-256 of both database snapshots: `6bda203e50068df5fa1f553db925cb96986d1e0807e14b9eddd43e391423168f`.
+- The development API was updated after a separate backup; its existing project and
+  calculation/sensitivity rows remained identical, and the new spacing-history API
+  returned an empty page. The development smoke checks passed.
+- The station-spacing GIF was recaptured from six real synthetic UI states, including
+  reload/history and the actual stored-results HTML. README retains eight GIFs total.
+
+Final API image: `sha256:583ba1f3cb8a6ca70e9a4dd306fcab70e6381632e1d8cf7ba64da4ecc8168ef5`.
+Final Web image: `sha256:48237f2df7261cf8a68999b35542078038d254cf6d616699f8ca9b30835b6ea6`.
+API executable SHA-256: `c6e3f00bec38ee2acd2cc68253b71f4b33bcba1cd6ab045f0fd222ada200d84e`.
+The full Docker E2E/recovery run used the same API executable in image
+`sha256:e81db54f06e8d0d3ab91c1860e2999b3e7dc9f744bdc1ce61b52b9f01700f14f`;
+the initial Web image was `sha256:c6e1fc9e61599b5ec1f93b71774909d559f8e26ac05d5a2c6cd3bbc99b53f269`.
+Proxy/CA settings and TLS verification were retained, without new application dependencies
+or numerical equations. Compose project: `doboku-resolution-history-check-20261011`.
+Local evidence is kept in `.local/compose-recovery/`, `.local/readme-capture/` and
+`.local/resolution-history-verification.json`; raw databases and research files are not Git content.
+
+GitHub Actions' ordinary HTTPS page returned404; Git access does not establish page/API
+authorization or CI success. Hosted CI remains unobserved. Practical datasets and actual
+external technical reviewers were not added. Fixed-rubric maturity remains44.0/100
+(displayed about45%), target60%. Retention limits and future schema compatibility remain
+unimplemented; same-version synthetic recovery is not proof of operational reliability.

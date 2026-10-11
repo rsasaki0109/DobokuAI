@@ -72,22 +72,41 @@ pub(super) struct Series {
     pub points: Vec<Point>,
 }
 pub(super) fn plot(title: &str, series: Vec<Series>) -> String {
+    draw_plot(title, series, false)
+}
+pub(super) fn difference_plot(title: &str, series: Vec<Series>) -> String {
+    draw_plot(title, series, true)
+}
+fn draw_plot(title: &str, series: Vec<Series>, difference: bool) -> String {
     let points: Vec<&Point> = series.iter().flat_map(|s| &s.points).collect();
     let xmin = points.iter().map(|p| p.x).fold(f64::INFINITY, f64::min);
     let xmax = points.iter().map(|p| p.x).fold(f64::NEG_INFINITY, f64::max);
-    let ymin = points.iter().map(|p| p.z).fold(f64::INFINITY, f64::min) - 0.5;
-    let ymax = points.iter().map(|p| p.z).fold(f64::NEG_INFINITY, f64::max) + 0.5;
-    let px = |v: f64| 60.0 + (v - xmin) / (xmax - xmin).max(1e-8) * 700.0;
-    let py = |v: f64| 220.0 - (v - ymin) / (ymax - ymin).max(1e-8) * 170.0;
+    let zmin = points.iter().map(|p| p.z).fold(f64::INFINITY, f64::min);
+    let zmax = points.iter().map(|p| p.z).fold(f64::NEG_INFINITY, f64::max);
+    let padding = if difference {
+        (zmax - zmin).max(1e-12) * 0.08
+    } else {
+        0.5
+    };
+    let (ymin, ymax) = (zmin - padding, zmax + padding);
+    let left = if difference { 110.0 } else { 60.0 };
+    let px = |v: f64| left + (v - xmin) / (xmax - xmin).max(1e-8) * (760.0 - left);
+    let py = |v: f64| {
+        220.0 - (v - ymin) / (ymax - ymin).max(if difference { 1e-15 } else { 1e-8 }) * 170.0
+    };
     let height = 260 + series.len().div_ceil(3) * 18;
     let mut s=format!("<svg role='img' aria-label='{}' viewBox='0 0 820 {}'><title>{}</title><rect width='820' height='{}' fill='#fff'/>",escape(title),height,escape(title),height);
     for i in 0..=4 {
         let y = ymin + (ymax - ymin) * i as f64 / 4.0;
         s.push_str(&format!(
-            "<path d='M60 {}H760' stroke='#dde3eb'/><text x='8' y='{}'>{:.2}</text>",
+            "<path d='M{left} {}H760' stroke='#dde3eb'/><text x='8' y='{}'>{}</text>",
             py(y),
             py(y) + 4.0,
-            y
+            if difference {
+                format!("{y:.2e}")
+            } else {
+                format!("{y:.2}")
+            }
         ));
         let x = xmin + (xmax - xmin) * i as f64 / 4.0;
         s.push_str(&format!(
@@ -105,7 +124,11 @@ pub(super) fn plot(title: &str, series: Vec<Series>) -> String {
             .join(" ");
         s.push_str(&format!("<polyline fill='none' stroke='{}' stroke-width='2' points='{}'/><text x='{}' y='{}' fill='{}'>{}</text>",line.color,coords,60+i%3*245,265+i/3*15,line.color,escape(&line.name)));
     }
-    s.push_str("<text x='60' y='25'>標高 (m / 共通基準高)</text><text x='660' y='25'>距離 (m)</text></svg>");
+    s.push_str(if difference {
+        "<text x='110' y='25'>水位差 (m)</text><text x='660' y='25'>距離 (m)</text></svg>"
+    } else {
+        "<text x='60' y='25'>標高 (m / 共通基準高)</text><text x='660' y='25'>距離 (m)</text></svg>"
+    });
     s
 }
 pub(super) fn water(points: &[Point], stage: f64) -> Vec<Point> {

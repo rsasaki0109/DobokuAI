@@ -34,7 +34,7 @@ Rust の決定論的な水理エンジンと、条件を整理する AI 操作�
 
 ### 測点間隔による結果差を照査
 
-線形補間の前提を確認して2分割・4分割を実行。同じ元測点の水位差を比較し、表示結果をJSON/CSVで保管できます。
+線形補間の前提を確認して2分割・4分割を実行。同じ元測点の水位差を比較し、SQLite履歴から元の結果をJSON/CSV/HTMLで保管できます。
 
 ![測点間隔の比較 — 補間の確認と2分割・4分割の水位差](docs/assets/station-spacing.gif)
 
@@ -143,7 +143,8 @@ Ctrl-C で同スクリプトが起動したプロセスのみを終了します�
 同じ元測点の水位・水深・流速差を比較できます。元の条件・流量・境界を保持し、
 追加点は線形補間です。追加測量や実河川の精度保証ではありません。
 失敗案は理由を表示し、数値を生成しません。表示結果は日時・エンジン版・補間後の全条件付きJSONと、
-元測点での比較CSVに出力します。SQLite履歴・専用HTMLは未対応です。
+元測点での比較CSV・図入りHTMLに出力します。Webの比較はSQLite履歴に保存し、
+再読込み後も同じ条件・数値・版・日時で出力できます。履歴を開いても作業中の条件は変わりません。
 対応する断面の組合せと検証結果は [測点間隔の比較](docs/station-spacing.md) を参照してください。
 
 ## エンジンと適用範囲
@@ -297,6 +298,9 @@ API は既定で `127.0.0.1:3001`、DB は `.local/doboku.sqlite`。`API_BIND` /
 | `POST /api/imports/survey/preview`, `/apply` | 横断測量CSVの診断・確認後の置換（保存・計算は別） |
 | `POST /api/sensitivity` | 基本条件固定の流量/粗度比較、成功と失敗を個別出力 |
 | `POST /api/resolution` | `{project, confirmed_interpolation:true}` → 基本計算と2/4分割の結果差（保存なし） |
+| `POST /api/resolution/runs` | 確認済みの測点間隔比較をサーバーで計算・保存。`{id,comparison}` |
+| `GET /api/projects/{id}/resolution-runs?before={cursor}` | 測点間隔比較の履歴概要を20件 |
+| `GET /api/resolution/runs/{id}`, `/reports/{csv\|html}` | 保存した測点間隔結果・成果の取得（再計算なし） |
 | `POST /api/sensitivity/runs` | 感度比較をサーバーで計算し、履歴へ保存。`{id,comparison}` |
 | `GET /api/projects/{id}/sensitivity-runs?before={cursor}` | 感度履歴の概要を新しい順で20件 |
 | `GET /api/sensitivity/runs/{id}` | 保存時の条件・数値・失敗理由・版・日時 |
