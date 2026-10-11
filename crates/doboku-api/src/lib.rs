@@ -15,6 +15,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::Semaphore;
 pub mod history;
 pub mod report;
+pub mod resolution;
 pub mod sensitivity;
 pub mod sensitivity_history;
 pub mod sensitivity_report;
@@ -79,6 +80,7 @@ pub fn app(state: AppState) -> Router {
         .route("/api/imports/survey/preview", post(survey::preview))
         .route("/api/imports/survey/apply", post(survey::apply))
         .route("/api/sensitivity", post(sensitivity::compare))
+        .route("/api/resolution", post(resolution::compare))
         .route("/api/sensitivity/runs", post(sensitivity_history::create))
         .route(
             "/api/projects/{id}/sensitivity-runs",

@@ -3,6 +3,8 @@ use doboku_core::{positive, Error, Regime, Result, River, Section, G};
 use doboku_geometry::{max_depth, validate as validate_section, wet};
 use serde::{Deserialize, Serialize};
 
+pub mod resolution;
+
 pub const DEPTH_TOL: f64 = 1e-9;
 pub const ENERGY_TOL: f64 = 1e-7;
 pub const MAX_ITER: usize = 120;

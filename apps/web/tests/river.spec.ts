@@ -1,5 +1,71 @@
 import { expect, test } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
+import { execFileSync } from 'node:child_process';
+
+function csvRows(text: string): Record<string,string>[] {
+  return JSON.parse(execFileSync('python3',['-c',
+    "import csv,io,json,sys;print(json.dumps(list(csv.DictReader(io.StringIO(sys.stdin.read().lstrip('\\ufeff'))))))"],{input:text,encoding:'utf8',maxBuffer:16*1024*1024}));
+}
+
+test('station spacing requires review, exports exact displayed results and clears them on edits', async ({page}) => {
+  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('/');
+  await expect(page.getByRole('heading',{name:'青葉川・河道改修検討'})).toBeVisible();
+  await page.getByRole('button',{name:'水理計算',exact:true}).click();
+  const compare=page.getByRole('button',{name:'基本条件を保持して測点間隔を比較',exact:true});
+  await expect(compare).toBeDisabled();
+  await page.getByLabel('測点間を線形補間する前提を確認しました').check();
+  const pending=page.waitForResponse(r=>r.url().endsWith('/api/resolution')&&r.request().method()==='POST');
+  await compare.click();
+  const response=await pending;expect(response.ok()).toBeTruthy();const result=await response.json();
+  await expect(page.getByText('測点間隔の比較完了: 成功 2 / 失敗 0。基本条件は変更していません。')).toBeVisible();
+  await expect(page.getByLabel('流量 Q (m³/s)')).toHaveValue('100');
+  await expect(page.locator('.resolution-panel tbody tr')).toHaveCount(2);
+  await expect(page.getByLabel('測点細分化による元測点の水位差')).toBeVisible();
+  const requests:string[]=[];page.on('request',r=>{if(r.method()==='POST')requests.push(r.url());});
+  for (const kind of ['JSON','CSV']) {
+    const pending=page.waitForEvent('download');
+    await page.getByRole('button',{name:`測点間隔比較${kind}を保存`,exact:true}).click();
+    const text=await readFile((await (await pending).path())!,'utf8');
+    expect(text).toContain(result.executed_at);
+    if(kind==='JSON')expect(JSON.parse(text)).toEqual(result);
+    else {
+      const rows=csvRows(text);expect(rows).toHaveLength(33);
+      rows.forEach(row=>{expect(row).not.toHaveProperty('null');expect(row.study_executed_at).toBe(result.executed_at);});
+      expect(Number(rows[11].water_change_m)).toBe(result.study.cases[0].differences[0].water_change);
+    }
+  }
+  expect(requests).toEqual([]);
+  await page.getByLabel('流量 Q (m³/s)').fill('110');
+  await expect(page.locator('.sensitivity-panel')).toHaveCount(1);
+  await expect(page.locator('.resolution-panel')).toHaveCount(1);
+  await expect(page.locator('.resolution-panel tbody tr')).toHaveCount(0);
+  await expect(compare).toBeDisabled();
+  expect(errors).toEqual([]);
+});
+
+test('station spacing preserves a failed refinement in CSV without invented numerical results',async({page,request})=>{
+  const project=await (await request.get('/api/sample')).json();
+  project.id=`e2e-spacing-${crypto.randomUUID()}`;project.name='=E2E 測点間隔の一部失敗';
+  project.river.stations=Array.from({length:51},(_,i)=>({...project.river.stations[0],chainage:i*20,bed_elevation:10-i*0.02}));
+  expect((await request.post('/api/projects',{data:project})).ok()).toBeTruthy();
+  await page.goto('/');
+  await expect(page.getByRole('heading',{name:'青葉川・河道改修検討'})).toBeVisible();
+  await page.getByLabel('保存済みプロジェクト').selectOption({label:project.name});
+  await page.getByRole('button',{name:'水理計算',exact:true}).click();
+  await page.getByLabel('測点間を線形補間する前提を確認しました').check();
+  await page.getByRole('button',{name:'基本条件を保持して測点間隔を比較',exact:true}).click();
+  await expect(page.getByText('測点間隔の比較完了: 成功 1 / 失敗 1。基本条件は変更していません。')).toBeVisible();
+  await expect(page.locator('.resolution-panel tbody tr').last()).toContainText('上限200');
+  const pending=page.waitForEvent('download');
+  await page.getByRole('button',{name:'測点間隔比較CSVを保存',exact:true}).click();
+  const rows=csvRows(await readFile((await (await pending).path())!,'utf8'));
+  expect(rows).toHaveLength(103);
+  for(const row of rows){expect(row.project).toBe("'"+project.name);expect(row).not.toHaveProperty('null');}
+  const failed=rows.filter(r=>r.status==='failed');expect(failed).toHaveLength(1);
+  for(const key of ['chainage_m','water_elevation_m','water_change_m','depth_change_m','velocity_change_m','conditions_json'])expect(failed[0][key]).toBe('');
+  expect(failed[0].error).toContain('上限200');
+});
 
 test('sensitivity history retains failed cases and original exports after project edits and reload', async ({page}) => {
   await page.goto('/');

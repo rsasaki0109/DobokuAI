@@ -9,7 +9,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(resolve(root, 'apps/web/package.json'));
 const { chromium } = require('playwright');
 const baseURL = process.argv[2];
+const only = process.argv[3];
 if (!baseURL) throw new Error('Pass the URL of a dedicated demo server; see docs/readme-demos.md.');
+if (only && !['hero','cross-section','water-profile','construction','sensitivity','ai-assistant','station-spacing'].includes(only)) throw new Error(`Unknown clip: ${only}`);
 const work = resolve(root, '.local/readme-capture');
 const assets = resolve(root, 'docs/assets');
 await mkdir(work, { recursive: true });
@@ -35,6 +37,7 @@ const run = async (page) => {
   await page.getByText('数値計算と施工比較が完了しました').waitFor();
 };
 async function clip(name, actions) {
+  if (only && only !== name) return;
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1000 },
     locale: 'ja-JP', timezoneId: 'Asia/Tokyo', reducedMotion: 'reduce',
@@ -165,6 +168,19 @@ try {
     await page.getByText('確認済みツールを適用し、Rust エンジンで計算しました').waitFor();
     await shot();
     await nav(page, '縦断水面形');
+    await shot(3);
+  });
+  await clip('station-spacing', async (page, shot) => {
+    await nav(page, '水理計算');
+    await focus(page, page.locator('.resolution-panel'));
+    await shot();
+    await page.getByLabel('測点間を線形補間する前提を確認しました').check();
+    await shot(1.5);
+    await page.getByRole('button', {name:'基本条件を保持して測点間隔を比較',exact:true}).click();
+    await page.getByText('測点間隔の比較完了: 成功 2 / 失敗 0。基本条件は変更していません。').waitFor();
+    await focus(page, page.locator('.resolution-panel'));
+    await shot(3);
+    await focus(page, page.locator('.resolution-panel .table-scroll'));
     await shot(3);
   });
   if (errors.length) throw new Error(errors.join('\n'));

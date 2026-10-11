@@ -215,3 +215,42 @@ The user reported publishing the saved `install_script` and `start_skill` config
 the restored task's full check was actually executed as recorded above.
 3D evidence belongs to the initial implementation. Docker was rerun for this CSV/sensitivity
 step as described above; optional 3D was not retested in this step.
+
+## Station-spacing study — 2026-10-11
+
+Added a standalone Rust interpolation/study module and confirmation-gated
+`POST /api/resolution`, plus original-station differences in the UI and JSON/CSV exports.
+It does not mutate the working project or write SQLite. Unsupported interpolation,
+capacity/spacing limits and solver failures are retained as diagnostics, without fabricated
+numerical output. [Specification and measured errors](station-spacing.md) describe the
+piecewise-linear assumptions and six independent ODE comparisons. Original abrupt-change
+guards are checked before splitting.
+
+Verification on this implementation:
+
+- `cargo fmt --all --check`, workspace clippy with `-D warnings`: passed.
+- All **50 Rust tests** and **3 Python recovery tests** passed; independent six-case
+  reference regeneration matched the pinned fixture.
+- TypeScript checking and Vite builds passed, including the final chart-layout adjustment
+  in the Docker Web build.
+- All **7 development browser E2E tests** passed after correcting the new sibling
+  component's duplicate React key and increasing the independent CSV parser's bounded
+  output buffer. Failed cases retain empty numerical CSV cells; exports preserve the
+  displayed timestamp/results without a new request. A direct initial browser invocation
+  lacked a Playwright-managed browser; later runs used the installed `/usr/bin/chromium`.
+- Separate Compose project `doboku-resolution-check-20261011`, dedicated new SQLite
+  volume, final API/Web images: startup and smoke passed; all **7 Docker browser E2E
+  tests** passed through Nginx. Existing data/services were not used as the test database.
+- A seventh actual UI GIF was recorded from a dedicated synthetic sample database.
+
+API image: `sha256:ee9a10b1fa9f7dcb1f78d2909f35ad65820c4702b7c8d4572caca9ddbbb3769d`.
+Web image: `sha256:a729b4a35ec9ce5f15aac0fb3e70624160a27d22af454771669183a44cd51887`.
+BuildKit-secret and read-only runtime CA mounts retained TLS verification. No new dependency
+or solver equation was introduced. The source hashes, observed sample differences and test
+record are retained in `.local/spacing-verification.json` and `.local/spacing-sample-result.json`.
+Those local outputs and databases are not Git content.
+
+This is numerical/workflow verification using synthetic cases. It does not add practical
+river datasets or actual technical reviewers. Maturity stays44.0/100 (displayed about45%).
+Hosted CI, actual provider credentials and the target's practical-data/review requirements
+remain unverified. Resolution-specific SQLite history/HTML are not implemented.

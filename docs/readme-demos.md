@@ -1,6 +1,6 @@
 # READMEの実画面GIF
 
-`docs/assets/` の6本は、同梱の合成サンプルをChromiumで実際に操作して撮影しています。
+`docs/assets/` の7本は、同梱の合成サンプルをChromiumで実際に操作して撮影しています。
 描画済みの画面状態を撮影し、読み取れる時間を確保してループGIFにします。
 画面や計算値の合成・差替えは行っていません。撮影日時は実際の実行日時です。
 数値精度の検証は [validation](validation.md) を参照してください。
@@ -29,6 +29,7 @@ CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-readme.mjs http://127.0.0.1
 ```
 
 画面は1440×1000 pxで撮影し、GIFは1200 px幅・4 fps・無限ループで書き出します。
+1本だけ更新する場合はURLの次に名前（例: `station-spacing`）を指定できます。
 生成元のPNG・HTML・フレーム一覧は `.local/readme-capture/` に保存し、Gitには含めません。
 公開対象はGIF、撮影スクリプトとこの文書です。撮影後は専用API/WebをCtrl-Cで終了します。
 
@@ -40,3 +41,4 @@ CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-readme.mjs http://127.0.0.1
 | `construction.gif` | 0.5 m/1 m掘削を再計算し、水位・土量・横断形状を確認 |
 | `sensitivity.gif` | 流量/粗度比較、SQLite履歴、実際のHTMLレポート |
 | `ai-assistant.gif` | キー不要のローカル提案、確認、Rust再計算、比較図 |
+| `station-spacing.gif` | 補間の前提確認、2/4分割、元測点の水位差・数値比較 |

@@ -41,6 +41,16 @@ displayed in UI and reports. No claim of suitability for design certification is
 
 ## Construction contract
 
+The optional station-spacing study is implemented in `doboku-hydraulics::resolution`,
+independent of HTTP/storage/AI. It validates the original model before inserting
+piecewise-linear intermediate stations, so refinement cannot evade abrupt-change guards.
+`POST /api/resolution` requires explicit interpolation confirmation and computes baseline,
+2-way and 4-way splits through the same bounded blocking pool. Its response retains the
+project, full interpolated rivers/profiles, original-station differences, diagnostics,
+engine version and UTC study timestamp. This operation does not write SQLite or change
+projects/scenarios. The UI exports the displayed response as JSON/CSV without recomputing.
+See [station spacing](station-spacing.md) for compatibility restrictions and validation.
+
 Excavation preserves bank coordinates/elevations and lowers the bottom: rectangle walls
 extend; trapezoid side slopes reconnect fixed banks to lowered toes; survey inner vertices
 are lowered and endpoint banks remain fixed. Section replacements use the same datum.

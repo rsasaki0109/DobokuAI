@@ -32,6 +32,12 @@ Rust の決定論的な水理エンジンと、条件を整理する AI 操作�
 
 ![施工シナリオ比較 — 掘削深を変更して再計算](docs/assets/construction.gif)
 
+### 測点間隔による結果差を照査
+
+線形補間の前提を確認して2分割・4分割を実行。同じ元測点の水位差を比較し、表示結果をJSON/CSVで保管できます。
+
+![測点間隔の比較 — 補間の確認と2分割・4分割の水位差](docs/assets/station-spacing.gif)
+
 ### 感度比較から履歴・レポートへ
 
 基本条件を保持して流量・粗度を比較。結果はSQLite履歴に保存し、元の数値・日時でHTML/CSV/JSONに出力できます。
@@ -125,6 +131,13 @@ Ctrl-C で同スクリプトが起動したプロセスのみを終了します�
 感度履歴を開いても作業中の基本条件は変更しません。CSVの失敗案は数値を空欄にします。
 基本断面・境界水深を固定して独立計算し、基本条件を変更しません。
 詳細と入力仕様は [survey import / sensitivity](docs/survey-import.md) を参照してください。
+
+水理計算画面の「測点間隔による結果差」では、補間の前提を確認してから区間を2分割・4分割し、
+同じ元測点の水位・水深・流速差を比較できます。元の条件・流量・境界を保持し、
+追加点は線形補間です。追加測量や実河川の精度保証ではありません。
+失敗案は理由を表示し、数値を生成しません。表示結果は日時・エンジン版・補間後の全条件付きJSONと、
+元測点での比較CSVに出力します。SQLite履歴・専用HTMLは未対応です。
+対応する断面の組合せと検証結果は [測点間隔の比較](docs/station-spacing.md) を参照してください。
 
 ## エンジンと適用範囲
 
@@ -276,6 +289,7 @@ API は既定で `127.0.0.1:3001`、DB は `.local/doboku.sqlite`。`API_BIND` /
 | `POST /api/compare` | `{project, scenarios, staged}` → 全結果 |
 | `POST /api/imports/survey/preview`, `/apply` | 横断測量CSVの診断・確認後の置換（保存・計算は別） |
 | `POST /api/sensitivity` | 基本条件固定の流量/粗度比較、成功と失敗を個別出力 |
+| `POST /api/resolution` | `{project, confirmed_interpolation:true}` → 基本計算と2/4分割の結果差（保存なし） |
 | `POST /api/sensitivity/runs` | 感度比較をサーバーで計算し、履歴へ保存。`{id,comparison}` |
 | `GET /api/projects/{id}/sensitivity-runs?before={cursor}` | 感度履歴の概要を新しい順で20件 |
 | `GET /api/sensitivity/runs/{id}` | 保存時の条件・数値・失敗理由・版・日時 |
@@ -288,7 +302,7 @@ API は既定で `127.0.0.1:3001`、DB は `.local/doboku.sqlite`。`API_BIND` /
 | `POST /api/agent/apply` | `{project, scenarios, staged, proposal, confirmed}` → 再計算 |
 | `POST /api/reports/html`, `/api/reports/csv` | 比較と同じ入力 → 図入り HTML / 全案 CSV |
 
-エンジンの入力/適用範囲エラーは 422、未確認操作は 409、計算過多は 429。
+エンジンの入力/適用範囲エラーは 422、AIの未確認操作は 409、間隔比較の未確認補間は 422、計算過多は 429。
 JSON ボディ上限 256 KiB、計算同時実行 4 件。計算は Tokio の blocking pool で実行します。
 レポートは全条件、全横断図、縦断水面形、水深/流速、施工比較、注意、エンジンバージョン、UTC 実行日時を記録します。
 認証・チーム共有・本番運用監査・河川以外の解析は未実装です。

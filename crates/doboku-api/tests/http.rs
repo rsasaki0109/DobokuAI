@@ -51,6 +51,149 @@ fn parse_csv(text: &str) -> Vec<Value> {
 }
 
 #[tokio::test]
+async fn resolution_requires_confirmation_and_returns_reproducible_results_without_db_writes() {
+    let api = app(state(":memory:").unwrap());
+    let project = doboku_core::sample();
+    let mut req = json!({"project":project,"confirmed_interpolation":false});
+    assert_eq!(
+        call(api.clone(), "POST", "/api/resolution", req.clone())
+            .await
+            .0,
+        StatusCode::UNPROCESSABLE_ENTITY
+    );
+    req["confirmed_interpolation"] = json!(true);
+    let (status, body) = call(api.clone(), "POST", "/api/resolution", req.clone()).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let response: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(response["project"], json!(project));
+    assert_eq!(response["engine_version"], doboku_core::ENGINE_VERSION);
+    assert!(
+        chrono::DateTime::parse_from_rfc3339(response["executed_at"].as_str().unwrap()).is_ok()
+    );
+    assert_eq!(
+        response["study"]["baseline"],
+        json!(doboku_hydraulics::solve(&project.river).unwrap())
+    );
+    for (i, factor) in [2, 4].iter().enumerate() {
+        let c = &response["study"]["cases"][i];
+        assert_eq!(c["status"], "ok");
+        assert_eq!(
+            c["river"]["stations"].as_array().unwrap().len(),
+            10 * factor + 1
+        );
+        assert_eq!(c["differences"].as_array().unwrap().len(), 11);
+        let river: doboku_core::River = serde_json::from_value(c["river"].clone()).unwrap();
+        assert_eq!(
+            c["profile"],
+            json!(doboku_hydraulics::solve(&river).unwrap())
+        );
+        for j in 0..11 {
+            assert_eq!(
+                c["river"]["stations"][j * factor],
+                json!(project.river.stations[j])
+            );
+            let expected = c["profile"]["rows"][j * factor]["water_elevation"]
+                .as_f64()
+                .unwrap()
+                - response["study"]["baseline"]["rows"][j]["water_elevation"]
+                    .as_f64()
+                    .unwrap();
+            assert!(
+                (c["differences"][j]["water_change"].as_f64().unwrap() - expected).abs() < 1e-12
+            );
+        }
+    }
+    for endpoint in [
+        "/api/projects/sample-river/runs",
+        "/api/projects/sample-river/sensitivity-runs",
+    ] {
+        let (_, body) = call(api.clone(), "GET", endpoint, Value::Null).await;
+        assert_eq!(
+            serde_json::from_str::<Value>(&body).unwrap()["items"],
+            json!([])
+        );
+    }
+    let (_, body) = call(
+        api.clone(),
+        "GET",
+        "/api/projects/sample-river",
+        Value::Null,
+    )
+    .await;
+    assert_eq!(
+        serde_json::from_str::<Value>(&body).unwrap(),
+        json!(project)
+    );
+    req["study"] = json!({"forged":true});
+    assert!(!call(api, "POST", "/api/resolution", req)
+        .await
+        .0
+        .is_success());
+}
+
+#[tokio::test]
+async fn resolution_retains_partial_and_geometry_failures_and_rejects_invalid_baseline() {
+    let api = app(state(":memory:").unwrap());
+    let mut project = doboku_core::sample();
+    project.river = doboku_hydraulics::resolution::refine(&project.river, 5).unwrap();
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/resolution",
+        json!({"project":project,"confirmed_interpolation":true}),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let result: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(result["study"]["cases"][0]["status"], "ok");
+    assert_eq!(result["study"]["cases"][1]["status"], "failed");
+    assert!(result["study"]["cases"][1]["error"]
+        .as_str()
+        .unwrap()
+        .contains("上限200"));
+    assert!(result["study"]["cases"][1].get("profile").is_none());
+    project = doboku_core::sample();
+    for s in &mut project.river.stations {
+        s.section = doboku_core::Section::Rectangle {
+            width: 20.0,
+            bank_height: 8.0,
+        };
+    }
+    project.river.stations[1].section = doboku_core::Section::Trapezoid {
+        bottom_width: 20.0,
+        side_slope: 0.0,
+        bank_height: 8.0,
+    };
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/resolution",
+        json!({"project":project,"confirmed_interpolation":true}),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let result: Value = serde_json::from_str(&body).unwrap();
+    for c in result["study"]["cases"].as_array().unwrap() {
+        assert_eq!(c["status"], "failed");
+        assert!(c["error"].as_str().unwrap().contains("異なる断面形式"));
+        assert!(c.get("profile").is_none());
+        assert!(c.get("max_abs_water_change").is_none());
+    }
+    project.river.discharge = -1.0;
+    assert_eq!(
+        call(
+            api,
+            "POST",
+            "/api/resolution",
+            json!({"project":project,"confirmed_interpolation":true})
+        )
+        .await
+        .0,
+        StatusCode::UNPROCESSABLE_ENTITY
+    );
+}
+
+#[tokio::test]
 async fn sensitivity_snapshots_preserve_exact_results_exports_failures_and_do_not_mutate_projects()
 {
     let root = std::env::temp_dir().join(format!(
