@@ -1,7 +1,7 @@
 {
-  "reviewed_on": "2026-10-11",
+  "reviewed_on": "2026-10-12",
   "adopted_practical_datasets": 0,
-  "note": "Candidate inventory only. No source-data licence, field calibration or engineering trial is certified. Dataset files are not distributed with DobokuAI.",
+  "note": "Candidate inventory only. Published usage terms are recorded where inspected; adoption, field calibration and engineering trials are not certified. Dataset files are not distributed with DobokuAI.",
   "candidates": [
     {
       "id": "bathypix-iowa",
@@ -201,7 +201,17 @@
         "Confirm common vertical reference, banks and reach direction for usable cross sections",
         "Select model-compatible reaches and record discharge, roughness and boundary conditions; do not manufacture them from missing metadata"
       ],
-      "redistributed_data": false
+      "redistributed_data": false,
+      "inspected_geopackage": {
+        "path": "input-data/flowtracker-data/TKE_Isar_Sep25.gpkg",
+        "bytes": 147456,
+        "sha256": "825fa0eb5d30553d021586d69f3e405a7cb21a6c3b510f2d3fa2634d34f03223",
+        "layer": "isar_sep_tke",
+        "measurement_records": 197,
+        "horizontal_crs": "EPSG:25832",
+        "geometry": "2D POINT",
+        "findings": "Contains coordinates, measured/total depth in m and velocity in m/s, but no common bed elevation field. Depth is not an absolute bed elevation."
+      }
     },
     {
       "id": "mchrb-synthetic",
@@ -218,6 +228,60 @@
       "inspected_readme_sha256": "c683b7b8baf0aedfb8e41ecd9cae70260316dd7977087eebce2ffa3594880391",
       "findings": "README describes generated synthetic riverbed topography. A real centerline does not establish measured underwater bathymetry.",
       "redistributed_data": false
+    },
+    {
+      "id": "fluvialgeomorph-testing-data",
+      "status": "pending_primary_metadata",
+      "source_url": "https://github.com/FluvialGeomorph/fluvgeodata/tree/25b562d9cbfca4f841aad097e246981322466f5f",
+      "revision": "25b562d9cbfca4f841aad097e246981322466f5f",
+      "inspected_files": [
+        {
+          "path": "inst/extdata/xs.csv",
+          "bytes": 5907,
+          "sha256": "8d9e4d49b36dcbfdcf5e778a5383c4c7c18e367966c61de1623c545d52256abf"
+        },
+        {
+          "path": "inst/extdata/thalweg.csv",
+          "bytes": 2280,
+          "sha256": "cd104711a34521b72364fcd47b4aa90bffd4497fbf7b783c54f3ec2ad06f7a5b"
+        },
+        {
+          "path": "inst/extdata/README-storage.md",
+          "bytes": 3733,
+          "sha256": "a5c8a9d2c1f9b7bcf57426febe1f91234de10e4b5ef260fe4b267b6ce4a93a9f"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 7048,
+          "sha256": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+        },
+        {
+          "path": "inst/extdata/AntelopeCreek_2013.gdb/a00000004.gdbtable",
+          "bytes": 388981,
+          "sha256": "50d8fde1f2b5ce28ea32156b5bc2ea8826a5f79a52174904643c8b0cbf388621"
+        },
+        {
+          "path": "inst/extdata/AntelopeCreek_2017.gdb/a00000004.gdbtable",
+          "bytes": 1263201,
+          "sha256": "53270d94d95a5773cf3416117e8bda4a8476acf3c4fbc4d048661f02498906ec"
+        },
+        {
+          "path": "inst/extdata/NWO_Papillion_ColeCreek_Stream.gdb/a00000004.gdbtable",
+          "bytes": 125224,
+          "sha256": "a4aaf0153afb07ab9d4a5ec64ea1af463955dc9a7e03a649d59431052afc51f7"
+        }
+      ],
+      "findings": "Data-only testing package identifies USACE authors and publishes CC0 terms. xs.csv contains 79 points in XS01/XS02 with explicit elev_m/elev_ft columns and bank/water-surface codes. Inspected FileGDB metadata includes Antelope Creek 2013/2017 and Cole Creek layers; Antelope 2017 process lineage references field-derived DEM. This does not establish original survey dates, bed survey provenance, vertical reference or three usable hydraulic cases. Related fluvgeo Sinsinawa documentation explicitly describes LiDAR-derived section elevations, not certified underwater bathymetry.",
+      "data_usage_terms": "Package README states CC0 and DESCRIPTION identifies file LICENSE; complete CC0 1.0 text inspected. Original survey attribution and rights applicable to individual fixtures remain to be traced.",
+      "vertical_unit": "xs.csv explicitly includes elev_m and elev_ft; units not verified for all FileGDB layers",
+      "vertical_datum": "unconfirmed for selected CSV and field-derived layers; do not apply a related package convention to all fixtures",
+      "adoption_blockers": [
+        "Identify original reach, survey source/date, horizontal CRS and common vertical reference for selected files",
+        "Distinguish measured underwater/dry-channel bed from LiDAR surface, interpolated terrain and synthetic fixtures",
+        "Select and inspect model-compatible reaches; document conversion, distance direction and hydraulic conditions before adoption"
+      ],
+      "redistributed_data": false
     }
-  ]
+  ],
+  "reviewed_timezone": "Asia/Tokyo"
 }
