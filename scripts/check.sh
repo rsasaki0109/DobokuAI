@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 bash scripts/run-cargo.sh fmt --all --check
 python3 tests/reference_cases.py --check
+python3 tests/irregular_reference.py --check
 python3 tests/dam_reference.py --check
 python3 tests/backups.py
 bash scripts/run-cargo.sh clippy --workspace --all-targets --locked -j 4 -- -D warnings

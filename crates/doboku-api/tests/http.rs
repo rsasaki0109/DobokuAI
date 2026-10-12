@@ -25,6 +25,104 @@ async fn call(app: Router, method: &str, url: &str, body: Value) -> (StatusCode,
         String::from_utf8(res.into_body().collect().await.unwrap().to_bytes().to_vec()).unwrap();
     (status, text)
 }
+
+#[tokio::test]
+async fn irregular_survey_preserves_vertices_and_saved_results_and_rejects_split_boundary() {
+    let api = app(state(":memory:").unwrap());
+    let points = [
+        (-10., 6.),
+        (-5., 0.6),
+        (-3., 0.),
+        (-1., 0.12),
+        (1., 0.04),
+        (3., 0.18),
+        (5., 0.5),
+        (9., 6.),
+    ];
+    let mut csv = String::from("station,chainage_m,bed_elevation_m,roughness,x_m,elevation_m\n");
+    for i in 0..11 {
+        for (x, z) in points {
+            csv.push_str(&format!(
+                "S{i},{},{},0.035,{x},{z}\n",
+                i * 40,
+                20.0 - i as f64 * 0.04
+            ));
+        }
+    }
+    let source = json!({"csv":csv,"file_name":"irregular-synthetic.csv","elevation_mode":"relative","unit":"m","vertical_datum":"合成基準高","horizontal_reference":"合成局所座標・m","dataset":{"data_kind":"synthetic","processing":"起伏を含む合成点列、平滑化なし"}});
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/imports/survey/preview",
+        source.clone(),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    let preview: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(preview["valid"], true, "{body}");
+    assert!(preview["warnings"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .any(|w| w.as_str().unwrap().contains("連続流路")));
+    let mut p = doboku_core::sample();
+    p.id = "irregular-survey".into();
+    p.river.discharge = 15.0;
+    p.river.boundary.depth = 3.6;
+    let request = json!({"project":p,"source":source,"confirmed":true,"review_token":preview["review_token"]});
+    let (status, body) = call(api.clone(), "POST", "/api/imports/survey/apply", request).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let project: Value = serde_json::from_str(&body).unwrap();
+    let expected: Vec<_> = points
+        .into_iter()
+        .map(|(x, z)| json!({"x":x,"z":z}))
+        .collect();
+    for station in project["river"]["stations"].as_array().unwrap() {
+        assert_eq!(station["section"]["points"], json!(expected));
+    }
+    let req = json!({"project":project,"scenarios":[],"staged":false});
+    let (status, body) = call(api.clone(), "POST", "/api/runs", req.clone()).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let saved: Value = serde_json::from_str(&body).unwrap();
+    let id = saved["id"].as_i64().unwrap();
+    assert_eq!(
+        saved["analysis"]["run"]["river"]["stations"],
+        project["river"]["stations"]
+    );
+    for format in ["csv", "html"] {
+        let (status, body) = call(
+            api.clone(),
+            "GET",
+            &format!("/api/runs/{id}/reports/{format}"),
+            Value::Null,
+        )
+        .await;
+        assert_eq!(status, StatusCode::OK);
+        assert!(body.contains(saved["analysis"]["run"]["executed_at"].as_str().unwrap()));
+        assert!(body.contains("起伏"));
+    }
+    let mut bad = req;
+    bad["project"]["river"]["boundary"] = json!({"regime":"supercritical","depth":0.08});
+    let (status, error) = call(api.clone(), "POST", "/api/runs", bad).await;
+    assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+    assert!(error.contains("分離した流路"));
+    let (_, body) = call(
+        api.clone(),
+        "GET",
+        "/api/projects/irregular-survey/runs",
+        Value::Null,
+    )
+    .await;
+    assert_eq!(
+        serde_json::from_str::<Value>(&body).unwrap()["items"]
+            .as_array()
+            .unwrap()
+            .len(),
+        1
+    );
+    let (_, body) = call(api, "GET", &format!("/api/runs/{id}"), Value::Null).await;
+    assert_eq!(serde_json::from_str::<Value>(&body).unwrap(), saved);
+}
 fn request() -> Value {
     json!({"project":doboku_core::sample(),"scenarios":[{"name":"掘削1m","modification":{"kind":"excavate","depth":1.0}}]})
 }
@@ -997,10 +1095,6 @@ async fn survey_diagnostics_reject_missing_nonfinite_and_unsupported_geometry() 
     let variants = [
         original.replace("-22,18.000", "-22,"),
         original.replace("S02", "S00"),
-        original.replace(
-            "S00,0,10.000,0.03,10,10.000",
-            "S00,0,10.000,0.03,0,12.000\nS00,0,10.000,0.03,10,10.000",
-        ),
         format!("{original}\""),
         original.replace("S00,0", "S\"00,0"),
         original.replace("S00,0", "\"S00\"oops,0"),
@@ -1031,6 +1125,61 @@ async fn survey_diagnostics_reject_missing_nonfinite_and_unsupported_geometry() 
         assert_eq!(preview["review_token"], Value::Null);
         assert_eq!(call(api.clone(), "POST", "/api/imports/survey/apply", json!({"source":source,"project":doboku_core::sample(),"confirmed":true,"review_token":"forged"})).await.0, StatusCode::UNPROCESSABLE_ENTITY);
     }
+}
+
+#[tokio::test]
+async fn irregular_shape_preview_is_distinct_from_wetted_connectivity_validation() {
+    let api = app(state(":memory:").unwrap());
+    let mut source = survey_source();
+    source["csv"] = json!(source["csv"].as_str().unwrap().replace(
+        "S00,0,10.000,0.03,10,10.000",
+        "S00,0,10.000,0.03,0,12.000\nS00,0,10.000,0.03,10,10.000"
+    ));
+    let (_, body) = call(
+        api.clone(),
+        "POST",
+        "/api/imports/survey/preview",
+        source.clone(),
+    )
+    .await;
+    let preview: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(preview["valid"], true);
+    let (status,body)=call(api.clone(),"POST","/api/imports/survey/apply",json!({"source":source,"project":doboku_core::sample(),"confirmed":true,"review_token":preview["review_token"]})).await;
+    assert_eq!(status, StatusCode::OK);
+    let mut project: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(
+        project["river"]["stations"][0]["section"]["points"][2],
+        json!({"x":0.0,"z":2.0})
+    );
+    project["river"]["boundary"] = json!({"regime":"supercritical","depth":0.5});
+    let (status, error) = call(
+        api.clone(),
+        "POST",
+        "/api/runs",
+        json!({"project":project,"scenarios":[]}),
+    )
+    .await;
+    assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+    assert!(
+        error.contains("分離") || error.contains("連続流路"),
+        "{error}"
+    );
+    let (_, body) = call(
+        api.clone(),
+        "GET",
+        "/api/projects/sample-river/runs",
+        Value::Null,
+    )
+    .await;
+    assert!(serde_json::from_str::<Value>(&body).unwrap()["items"]
+        .as_array()
+        .unwrap()
+        .is_empty());
+    let (_, body) = call(api, "GET", "/api/projects/sample-river", Value::Null).await;
+    assert_eq!(
+        serde_json::from_str::<Value>(&body).unwrap(),
+        json!(doboku_core::sample())
+    );
 }
 
 #[tokio::test]

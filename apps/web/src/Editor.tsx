@@ -132,7 +132,7 @@ export function SectionFields({
               {error}
             </p>
           )}
-          <p className="muted">最低点 z=0、x は昇順、単一谷形。両端は堤岸です。</p>
+          <p className="muted">最低点 z=0、x は昇順、両端は堤岸。起伏を保持し、計算水深で連続する1流路が必要です。</p>
         </div>
       )}
     </>

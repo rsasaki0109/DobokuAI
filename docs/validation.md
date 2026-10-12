@@ -395,3 +395,59 @@ This validates the stated simple static/capacity models. It does not validate ea
 FEM, cracking, foundation deformation, uplift drainage reduction, gate discharge, reservoir
 routing, spillway-flow loads or any code-of-practice safety criteria. Maturity remains
 44.0/100 (display approximately 45%); actual-river trials and hosted CI remain unverified.
+
+## Unsmoothed irregular sections — engine 0.2.0, 2026-10-12 (JST)
+
+The geometry contract now permits irregular ground without modifying vertices, while
+wetted geometry requires one connected surface interval. The hydraulic solver enumerates
+connected depth bands, scans vertex sides and interval stationary points for critical and
+normal roots, rejects detected multiple/discontinuous roots, and restricts standard-step
+and boundary depth to the band with the unique minimum-energy critical root.
+See [the model, tolerances and exclusions](irregular-sections.md).
+
+Two additional synthetic benchmarks use independent horizontal-strip integration that
+sums separate low-level slices below submerged bed ridges, followed by the continuous
+GVF ODE integrated with RK4. The production formula and Rust geometry are not imported.
+Reference steps 0.02/0.01m differ by 2.887e−14m for subcritical and 9.504e−12m for
+supercritical flow. The observed standard-step fine-grid errors are approximately
+4.273e−8m (4m stations, about 24 times better than 20m stations) and 4.288e−5m
+(1m stations, about 26 times better than 5m stations). Predefined acceptance limits
+are 5e−5m / 15-times improvement and 1e−4m / 10-times improvement respectively.
+Original classic ODE, survey-vertex and external SWASHES comparisons remain passing.
+
+Hand-integrated irregular geometry checks area=127/24m² and surface width=41/12m at
+3m depth. Additional tests verify retained vertices, disconnected/just-touching water,
+wrong connected band at the boundary, continuous sharp widening with multiple critical
+roots, and multiple or unresolved-discontinuous Manning normal-depth roots.
+CSV preview acceptance is explicitly separate from subsequent wetted-flow validation.
+A formerly rejected irregular ground fixture now previews intact, but its split-water
+calculation fails without changing projects or appending history.
+
+Final quality checks: 72 Rust tests; cargo fmt and clippy with warnings denied;
+frontend typecheck/Vite build; 5 Python recovery checks; independent irregular-reference
+regeneration and gravity-dam fixture checks. Development E2E initially passed 15/16:
+the old overflow case received an overly generic depth-band error. Boundary wet geometry
+is now checked first; the affected overflow and irregular-section tests both passed.
+The production Docker build passed all 16 E2E, including unchanged dam/3D/gallery,
+spacing, sensitivity, survey provenance, AI confirmation and report/history workflows.
+
+A copy of a real earlier 0.1.0 verification DB was reopened by the 0.2.0 API. All
+22 saved snapshots (6 river, 2 sensitivity, 3 spacing, 11 dam) matched their stored JSON
+conditions, numerical values, original versions and timestamps exactly without solving.
+The source database was untouched. River CSV retains existing columns and appends
+warnings_json; HTML exports stored profile warnings. The old-version CSV still reported
+0.1.0 and its original warnings. Byte identity of an old CSV/HTML across the format
+upgrade is not claimed; numerical/input snapshot compatibility is verified.
+
+The bundled synthetic CSV previews as 21 sections with all eight ground vertices retained.
+Actual Antelope Creek points were reviewed with explicit geometry-only placeholder reach
+spacing/roughness, with no apply or calculation: the old monotonic-ground rejection is
+removed, but its pair of original sections fails the existing adjacent-width guard.
+Original datum and survey conditions remain unconfirmed. This is not an adopted field trial.
+Local evidence is retained in .local/irregular-validation/.
+
+A full execution volume was encountered after the Docker build. Unused build cache
+older than one hour was pruned; tagged images, running containers, all project databases
+and research evidence were retained. Approximately 20GB became available and the
+production browser/compatibility checks completed. No TLS or numerical assertion was disabled.
+Maturity remains 44.0/100 (approximately 45%) pending qualified real-data trials and hosted CI.

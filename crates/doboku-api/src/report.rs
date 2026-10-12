@@ -19,7 +19,7 @@ pub(super) fn cell(s: &str) -> String {
     format!("\"{}\"", s.replace('"', "\"\""))
 }
 pub fn csv(a: &Analysis) -> String {
-    let mut out=String::from("\u{feff}engine_version,executed_at,scenario,chainage_m,bed_elevation_m,water_elevation_m,depth_m,velocity_m_s,area_m2,froude,friction_slope,critical_depth_m,normal_depth_m,energy_residual_m,cut_volume_m3,fill_volume_m3,cut_area_m2,conditions_json,reference_json\r\n");
+    let mut out=String::from("\u{feff}engine_version,executed_at,scenario,chainage_m,bed_elevation_m,water_elevation_m,depth_m,velocity_m_s,area_m2,froude,friction_slope,critical_depth_m,normal_depth_m,energy_residual_m,cut_volume_m3,fill_volume_m3,cut_area_m2,conditions_json,reference_json,warnings_json\r\n");
     let reference = cell(&serde_json::to_string(&a.project.reference).unwrap());
     let mut add = |name: &str,
                    p: &Profile,
@@ -30,7 +30,7 @@ pub fn csv(a: &Analysis) -> String {
         let conditions = cell(&serde_json::to_string(river).unwrap());
         for (i, r) in p.rows.iter().enumerate() {
             out.push_str(&format!(
-                "{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\r\n",
+                "{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\r\n",
                 cell(&a.run.engine_version),
                 cell(&a.run.executed_at),
                 cell(name),
@@ -49,7 +49,8 @@ pub fn csv(a: &Analysis) -> String {
                 fill.map(|v| v.to_string()).unwrap_or_default(),
                 areas.map(|a| a[i].to_string()).unwrap_or_default(),
                 conditions,
-                reference
+                reference,
+                cell(&serde_json::to_string(&p.warnings).unwrap())
             ));
         }
     };
@@ -168,7 +169,7 @@ pub fn html(a: &Analysis) -> String {
     let colors = [
         "#e18127", "#895be5", "#cc526c", "#1e948b", "#8a863a", "#445ea9",
     ];
-    let mut s=format!("<!doctype html><html lang='ja'><meta charset='utf-8'><title>DobokuAI 計算レポート</title><style>body{{font:14px system-ui;color:#203244;max-width:1100px;margin:40px auto;padding:20px}}h1,h2,h3{{color:#12382f}}table{{width:100%;border-collapse:collapse;font-size:12px}}td,th{{border-bottom:1px solid #ddd;padding:7px;text-align:right}}pre{{white-space:pre-wrap;font-size:11px;background:#f4f6f7;padding:15px}}svg{{width:100%;font:12px system-ui}}section{{break-inside:avoid;margin:24px 0}}@media print{{body{{margin:0}}}}</style><h1>DobokuAI / {}</h1><p>エンジン {} ・実行日時 {} (UTC) ・単位 SI ・全図共通基準高</p><h2>計算条件・手法</h2><p>Q={} m³/s / 参照勾配={} / 境界 {:?}: 水深 {} m。標準逐次計算法、Manning摩擦、α=1、区間摩擦勾配の算術平均。二分法最大120回、エネルギー残差≤10⁻⁷m。等流水深は参照勾配の診断値。</p><p>{}</p><p>施工案モード: {}。水位差・土量は施工前からの累積値。工期・費用は根拠データがないため未算定。</p>",escape(&a.project.name),escape(&a.run.engine_version),escape(&a.run.executed_at),a.run.river.discharge,a.run.river.normal_slope,a.run.river.boundary.regime,a.run.river.boundary.depth,escape(doboku_hydraulics::LIMITATIONS),if a.staged{"順序付き施工段階（条件を累積）"}else{"独立した代替案"});
+    let mut s=format!("<!doctype html><html lang='ja'><meta charset='utf-8'><title>DobokuAI 計算レポート</title><style>body{{font:14px system-ui;color:#203244;max-width:1100px;margin:40px auto;padding:20px}}h1,h2,h3{{color:#12382f}}table{{width:100%;border-collapse:collapse;font-size:12px}}td,th{{border-bottom:1px solid #ddd;padding:7px;text-align:right}}pre{{white-space:pre-wrap;font-size:11px;background:#f4f6f7;padding:15px}}svg{{width:100%;font:12px system-ui}}section{{break-inside:avoid;margin:24px 0}}@media print{{body{{margin:0}}}}</style><h1>DobokuAI / {}</h1><p>エンジン {} ・実行日時 {} (UTC) ・単位 SI ・全図共通基準高</p><h2>計算条件・手法</h2><p>Q={} m³/s / 参照勾配={} / 境界 {:?}: 水深 {} m。標準逐次計算法、Manning摩擦、α=1、区間摩擦勾配の算術平均。二分法最大120回、エネルギー残差≤10⁻⁷m。等流水深は参照勾配の診断値。</p><p>{}</p><p>施工案モード: {}。水位差・土量は施工前からの累積値。工期・費用は根拠データがないため未算定。</p>",escape(&a.project.name),escape(&a.run.engine_version),escape(&a.run.executed_at),a.run.river.discharge,a.run.river.normal_slope,a.run.river.boundary.regime,a.run.river.boundary.depth,escape(&a.run.profile.warnings.join(" / ")),if a.staged{"順序付き施工段階（条件を累積）"}else{"独立した代替案"});
     s.push_str(&format!("<h3>座標・基準高と取込み元</h3><p>標高系: {} / 水平座標: {}。座標変換は行っていません。</p>", escape(&a.project.reference.vertical_datum), escape(&a.project.reference.horizontal_reference)));
     if let Some(source) = &a.project.reference.import {
         s.push_str(&format!("<p>取込み元: {} / 日時 {} / 高さの解釈 {} / 単位 {}<br>取込み元CSVのSHA-256: {}。取込み後の編集はハッシュに含まれません。現在の条件は末尾の再現用JSONを参照してください。</p>", escape(&source.file_name), escape(&source.imported_at), escape(&source.elevation_mode), escape(&source.unit), escape(&source.sha256)));

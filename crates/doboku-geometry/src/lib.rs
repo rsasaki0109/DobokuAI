@@ -1,4 +1,4 @@
-//! Wetted geometry for finite-bank, single-valley sections.
+//! Wetted geometry for finite banks and one connected wetted channel.
 use doboku_core::{positive, Error, Point, Result, Section};
 use serde::Serialize;
 
@@ -45,16 +45,9 @@ pub fn validate(s: &Section) -> Result<()> {
             if min.abs() > 1e-9 {
                 return Err(Error::Invalid("測量断面の最低点は相対高さ0".into()));
             }
-            let mut rising = false;
             for w in points.windows(2) {
                 if w[1].x <= w[0].x {
                     return Err(Error::Invalid("測点xは単調増加、垂直区間は未対応".into()));
-                }
-                if w[1].z > w[0].z {
-                    rising = true;
-                }
-                if rising && w[1].z < w[0].z {
-                    return Err(Error::Unsupported("複断面・分離した流路は未対応".into()));
                 }
             }
             positive("左岸高", points[0].z)?;
@@ -62,6 +55,57 @@ pub fn validate(s: &Section) -> Result<()> {
         }
     }
     Ok(())
+}
+
+/// Open depth intervals in which the surface covers one connected channel.
+/// Ground vertices are retained; no smoothing, cropping or monotonic repair.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct DepthRange {
+    pub lower: f64,
+    pub upper: f64,
+}
+
+fn wet_regions(points: &[Point], depth: f64) -> usize {
+    usize::from(points[0].z < depth)
+        + points
+            .windows(2)
+            .filter(|w| w[0].z >= depth && w[1].z < depth)
+            .count()
+}
+
+pub fn connected_ranges(s: &Section) -> Result<Vec<DepthRange>> {
+    validate(s)?;
+    let upper = max_depth(s);
+    let Section::Survey { points } = s else {
+        return Ok(vec![DepthRange { lower: 0.0, upper }]);
+    };
+    let mut levels = vec![0.0, upper];
+    levels.extend(
+        points
+            .iter()
+            .map(|p| p.z)
+            .filter(|z| *z > 0.0 && *z < upper),
+    );
+    levels.sort_by(f64::total_cmp);
+    levels.dedup();
+    let mut ranges: Vec<DepthRange> = Vec::new();
+    for pair in levels.windows(2) {
+        let middle = pair[0] + (pair[1] - pair[0]) / 2.0;
+        if middle <= pair[0] || middle >= pair[1] || wet_regions(points, middle) != 1 {
+            continue;
+        }
+        if let Some(last) = ranges.last_mut() {
+            if last.upper == pair[0] && wet_regions(points, pair[0]) == 1 {
+                last.upper = pair[1];
+                continue;
+            }
+        }
+        ranges.push(DepthRange {
+            lower: pair[0],
+            upper: pair[1],
+        });
+    }
+    Ok(ranges)
 }
 pub fn max_depth(s: &Section) -> f64 {
     match s {
@@ -97,6 +141,11 @@ pub fn wet(s: &Section, depth: f64) -> Result<WetGeometry> {
             top_width: b + 2.0 * m * depth,
         },
         Section::Survey { points } => {
+            if wet_regions(points, depth) != 1 {
+                return Err(Error::Unsupported(
+                    "計算水深で分離した流路が生じます。接続点ちょうどの水位も対象外です".into(),
+                ));
+            }
             let mut g = WetGeometry {
                 area: 0.0,
                 perimeter: 0.0,
@@ -202,7 +251,7 @@ mod tests {
         }
     }
     #[test]
-    fn valley_and_banks_are_enforced() {
+    fn connected_water_and_banks_are_enforced_without_ground_repair() {
         let t = Section::Rectangle {
             width: 10.0,
             bank_height: 5.0,
@@ -216,6 +265,27 @@ mod tests {
             Point { x: 3.0, z: 1.0 },
             Point { x: 4.0, z: 4.0 },
         ];
-        assert!(validate(&Section::Survey { points: p }).is_err());
+        let s = Section::Survey { points: p.clone() };
+        assert!(validate(&s).is_ok());
+        assert!(wet(&s, 1.5).is_err());
+        assert!(wet(&s, 2.0).is_err());
+        let g = wet(&s, 3.0).unwrap();
+        // Hand integration of four submerged line segments.
+        assert!((g.area - 127.0 / 24.0).abs() < 1e-12);
+        assert!((g.top_width - 41.0 / 12.0).abs() < 1e-12);
+        assert_eq!(ground(&s, 0.0), p);
+        assert_eq!(
+            connected_ranges(&s).unwrap(),
+            vec![
+                DepthRange {
+                    lower: 0.0,
+                    upper: 1.0
+                },
+                DepthRange {
+                    lower: 2.0,
+                    upper: 4.0
+                }
+            ]
+        );
     }
 }

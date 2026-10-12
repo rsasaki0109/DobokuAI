@@ -1,8 +1,9 @@
 //! Deterministic Manning and standard-step solver. No storage, network or AI.
 use doboku_core::{positive, Error, Regime, Result, River, Section, G};
-use doboku_geometry::{max_depth, validate as validate_section, wet};
+use doboku_geometry::{validate as validate_section, wet};
 use serde::{Deserialize, Serialize};
 
+mod depth_range;
 pub mod resolution;
 pub mod spillway;
 
@@ -71,61 +72,19 @@ fn bisect<F: Fn(f64) -> Result<f64>>(mut lo: f64, mut hi: f64, f: F) -> Result<f
 pub fn critical_depth(s: &Section, q: f64) -> Result<f64> {
     validate_section(s)?;
     positive("流量", q)?;
-    let lo = 1e-6;
-    let hi = max_depth(s) * (1.0 - 1e-8);
-    if hi <= lo {
-        return Err(Error::Unsupported(
-            "断面の堤岸高は1µmより大きい値が必要".into(),
-        ));
-    }
-    let f = |d| Ok(froude(s, d, q)?.powi(2) - 1.0);
-    if let Section::Survey { points } = s {
-        // Survey benches can have multiple energy minima or discontinuous top width.
-        // Scan both sides of every vertex as well as a logarithmic grid; never select
-        // an arbitrary critical depth from a compound-energy section.
-        let mut grid: Vec<f64> = (0..=256)
-            .map(|i| lo * (hi / lo).powf(i as f64 / 256.0))
-            .collect();
-        for p in points {
-            for d in [p.z * (1.0 - 1e-8), p.z, p.z * (1.0 + 1e-8)] {
-                if d > lo && d < hi {
-                    grid.push(d);
-                }
-            }
-        }
-        grid.sort_by(f64::total_cmp);
-        grid.dedup_by(|a, b| (*a - *b).abs() < 1e-12);
-        let mut roots = Vec::new();
-        for w in grid.windows(2) {
-            if f(w[0])? * f(w[1])? <= 0.0 {
-                let root = bisect(w[0], w[1], f)?;
-                if f(root)?.abs() > 1e-6 {
-                    return Err(Error::Unsupported(
-                        "横断面の段差による限界条件の不連続は未対応".into(),
-                    ));
-                }
-                roots.push(root);
-            }
-        }
-        roots.dedup_by(|a, b| (*a - *b).abs() < 1e-6);
-        if roots.len() > 1 {
-            return Err(Error::Unsupported("限界水深が複数の断面は未対応".into()));
-        }
-        roots
-            .first()
-            .copied()
-            .ok_or_else(|| Error::Numerical("堤岸内に限界水深がありません".into()))
-    } else {
-        bisect(lo, hi, f)
-    }
+    Ok(depth_range::branch(s, q)?.critical)
 }
 pub fn normal_depth(s: &Section, q: f64, n: f64, slope: f64) -> Result<f64> {
+    validate_section(s)?;
     positive("流量", q)?;
     positive("粗度", n)?;
     positive("等流水深の参照河床勾配", slope)?;
-    bisect(1e-6, max_depth(s) * (1.0 - 1e-8), |d| {
-        Ok(manning(s, d, n, slope)? - q)
-    })
+    if !matches!(s, Section::Survey { .. }) {
+        return bisect(1e-6, doboku_geometry::max_depth(s) * (1.0 - 1e-8), |d| {
+            Ok(manning(s, d, n, slope)? - q)
+        });
+    }
+    depth_range::normal(s, q, n, slope, depth_range::branch(s, q)?)
 }
 fn state(s: &Section, y: f64, q: f64, n: f64) -> Result<(f64, f64)> {
     let g = wet(s, y)?;
@@ -163,7 +122,7 @@ pub fn validate(r: &River) -> Result<()> {
         if (w[0].bed_elevation - w[1].bed_elevation).abs() / dx > 0.1 {
             return Err(Error::Unsupported("河床急変（勾配>0.1）".into()));
         }
-        let d = 0.5 * max_depth(&w[0].section).min(max_depth(&w[1].section));
+        let d = depth_range::width_reference(&w[0].section, &w[1].section)?;
         let a = wet(&w[0].section, d)?.top_width;
         let b = wet(&w[1].section, d)?.top_width;
         if a.max(b) / a.min(b) > 1.25 {
@@ -195,6 +154,18 @@ pub fn solve(r: &River) -> Result<Profile> {
     } else {
         (0..count).collect()
     };
+    // Report the actual boundary geometry fault (overflow or separated water)
+    // before testing membership in the narrower critical-depth branch.
+    wet(&r.stations[order[0]].section, r.boundary.depth)?;
+    let branches: Vec<_> = r
+        .stations
+        .iter()
+        .map(|s| depth_range::branch(&s.section, r.discharge))
+        .collect::<Result<_>>()?;
+    let boundary_branch = branches[order[0]];
+    if r.boundary.depth <= boundary_branch.lower || r.boundary.depth >= boundary_branch.upper {
+        return Err(Error::Unsupported(format!("境界水深が、一意な限界水深と同じ連続流路の水深範囲にありません。距離{}m: {:.6} < 水深 < {:.6}m。分離流路を確認してください",r.stations[order[0]].chainage,boundary_branch.lower,boundary_branch.upper)));
+    }
     depths[order[0]] = r.boundary.depth;
     check_regime(
         froude(&r.stations[order[0]].section, r.boundary.depth, r.discharge)?,
@@ -206,11 +177,12 @@ pub fn solve(r: &River) -> Result<Profile> {
         let b = &r.stations[known];
         let dx = (a.chainage - b.chainage).abs();
         let (eb, sfb) = state(&b.section, depths[known], r.discharge, b.roughness)?;
-        let yc = critical_depth(&a.section, r.discharge)?;
+        let branch = branches[i];
+        let yc = branch.critical;
         let (lo, hi) = if sub {
-            (yc * (1.0 + 1e-6), max_depth(&a.section) * (1.0 - 1e-8))
+            (yc * (1.0 + 1e-6), branch.upper)
         } else {
-            (1e-5, yc * (1.0 - 1e-6))
+            (branch.lower.max(1e-5), yc * (1.0 - 1e-6))
         };
         let f = |y: f64| -> Result<f64> {
             let (ea, sfa) = state(&a.section, y, r.discharge, a.roughness)?;
@@ -271,8 +243,14 @@ pub fn solve(r: &River) -> Result<Profile> {
             area: g.area,
             froude: froude(&s.section, y, r.discharge)?,
             friction_slope: state(&s.section, y, r.discharge, s.roughness)?.1,
-            critical_depth: critical_depth(&s.section, r.discharge)?,
-            normal_depth: normal_depth(&s.section, r.discharge, s.roughness, r.normal_slope)?,
+            critical_depth: branches[i].critical,
+            normal_depth: depth_range::normal(
+                &s.section,
+                r.discharge,
+                s.roughness,
+                r.normal_slope,
+                branches[i],
+            )?,
             energy_residual: residuals[i],
         };
         if [
@@ -293,6 +271,7 @@ pub fn solve(r: &River) -> Result<Profile> {
         warnings: vec![
             LIMITATIONS.into(),
             "等流水深は参照勾配の診断値。各区間の実標高を不等流計算に使用。".into(),
+            "測量地盤の起伏を保持。計算水面が1流路となり、一意な最小エネルギーの限界水深と同じ連続水深範囲だけを使用。等流水深の複数根・不連続も拒否します。".into(),
         ],
     })
 }

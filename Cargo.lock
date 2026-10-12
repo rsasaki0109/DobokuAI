@@ -267,7 +267,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-agent"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "doboku-core",
  "doboku-planning",
@@ -280,7 +280,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-api"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "axum",
  "chrono",
@@ -302,7 +302,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "serde",
  "thiserror",
@@ -310,7 +310,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-earthwork"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "doboku-core",
  "doboku-geometry",
@@ -318,7 +318,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-geometry"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "doboku-core",
  "serde",
@@ -326,7 +326,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-hydraulics"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "doboku-core",
  "doboku-geometry",
@@ -336,7 +336,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-planning"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "doboku-core",
  "doboku-earthwork",
@@ -347,7 +347,7 @@ dependencies = [
 
 [[package]]
 name = "doboku-structures"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "doboku-core",
  "serde",

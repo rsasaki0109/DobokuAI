@@ -302,7 +302,7 @@
       "vertical_datum": "unconfirmed for selected CSV and field-derived layers; do not apply a related package convention to all fixtures",
       "adoption_blockers": [
         "Confirm original survey attribution/date and common vertical reference for Antelope 2017; horizontal CRS and explicit elev_m do not establish datum",
-        "Antelope XS01/XS02 fail the current single-valley geometry contract; no silent smoothing or removal of ground points",
+        "Antelope original XS01/XS02 preview in 0.2.0 fails the adjacent-width guard; original points must not be silently cropped/smoothed to evade it",
         "Trace Cole Creek source DEMs, vertical reference/foot definition and underwater/dry-bed/LiDAR acquisition; reused sampling geometry is not independent measured bathymetry",
         "Select model-compatible reaches and document measured or explicitly justified hydraulic conditions before complete trials"
       ],
@@ -351,6 +351,12 @@
           "xs_points_per_archive": 21248,
           "cross_archive_comparison": "XY identical for all compared layers; 3D riffle geometry Z identical. DEM_Z and Detrend_DEM_Z differ at all points. These are reused sampling geometries with year-specific DEM attributes, not proof of 3 independent underwater field surveys.",
           "vertical_reference": "Some process lineage names NAVD88 - Geoid09 (Feet)/Foot_US with VDATUM unknown and NO_VERTICAL. Final layer definitions lack vertical CRS. Do not apply another layer datum or foot definition without verification."
+        },
+        "engine_0_2_geometry_diagnostic": {
+          "ground_shape": "Irregular ground points are no longer rejected just for reversals; original WSE rows excluded, remaining 40/35 ground vertices preserved",
+          "input_scope": "Geometry-only CSV preview with explicitly declared placeholder chainage 0/100m and roughness .03; not measured hydraulic conditions",
+          "outcome": "Rejected by the unchanged adjacent-width guard (>25%), not by the old single-valley check. No apply, solve or adoption.",
+          "remaining_metadata": "Original survey attribution/date, vertical reference and real reach/hydraulic conditions still unconfirmed"
         }
       }
     }

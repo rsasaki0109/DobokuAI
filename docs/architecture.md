@@ -1,6 +1,6 @@
 # Architecture / MVP implementation plan
 
-DobokuAI 0.1: source visibility is separate from licensing; no OSS license grant is implied.
+DobokuAI 0.2: source visibility is separate from licensing; no OSS license grant is implied.
 SI units (m, m², m³, m³/s, s); dam statics use kN/m³, kN/m, kN·m/m and kPa.
 
 | Module | Responsibility |
@@ -36,9 +36,14 @@ The solver uses bracketed bisection on the selected branch of specific energy.
 Subcritical flow requires downstream depth; supercritical flow requires upstream depth.
 Boundary water elevation stays fixed in construction comparisons unless the user edits it.
 
-Rectangular/trapezoidal banks have a finite height. Surveyed sections are single-valley
-piecewise-linear polylines, with strictly increasing x, monotonically falling then rising z.
-No disconnected wet areas or vertical survey segments. Water must remain below both banks.
+Rectangular/trapezoidal banks have a finite height. Surveyed sections are unsmoothed
+piecewise-linear polylines with strictly increasing x and relative minimum z=0.
+The selected water depth must cover one connected wetted interval below both banks.
+Critical-depth roots are checked across connected bands using vertex sides and analytic
+stationary points. A unique minimum-energy root selects one continuous band; boundary,
+standard-step and normal-depth roots stay in that band. Multiple/discontinuous roots,
+separated surface water and vertical survey segments are rejected.
+See [irregular cross sections](irregular-sections.md).
 Critical flow (within a 2% Froude margin), missing branch roots, nonconvergence,
 nonfinite inputs/results, adverse/flat normal-depth slopes, bank overflow, reach bed slopes
 over 0.1, and adjacent width changes over 25% are rejected. This width check is a conservative

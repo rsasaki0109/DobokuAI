@@ -208,7 +208,7 @@ export default function App() {
           </div>
         </a>
         <div className="workspace-label">
-          WORKSPACE <span>MVP / 0.1</span>
+          WORKSPACE <span>MVP / 0.2</span>
         </div>
         <nav>
           {navigation.map((n) => (
@@ -237,7 +237,7 @@ export default function App() {
             エンジンが数値を計算します。
           </p>
           <div className="sidebar-version">
-            RIVER ENGINEERING <span>v0.1.0</span>
+            RIVER ENGINEERING <span>v0.2.0</span>
           </div>
         </div>
       </aside>
@@ -1154,7 +1154,7 @@ export default function App() {
                   </summary>
                   <p>
                     1次元定常・一定流量・静水圧・エネルギー補正係数α=1。Manning摩擦勾配の区間平均を使用。常流は下流端、射流は上流端に境界水深を指定します。限界流付近（Fr
-                    の1からの差が2%以内）・越岸・混在流況・跳水・構造物・急変は未対応です。隣接幅比25%と河床勾配0.1の上限を設けていますが、実際の遷移が緩やかかどうかは別途判断が必要です。断面数2〜200。等流水深は正の参照勾配を使う診断値です。計算可能であっても設計実務への適合を保証せず、測量・境界条件・断面間隔と独立照査が必要です。
+                    の1からの差が2%以内）・越岸・混在流況・跳水・構造物・急変は未対応です。測量点の起伏は保持します。計算水深で連続する1流路があり、限界水深・等流水深が一意となる同じ連続水深範囲だけを扱います。分離流路、段差による不連続な解は拒否します。隣接幅比25%と河床勾配0.1の上限を設けていますが、実際の遷移が緩やかかどうかは別途判断が必要です。断面数2〜200。等流水深は正の参照勾配を使う診断値です。計算可能であっても設計実務への適合を保証せず、測量・境界条件・断面間隔と独立照査が必要です。
                   </p>
                 </details>
               </fieldset>

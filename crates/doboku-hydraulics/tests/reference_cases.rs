@@ -77,8 +77,11 @@ fn refine(river: &River, dx: f64) -> River {
 }
 
 fn verify(id: &str) {
-    let suite: Suite =
-        serde_json::from_str(include_str!("../../../examples/reference-cases.json")).unwrap();
+    verify_from(include_str!("../../../examples/reference-cases.json"), id);
+}
+
+fn verify_from(json: &str, id: &str) {
+    let suite: Suite = serde_json::from_str(json).unwrap();
     let case = suite.cases.into_iter().find(|c| c.id == id).unwrap();
     assert!(case.reference_refinement_m >= 0.0 && case.reference_refinement_m < 1e-9);
     assert!(case.rows.len() >= 11);
@@ -176,4 +179,19 @@ fn survey_waterline_crossing_a_vertex_matches_independent_ode() {
 #[test]
 fn gradual_width_change_matches_ode_including_area_gradient() {
     verify("widening_rectangle_subcritical");
+}
+
+#[test]
+fn irregular_bed_backwater_matches_independent_strip_integrated_ode() {
+    verify_from(
+        include_str!("../../../examples/reference-irregular.json"),
+        "irregular_subcritical",
+    );
+}
+#[test]
+fn irregular_bed_supercritical_flow_matches_independent_strip_integrated_ode() {
+    verify_from(
+        include_str!("../../../examples/reference-irregular.json"),
+        "irregular_supercritical",
+    );
 }

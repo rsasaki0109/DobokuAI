@@ -139,6 +139,7 @@ pub fn inspect(source: &Source) -> Preview {
         }
     }
     warnings.extend(crate::provenance::warnings(source.dataset.as_ref()));
+    warnings.push("起伏のある地盤点を保持します。計算水深で単一の連続流路となり、限界水深・等流水深が一意になる範囲だけ計算します。取込みの成功は水理計算や標高基準の確認成功を意味しません。".into());
     if source.csv.len() > 65536 {
         errors.push(diagnostic(None, None, "csv", "CSVはUTF-8で64KiB以内"));
     }
