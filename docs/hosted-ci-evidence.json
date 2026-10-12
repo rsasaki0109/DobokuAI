@@ -289,6 +289,19 @@
         "Local full checks and Docker checks passed; these results do not establish hosted CI success or field-data adoption.",
         "Only the local observer was stopped; the GitHub Actions run was not cancelled."
       ]
+    },
+    {
+      "commit": "dfb556d143f5e864792cfb0ef7ba3d19b6adedb6",
+      "observed_at_utc": "2026-10-12T23:50:42.902420+00:00",
+      "run_id": 38324061907,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38324061907",
+      "status": "Queued",
+      "page_bytes": 191809,
+      "page_sha256": "aad411d240f129d119aea9de581d5239be9a970e0435bf80585acc3108014990",
+      "limits": [
+        "Official run page observed Queued; hosted job/workflow success not verified for this implementation commit.",
+        "Local/native and Docker validation is separate evidence; public city display does not establish hydraulic field validation."
+      ]
     }
   ]
 }
