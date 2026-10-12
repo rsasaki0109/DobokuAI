@@ -1242,6 +1242,20 @@ footer {
 }
 
 .dam-workspace { display: grid; gap: 22px; }
+.city-workspace { display: grid; gap: 22px; }
+.city-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+.city-actions a { color: #3b687d; font-size: 12px; }
+.city-review { margin-top: 18px; padding: 18px; background: #eff6f7; border: 1px solid #c5dce2; border-radius: 10px; font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
+.city-review button { margin: 6px 8px 0 0; }
+.city-stage { position: relative; height: 600px; border-radius: 12px; overflow: hidden; background: #bed3de; }
+.city-hud { position: absolute; top: 22px; left: 22px; z-index: 1; padding: 14px 18px; border-radius: 9px; background: #f3f7f0df; color: #344d46; pointer-events: none; }
+.city-hud span, .city-hud small { display: block; font-size: 10px; }
+.city-hud strong { display: block; font-size: 24px; margin: 8px 0; }
+.city-caption { position: absolute; bottom: 20px; left: 22px; right: 22px; z-index: 1; font-size: 11px; color: #243c3d; background: #edf3f1cc; padding: 9px 12px; border-radius: 6px; pointer-events: none; }
+.city-layers { display: flex; flex-wrap: wrap; gap: 18px; margin: 18px 0; font-size: 12px; }
+.city-layers label { display: flex; align-items: center; gap: 6px; }
+.city-provenance { overflow-wrap: anywhere; line-height: 1.8; }
+@media(max-width: 800px) { .city-stage { height: 440px; } .city-hud { top: 12px; left: 12px; right: 12px; } .city-hud strong { font-size: 20px; } .city-caption { left: 12px; right: 12px; } }
 .dam-scope { display: flex; gap: 14px; padding: 18px 22px; border: 1px solid #cbdde5; border-radius: 12px; background: #edf5f7; color: #2b5266; }
 .dam-scope svg { flex-shrink: 0; margin-top: 2px; }
 .dam-scope p { font-size: 12px; line-height: 1.8; margin: 6px 0 0; }

@@ -44,6 +44,7 @@ import { BoundaryStageInput } from './BoundaryStageInput';
 import { ReviewPack } from './ReviewPack';
 const River3D = lazy(() => import('./River3D'));
 const Infrastructure3D = lazy(() => import('./Infrastructure3D'));
+const CityWorkspace = lazy(() => import('./CityWorkspace'));
 const DamAnalysis = lazy(() => import('./DamAnalysis'));
 const navigation = [
   { id: 'dashboard', name: 'プロジェクト', en: 'PROJECT DASHBOARD', icon: LayoutDashboard },
@@ -52,6 +53,7 @@ const navigation = [
   { id: 'profile', name: '縦断水面形', en: 'WATER SURFACE PROFILE', icon: Activity },
   { id: 'comparison', name: '施工シナリオ比較', en: 'CONSTRUCTION SCENARIOS', icon: Layers },
   { id: 'structures', name: '3D施設ギャラリー', en: 'INFRASTRUCTURE STUDIO', icon: Mountain },
+  { id: 'city', name: '都市・地形3D', en: 'CITY & TERRAIN WORKSPACE', icon: Mountain },
   { id: 'dam', name: 'ダム予備照査', en: 'DAM HYDRAULICS & STATICS', icon: Layers },
   { id: 'assistant', name: 'AI アシスタント', en: 'AI ASSISTANT', icon: MessageSquare },
 ];
@@ -73,7 +75,7 @@ function actionLabel(a: Action, p: Project) {
 export default function App() {
   const [project, setProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [page, setPage] = useState(() => { const view = new URLSearchParams(window.location.search).get('view'); return view === 'structures' || view === 'dam' ? view : 'dashboard'; });
+  const [page, setPage] = useState(() => { const view = new URLSearchParams(window.location.search).get('view'); return view === 'structures' || view === 'dam' || view === 'city' ? view : 'dashboard'; });
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [historyId, setHistoryId] = useState<number | null>(null);
   const [historyRevision, setHistoryRevision] = useState(0);
@@ -270,6 +272,8 @@ export default function App() {
                   ? '河川の条件を理解し、改修案を確かな数値で比較する。'
                   : page === 'structures'
                     ? 'ダム・橋梁・砂防の架空モデルを、地形とともに立体で見る。'
+                  : page === 'city'
+                    ? 'CityGMLの都市・地形を読み込み、施工範囲を同じ座標に重ねる。'
                   : page === 'dam'
                     ? '条件を確認し、重力式ダムの荷重・接触状態・自由越流容量を計算する。'
                   : page === 'editor'
@@ -279,7 +283,7 @@ export default function App() {
                       : '同じ座標系・基準高で、計算条件と結果を確認します。'}
               </p>
             </div>
-            {page !== 'structures' && page !== 'dam' && <div className="heading-actions">
+            {page !== 'structures' && page !== 'dam' && page !== 'city' && <div className="heading-actions">
               <button
                 className="secondary"
                 disabled={!project || busy}
@@ -293,7 +297,7 @@ export default function App() {
               </button>
             </div>}
           </div>
-          {error && page !== 'structures' && page !== 'dam' && (
+          {error && page !== 'structures' && page !== 'dam' && page !== 'city' && (
             <div className="alert error" role="alert">
               <CircleHelp size={19} />
               <div>
@@ -310,6 +314,8 @@ export default function App() {
           )}
           {page === 'structures' ? (
             <Suspense fallback={<p>施設の3Dモデルを準備しています…</p>}><Infrastructure3D onOpenDam={() => setPage('dam')} /></Suspense>
+          ) : page === 'city' ? (
+            <Suspense fallback={<p>都市・地形の3Dビューを準備しています…</p>}><CityWorkspace /></Suspense>
           ) : page === 'dam' ? (
             <Suspense fallback={<p>ダム予備照査を準備しています…</p>}><DamAnalysis /></Suspense>
           ) : !project ? (

@@ -26,6 +26,17 @@ See [dam model and validation](dam-calculations.md).
 
 Implementation order: workspace/contracts → engine → independent numerical validation → API → web/editor → profile/comparison → agent → report → containers/E2E.
 
+## CityGML display workspace
+
+`apps/web/src/cityModel.ts` reads bounded embedded CityGML surfaces in the browser,
+validates declared CRS/dimensions and rings, and triangulates display geometry.
+`CityWorkspace.tsx` separates input, reviewed candidates and confirmed display/footprints.
+EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display approximation;
+source heights are retained. No datum conversion or solver integration is implied.
+The synthetic demo is explicitly labelled; official city/terrain download and adoption
+remain pending environment network configuration and source-specific terms.
+No API/storage/schema or numerical-engine dependencies changed. [Scope](city-workspace.md).
+
 ## Hydraulic contract
 
 Stations increase **upstream to downstream**. Bed elevation is in a single project datum.

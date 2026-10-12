@@ -1132,3 +1132,72 @@ the successful local/native/Docker counts above are separate evidence. Only the 
 observer was stopped, leaving the GitHub run active. The official run page's SHA-256 and
 observation time are recorded under `pending_runs` in [hosted evidence](hosted-ci-evidence.json).
 The previous implementation's confirmed CI success remains recorded independently.
+
+## CityGML display and planning workspace / 2026-10-12 UTC
+
+The browser now reads bounded embedded CityGML Polygon/Triangle rings, requires a
+declared supported CRS and dimension, selects LOD0/1/2, triangulates valid simple
+planar rings and displays building/terrain/road/bridge/water layers. File hashes,
+inspection time and source declarations are reviewable before explicit display
+replacement. Invalid inputs, cancellation and source edits retain the confirmed
+display. EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display
+approximation; original heights stay unchanged. A separately confirmed rectangular
+planning marker is visual only and is cleared when the model changes.
+No numerical engine, API/storage schema, dependencies or lockfiles changed.
+The builtin and example city are synthetic. Real PLATEAU city/terrain download,
+source-specific licensing review and field trials remain incomplete. [Scope](city-workspace.md).
+
+Four initial browser cases passed (18.8 seconds). Expanded checks initially passed
+four of five: the bow-tie rejection test expected an area-zero message, while the
+parser correctly rejected it as self-intersection. The expected rejection reason
+was corrected to self-intersection; no numerical tolerance was relaxed.
+Final checks verify offline WebGL, layer/camera/lighting controls, confirmed vs
+uncommitted overlays/exports, mobile width, file SHA-256 equality, cancel/context
+invalidation, explicit LOD selection, replacement clearing old overlays, mixed-CRS
+rejection keeping the confirmed snapshot, and saved river/run equality without
+additional POST requests. Invalid cases include wrong CRS/dimension, holes,
+unclosed rings, NaN, DOCTYPE, wrong root, external xlink, >5km extent, self-intersection
+and files exceeding 8MiB.
+
+The synthetic geographic range (35–35.001° latitude, 139–139.001° longitude) was
+compared against independently generated GDAL/PROJ GRS80 Transverse Mercator bounds,
+origin 35.0005/139.0005 and k=1: east ±45.6440848m, north −55.4701753/55.4704084m.
+The browser tangent-plane result agrees within 0.001m for this case. Source heights
+100/110m retain a 10m difference. This small-case display check is not a 5km accuracy
+guarantee, a survey datum conversion, hydraulic validation or real-data trial.
+
+The complete `scripts/check.sh` exited zero: 91 Rust tests, fmt, clippy with warnings
+denied, independent reference regeneration, five backup tests, five NCRO tests,
+ten offline-audit tests, frontend type check/build and all 44 native-browser E2E cases
+(3.2 minutes). All five final city cases passed within that suite.
+
+The repository Web Dockerfile was rebuilt and the new distribution passed six
+targeted browser cases (26.0 seconds): all five city cases and the existing edit/
+steady-flow/construction/report/persistence workflow. The unchanged API image was
+explicitly reused. Image identities:
+
+- API: sha256:8e51c9d1f872edf4545988a4942f05ae9824ebffc101c3228d418810f05a30cb
+- Web: sha256:d914deec7ee10eff38eda6fa5408925d3c9c65026ff68f273fe61d7c998a59c8
+
+The dedicated `doboku-city-20261012` Compose project was stopped after testing/capture;
+its volume and existing user services/database are retained. After the build left
+approximately 227MiB free, only regenerable local `target/debug/incremental` compiler
+cache was removed, after verifying no rustc was running. Original data, evidence,
+database volumes and Docker caches/images were not pruned.
+
+`scripts/capture-city.mjs` captured 18 distinct actual browser frames of the synthetic
+city, inspected without page errors, and generated a 1120×562 GIF (34 encoded frames,
+1,257,734 bytes). GIF SHA-256: b83b1d6635018db700bd0a27e34531a70e13cec59e2cf65b966ce604c9d6f714.
+Source/frame hashes and timestamp are in `.local/city-capture/manifest.json`; README
+states synthetic city and no solver integration. Logs retained under `.local/city-`:
+`build-20261012.log`, `focused-20261012.log`, `final-focused-20261012.log` (initial
+message-expectation failure), `check-20261012.log`, `docker-build-20261012.log`,
+`docker-start-20261012.log`, `docker-20261012.log`, `capture-20261012.log` and
+`docker-stop-20261012.log`.
+
+Environment draft revision 8 preserves the original nine custom hosts and tested
+install/start scripts, adding four original-data hosts documented in the scope page.
+Saving was verified separately from runtime enforcement; runtime revision 11 had
+not applied those hosts. No blocked-data relays or TLS/proxy bypasses were used.
+Engine version stays 0.2.0; real river adoption stays zero, with fixed maturity
+44.0/100 (about 45%), target 50%.

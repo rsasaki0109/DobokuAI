@@ -118,3 +118,10 @@ WebGLコンテキストと元フレームの変化も確認します。元PNG、
 | `ai-assistant.gif` | キー不要のローカル提案、確認、Rust再計算、比較図 |
 | `station-spacing.gif` | 補間の確認、2/4分割、元測点の水位差、再読込み後の履歴・実際のHTML |
 | `survey-provenance.gif` | 合成CSVの出典記録、プレビュー/確認、保存結果HTML |
+
+## 都市・地形ビューの追加GIF
+
+`scripts/capture-city.mjs <専用デモURL>` は、`/?view=city` の合成都市を
+APIなしで操作し、18フレームの実画面を撮影します。斜め・真上・夕景・施工範囲マーカーを含みます。
+元フレーム・ハッシュ・撮影日時・ソースハッシュは `.local/city-capture/manifest.json` に保存。
+FFmpegで `docs/assets/hero-city.gif` を作成します。実都市取得済みや数値解析として紹介しません。
