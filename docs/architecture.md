@@ -117,6 +117,11 @@ and a source/options token, then requires explicit confirmation and token matchi
 replacing station geometry and clearing construction scenarios. Saving and solving are
 separate operations. Reports include reference metadata; the hash describes original CSV,
 while subsequent edits are captured in the calculation snapshot, not in that source hash.
+Before application, the UI shows current/candidate roughness ranges and inherited flow,
+slope, regime and boundary depth. The upstream/downstream boundary bed comes from the CSV;
+its stage becomes that bed plus retained depth. Datum declarations are displayed separately,
+without estimating a water-level difference across different declarations or transforming
+vertical references. This condition review does not solve or persist anything.
 
 Sensitivity retains original geometry/datum/boundary depth and solves independent discharge
 or whole-reach roughness cases. Baseline failure rejects the batch; failed alternatives

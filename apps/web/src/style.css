@@ -757,7 +757,8 @@ select {
   grid-column: 2/-1;
   margin-bottom: 0;
 }
-.table-wrap {
+.table-wrap,
+.table-scroll {
   overflow: auto;
 }
 table {

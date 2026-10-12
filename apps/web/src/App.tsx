@@ -582,7 +582,7 @@ export default function App() {
                   <>
                     <SurveyImport
                       key={project.id}
-                      project={project}
+                      project={{ ...project, scenarios, staged }}
                       edit={edit}
                       task={task}
                       onImport={(p) => {

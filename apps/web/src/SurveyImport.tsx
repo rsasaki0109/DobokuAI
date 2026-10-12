@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { api, saveBlob, type Project, type Station, type SpatialReference, type DatasetProvenance } from './types';
 import { SurveyGeometry, type GeometryPreview } from './SurveyGeometry';
 import { DatasetFields, DatasetDetails, emptyDataset } from './DatasetProvenance';
+import { SurveyConditionReview } from './SurveyConditionReview';
 
 type Source = {
   csv: string;
@@ -153,7 +154,7 @@ export function SurveyImport({
       </div>
       <DatasetFields value={source.dataset} change={dataset => change({ dataset })} />
       <p className="muted">
-        CSVの距離: {source.unit} → m / 高さ: {heightUnit} → m。現在の全測点を置換し、施工案をクリアします。流量m³/s・参照勾配・境界水深m・粗度nは保持します。
+        CSVの距離: {source.unit} → m / 高さ: {heightUnit} → m。全測点と各測点の粗度nをCSVで置換し、施工案をクリアします。流量m³/s・参照勾配・流況・境界水深mは保持します。
       </p>
       <button
         className="secondary"
@@ -185,6 +186,7 @@ export function SurveyImport({
                 取込みプレビュー: {preview.stations.length} 断面。確認前の条件は変更されていません。
               </p>
               <DatasetDetails value={preview.reference.import?.dataset} />
+              <SurveyConditionReview project={project} stations={preview.stations} reference={preview.reference} />
             </>
           ) : (
             <>

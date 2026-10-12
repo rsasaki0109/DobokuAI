@@ -911,3 +911,61 @@ Official page hashes and observation time are retained in [hosted evidence](host
 The test counts above are from local execution; hosted numeric counts were not independently
 counted from downloaded job logs. This establishes CI success for the implementation
 commit, not field applicability or the later documentation-only commit.
+
+## Survey import condition review / 2026-10-12
+
+The import panel incorrectly said existing Manning roughness would be retained, although
+CSV roughness replaces it. The explanation is corrected and a read-only condition review
+shows current/candidate roughness ranges and individual CSV values in the existing geometry
+table. Discharge, reference slope, regime and boundary depth remain inherited conditions;
+new endpoint chainage/bed and bed-plus-depth stage are displayed before explicit application.
+The declarations are shown separately, without a water-level difference across different
+vertical datum labels or a claim that matching labels authenticate the original datum.
+No solver, API/storage contract, schema, dependency or lockfile changed.
+
+Two synthetic browser cases cover subcritical/downstream and supercritical/upstream endpoints,
+original versus CSV roughness, inherited Q/slope/depth, changed declarations, confirmation
+before saving, cleared scenarios, actual Rust profiles in the selected regime, unchanged
+prior run snapshots and saved project persistence. The displayed review follows current
+project declarations if edited after the CSV preview. The existing table-scroll class now
+shares the intended horizontal scroll styling; width390px does not overflow the page after
+the responsive charts settle.
+
+The initial subcritical fixture compared an 8m relative height exactly after serializing
+it as an absolute decimal elevation; subtraction produced ordinary ~1e-15 round-off.
+The condition-review fixture now supplies explicit relative heights, preserving exact
+coordinate assertions without changing engine tolerances. Absolute-height conversion
+remains covered by existing tests. The first mobile check ran before responsive chart
+layout settled; the final test waits for the same width390px assertion without relaxing it.
+Both focused cases then passed (30.9 seconds). The confirmation screenshot was inspected.
+
+A final UI review found that working scenario edits are held separately from the saved
+project in App. The importer now receives the current scenario/staged state as well as
+current river/reference conditions, so the count of proposals to clear is accurate even
+before saving. Both new cases add an unsaved second scenario and enable cumulative mode,
+then check the displayed count, unchanged stored project before confirmation and cleared
+scenarios/cumulative mode afterward. The initial complete check was stopped during its
+browser phase to apply this correction; its numerical/reference/recovery/audit portion
+had passed. The final source was rebuilt/type-checked and all browser cases rerun.
+
+The numerical/reference/build checks passed: 91 Rust tests, fmt, clippy with warnings
+denied, independent reference regeneration, five backup tests, five NCRO tests, ten
+review-pack audit tests, type check and production build. Final native browser execution
+exited zero with all 28 cases passing (3.2 minutes), including both new condition-review
+cases with unsaved scenario edits. Engine version remains 0.2.0. Field adoption remains
+zero; fixed maturity remains 44.0/100 (about 45%), target 50%.
+
+The final rebuilt Docker distribution passed four targeted browser cases (16.4 seconds):
+both new cases, the existing horizontal-m/vertical-survey-foot import, and the existing
+edit/steady-flow/construction/report/persistence workflow. Production images:
+
+- API: sha256:83f6cb75c03aa468a1a796647aef8bae15d82e3b292fa735ba6533110fd9ecde
+- Web: sha256:01c4c676b60197a9cf6be3c0ac2dc89bbb68da74c9ec95f73bfc048975cc4b0b
+
+Logs under `.local/import-conditions-`: `focused-20261012.log` and
+`focused-fixed-20261012.log` (initial fixture/layout failures), `responsive-20261012.log`
+(passing focused cases), `check-20261012.log` (numerical/build checks then interrupted
+browser phase), `build-final-20261012.log`, `native-final-20261012.log`,
+`docker-build-final-20261012.log` and `docker-final-20261012.log` (final passing runs).
+The dedicated `doboku-import-20261012` Compose project is stopped after testing and its
+volume is retained. The existing user database/services remain in place.
