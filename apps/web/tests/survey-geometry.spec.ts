@@ -1,0 +1,50 @@
+import { test, expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+
+test('rejected CSV retains all original sections for inspection and export without applying geometry', async ({ page, request }) => {
+  const project = await (await request.get('/api/sample')).json();
+  project.id = `survey-geometry-${crypto.randomUUID()}`;
+  project.name = project.id;
+  expect((await request.post('/api/projects', { data: project })).ok()).toBeTruthy();
+  let csv = 'station,chainage_m,bed_elevation_m,roughness,x_m,elevation_m\n';
+  const expected = [];
+  for (let i = 0; i < 4; i++) {
+    const half = i === 1 ? 50 : 10;
+    const points = [{x:-half,z:8},{x:0,z:0},{x:half,z:8}];
+    const bed = 10 - i * .125;
+    for (const p of points) csv += `S${i},${i*100},${bed},.03,${p.x},${bed+p.z}\n`;
+    expected.push({chainage:i*100,bed_elevation:bed,roughness:.03,section:{kind:'survey',points}});
+  }
+  await page.goto('/');
+  await page.getByLabel('保存済みプロジェクト').selectOption(project.id);
+  await page.getByRole('button', { name: '横断面エディタ', exact: true }).click();
+  await page.getByLabel('横断測量CSV', { exact: true }).setInputFiles({ name:'rejected-synthetic.csv', mimeType:'text/csv', buffer:Buffer.from(csv) });
+  await page.getByLabel('取込みデータの標高系').fill('合成の共通基準高');
+  const response = page.waitForResponse(r => r.url().endsWith('/api/imports/survey/preview'));
+  await page.getByRole('button', { name: 'CSVを検証・プレビュー' }).click();
+  const preview = await (await response).json();
+  expect(preview.valid).toBeFalsy();
+  expect(preview.review_token).toBeNull();
+  expect(preview.geometry.sections.map((s:{station:unknown}) => s.station)).toEqual(expected);
+  await expect(page.getByRole('button', { name: '内容を確認して全測点を置換・施工案をクリア' })).toHaveCount(0);
+  const panel = page.getByRole('region', { name: '取込み前の幾何点検' });
+  await expect(panel).toContainText('S0 → S1');
+  await expect(panel).toContainText('S1 → S2');
+  await expect(panel).toContainText('幅急変');
+  await expect(panel).toContainText('CSV入力地盤');
+  await expect(panel.getByLabel('取込み地盤の縦断図（未計算）')).toBeVisible();
+  await panel.getByRole('button', { name: '下流断面を表示: S1' }).click();
+  await expect(panel.getByLabel('取込みプレビューの断面')).toHaveValue('1');
+  await expect(panel.getByRole('status')).toContainText('表示断面: S1');
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: '取込み点検JSONを保存' }).click();
+  const saved = JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+  expect(saved.source.csv).toBe(csv);
+  expect(saved.preview).toEqual(preview);
+  expect(saved.preview.geometry).not.toHaveProperty('critical_depth');
+  expect(await (await request.get(`/api/projects/${project.id}`)).json()).toEqual(project);
+  expect((await (await request.get(`/api/projects/${project.id}/runs`)).json()).items).toHaveLength(0);
+  await page.getByLabel('取込みデータの標高系').fill('変更した基準高');
+  await expect(panel).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '取込み点検JSONを保存' })).toHaveCount(0);
+});

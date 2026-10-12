@@ -37,6 +37,9 @@ test('facility models remain finite and reservoir surfaces stay at the chosen le
 });
 
 test('facility gallery works without API and exposes models, geometry controls and fullscreen', async ({ page }) => {
+  // Four PBR models, fullscreen and exports use software WebGL on headless CI.
+  // Keep each operation checked; allow this combined workflow more wall time.
+  test.setTimeout(90_000);
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.route('**/api/**', route => route.abort());
   await page.goto('/?view=structures');

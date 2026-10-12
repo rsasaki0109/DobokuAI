@@ -102,10 +102,13 @@ fn validate_inputs(r: &River) -> Result<()> {
         return Err(Error::Unsupported("流量>10⁶ または勾配>0.1".into()));
     }
     positive("境界水深", r.boundary.depth)?;
-    if !(2..=200).contains(&r.stations.len()) {
+    validate_stations(&r.stations)
+}
+fn validate_stations(stations: &[doboku_core::Station]) -> Result<()> {
+    if !(2..=200).contains(&stations.len()) {
         return Err(Error::Invalid("断面数は2〜200".into()));
     }
-    for s in &r.stations {
+    for s in stations {
         if !s.chainage.is_finite() || !s.bed_elevation.is_finite() {
             return Err(Error::Invalid("測点位置・標高は有限値".into()));
         }
@@ -114,8 +117,17 @@ fn validate_inputs(r: &River) -> Result<()> {
             return Err(Error::Invalid("粗度係数は0.005〜0.2".into()));
         }
         validate_section(&s.section)?;
+        if doboku_geometry::ground(&s.section, s.bed_elevation)
+            .iter()
+            .any(|p| !p.z.is_finite())
+        {
+            return Err(Error::Invalid(format!(
+                "測点 {} m: 河床標高＋相対高さは有限の標高が必要",
+                s.chainage
+            )));
+        }
     }
-    for w in r.stations.windows(2) {
+    for w in stations.windows(2) {
         let dx = w[1].chainage - w[0].chainage;
         if dx < 0.1 || !dx.is_finite() {
             return Err(Error::Invalid("距離は上流→下流に増加、間隔0.1m以上".into()));

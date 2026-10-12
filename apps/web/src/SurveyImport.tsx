@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { api, type Project, type Station, type SpatialReference, type DatasetProvenance } from './types';
-import { SectionChart } from './Charts';
+import { api, saveBlob, type Project, type Station, type SpatialReference, type DatasetProvenance } from './types';
+import { SurveyGeometry, type GeometryPreview } from './SurveyGeometry';
 import { DatasetFields, DatasetDetails, emptyDataset } from './DatasetProvenance';
 
 type Source = {
@@ -13,12 +13,15 @@ type Source = {
   dataset: DatasetProvenance;
 };
 type Preview = {
+  engine_version: string;
+  inspected_at: string;
   valid: boolean;
   stations: Station[];
   reference: SpatialReference;
   diagnostics: { line: number | null; station: string | null; field: string; message: string }[];
   warnings: string[];
   review_token: string | null;
+  geometry: GeometryPreview | null;
 };
 export function SurveyImport({
   project,
@@ -138,6 +141,7 @@ export function SurveyImport({
       </button>
       {preview && (
         <div className="import-preview">
+          <p className="muted">点検日時 {preview.inspected_at} · engine {preview.engine_version}。CSVと点検結果をJSONで保存できます。点検JSONは反映済みプロジェクトではありません。</p>
           {preview.warnings.map((w) => (
             <p className="muted" key={w}>
               {w}
@@ -148,31 +152,24 @@ export function SurveyImport({
               <p role="status">
                 取込みプレビュー: {preview.stations.length} 断面。確認前の条件は変更されていません。
               </p>
-              <div className="table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>流下距離 m</th>
-                      <th>河床標高 m</th>
-                      <th>粗度 n</th>
-                      <th>点数</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {preview.stations.map((st) => (
-                      <tr key={st.chainage}>
-                        <td>{st.chainage}</td>
-                        <td>{st.bed_elevation}</td>
-                        <td>{st.roughness}</td>
-                        <td>{st.section.kind === 'survey' && st.section.points.length}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <p>最初の断面・標高基準: {source.vertical_datum}</p>
               <DatasetDetails value={preview.reference.import?.dataset} />
-              <SectionChart station={preview.stations[0]} analysis={null} index={0} />
+            </>
+          ) : (
+            <>
+              <p role="alert">CSVを反映できません。診断を修正して再プレビューしてください。</p>
+              <ul>
+                {preview.diagnostics.map((d, i) => (
+                  <li key={i}>
+                    行 {d.line ?? '—'} / 断面 {d.station ?? '—'} / {d.field}: {d.message}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {preview.geometry && (
+            <SurveyGeometry geometry={preview.geometry} verticalDatum={preview.reference.vertical_datum} />
+          )}
+          {preview.valid && (
               <button
                 className="primary"
                 onClick={() =>
@@ -190,19 +187,11 @@ export function SurveyImport({
               >
                 内容を確認して全測点を置換・施工案をクリア
               </button>
-            </>
-          ) : (
-            <>
-              <p role="alert">CSVを反映できません。診断を修正して再プレビューしてください。</p>
-              <ul>
-                {preview.diagnostics.map((d, i) => (
-                  <li key={i}>
-                    行 {d.line ?? '—'} / 断面 {d.station ?? '—'} / {d.field}: {d.message}
-                  </li>
-                ))}
-              </ul>
-            </>
           )}
+          <button className="secondary" onClick={() => saveBlob(
+            new Blob([JSON.stringify({ source, preview }, null, 2)], { type: 'application/json' }),
+            'doboku-survey-inspection.json',
+          )}>取込み点検JSONを保存</button>
         </div>
       )}
       <hr />

@@ -116,6 +116,109 @@ async fn river_diagnostics_preserve_conditions_and_history_and_localize_rejected
 }
 
 #[tokio::test]
+async fn survey_retains_complete_rejected_geometry_without_permitting_apply_or_mutating_history() {
+    let api = app(state(":memory:").unwrap());
+    let project = serde_json::to_value(doboku_core::sample()).unwrap();
+    assert_eq!(
+        call(api.clone(), "POST", "/api/projects", project.clone())
+            .await
+            .0,
+        StatusCode::OK
+    );
+    let mut source = survey_source();
+    let mut csv = String::from("station,chainage_m,bed_elevation_m,roughness,x_m,elevation_m\n");
+    let mut expected = Vec::new();
+    for i in 0..4 {
+        let half = if i == 1 { 50. } else { 10. };
+        let bed = 10. - i as f64 * 0.125;
+        for (x, z) in [(-half, 8.), (0., 0.), (half, 8.)] {
+            csv.push_str(&format!("S{i},{},{bed},.03,{x},{}\n", i * 100, bed + z));
+        }
+        expected.push(json!({"chainage":(i*100) as f64,"bed_elevation":bed,"roughness":0.03,"section":{"kind":"survey","points":[{"x":-half,"z":8.},{"x":0.,"z":0.},{"x":half,"z":8.}]}}));
+    }
+    source["csv"] = json!(csv);
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/imports/survey/preview",
+        source.clone(),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    let preview: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(preview["valid"], false);
+    assert_eq!(preview["review_token"], Value::Null);
+    assert!(preview["stations"].as_array().unwrap().is_empty());
+    assert_eq!(preview["geometry"]["can_import"], false);
+    assert_eq!(preview["engine_version"], doboku_core::ENGINE_VERSION);
+    chrono::DateTime::parse_from_rfc3339(preview["inspected_at"].as_str().unwrap()).unwrap();
+    assert_eq!(
+        preview["geometry"]["transitions"].as_array().unwrap().len(),
+        3
+    );
+    assert_eq!(preview["diagnostics"].as_array().unwrap().len(), 2);
+    assert_eq!(preview["diagnostics"][0]["station"], "S0 → S1");
+    assert_eq!(preview["diagnostics"][0]["line"], 5);
+    for (i, section) in preview["geometry"]["sections"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .enumerate()
+    {
+        assert_eq!(section["station"], expected[i]);
+        assert_eq!(section["id"], format!("S{i}"));
+        assert_eq!(section["line"], 2 + i * 3);
+        assert_eq!(
+            section["connected_depth_ranges"],
+            json!([{"lower":0.,"upper":8.}])
+        );
+    }
+    assert_eq!(
+        call(
+            api.clone(),
+            "POST",
+            "/api/imports/survey/apply",
+            json!({"source":source,"project":project,"confirmed":true,"review_token":"forged"})
+        )
+        .await
+        .0,
+        StatusCode::UNPROCESSABLE_ENTITY
+    );
+    let (_, saved) = call(
+        api.clone(),
+        "GET",
+        &format!("/api/projects/{}", project["id"].as_str().unwrap()),
+        Value::Null,
+    )
+    .await;
+    assert_eq!(serde_json::from_str::<Value>(&saved).unwrap(), project);
+    let (_, history) = call(
+        api.clone(),
+        "GET",
+        &format!("/api/projects/{}/runs", project["id"].as_str().unwrap()),
+        Value::Null,
+    )
+    .await;
+    assert!(serde_json::from_str::<Value>(&history).unwrap()["items"]
+        .as_array()
+        .unwrap()
+        .is_empty());
+    let (status, body) = call(api, "POST", "/api/imports/survey/preview", survey_source()).await;
+    assert_eq!(status, StatusCode::OK);
+    let valid: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(valid["valid"], true);
+    assert_eq!(valid["geometry"]["can_import"], true);
+    for (a, b) in valid["geometry"]["sections"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .zip(valid["stations"].as_array().unwrap())
+    {
+        assert_eq!(a["station"], *b);
+    }
+}
+
+#[tokio::test]
 async fn irregular_survey_preserves_vertices_and_saved_results_and_rejects_split_boundary() {
     let api = app(state(":memory:").unwrap());
     let points = [
@@ -1211,6 +1314,7 @@ async fn survey_diagnostics_reject_missing_nonfinite_and_unsupported_geometry() 
         assert_eq!(preview["valid"], false, "{body}");
         assert!(preview["stations"].as_array().unwrap().is_empty());
         assert!(!preview["diagnostics"].as_array().unwrap().is_empty());
+        assert_eq!(preview["geometry"], Value::Null);
         assert_eq!(preview["review_token"], Value::Null);
         assert_eq!(call(api.clone(), "POST", "/api/imports/survey/apply", json!({"source":source,"project":doboku_core::sample(),"confirmed":true,"review_token":"forged"})).await.0, StatusCode::UNPROCESSABLE_ENTITY);
     }

@@ -433,7 +433,7 @@
       "status": "pending_primary_metadata",
       "findings": "Pinned README identifies Ngwerere river at Zambezi Road crossing, Lusaka, Zambia. Two XYZ CSVs contain 27 and 25 points. The primary tutorial explicitly states that both sections are measured in the same vertical reference as the measured water level. ngwerere.json declares horizontal EPSG:32735 and gauge parameters h_ref=0, z_0=1182.2; no vertical CRS is encoded there. The software is AGPL-3.0; dataset-specific ownership and use terms are not confirmed.",
       "horizontal_reference": "WGS 84 / UTM zone 35S (EPSG:32735), horizontal metre in camera config",
-      "vertical_reference": "Shared with measured water level according to original tutorial; native datum and survey realization unconfirmed",
+      "vertical_reference": "Original camera notebook explicitly describes RTK GPS observations and the same ellipsoid vertical reference for water level and bathymetry; EPSG:32735 is a horizontal CRS and does not specify vertical realization. Original survey specification remains unconfirmed.",
       "vertical_unit": "XYZ CSV header has no unit; metre-based usage in tutorial is not an original survey specification",
       "survey_date": "unconfirmed; video filename is not proof of cross-section survey date",
       "inspected_attribute_files": [
@@ -515,9 +515,93 @@
           "path": "LICENSE",
           "bytes": 34523,
           "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+        },
+        {
+          "repo": "pyorc",
+          "path": "docs/intro.rst",
+          "bytes": 4243,
+          "sha256": "1edf05f954cee5b6321a5ec119a9b91cd5150523c6bd2c3368146063a963bf02"
+        },
+        {
+          "repo": "pyorc",
+          "path": "docs/quickstart.rst",
+          "bytes": 2343,
+          "sha256": "1c112c9b91aa448c043c940615ac50d968c9cfae15fa182cc0b4c8baf2781d66"
+        },
+        {
+          "repo": "pyorc",
+          "path": "docs/user-guide/camera_config/api_gcps.rst",
+          "bytes": 3380,
+          "sha256": "7a81043013332095e1b57e20158dd11b5349ce3f0f72124f71c83803d88e7de5"
+        },
+        {
+          "repo": "pyorc",
+          "path": "docs/user-guide/camera_config/index.rst",
+          "bytes": 28030,
+          "sha256": "16f3a05db690885e2120aa56e7ca53e2ea6458ded2a1a34db743359678c38b4c"
+        },
+        {
+          "repo": "pyorc",
+          "path": "examples/01_Camera_Configuration_single_video.ipynb",
+          "bytes": 11990,
+          "sha256": "1914b8df06424b12837aaca51809c18b4b66e6e671effb9a1615d81a63aed61f"
+        },
+        {
+          "repo": "pyorc",
+          "path": "examples/ngwerere/cross_section1.geojson",
+          "bytes": 4250,
+          "sha256": "c89c58512cb4a0e8729eb4cee743ca804b1b386aaba95b0a73143adfc9f9fdf8"
+        },
+        {
+          "repo": "pyorc",
+          "path": "examples/ngwerere/cross_section2.geojson",
+          "bytes": 3935,
+          "sha256": "0d7a6ec6ff983a6953f09a120e77ebb05eceb3aacf0229cc549e6a9881916c44"
         }
       ],
-      "redistributed_data": false
+      "redistributed_data": false,
+      "additional_review": {
+        "reviewed_on": "2026-10-12",
+        "source": "examples/01_Camera_Configuration_single_video.ipynb at pinned revision",
+        "reported_method": "RTK GPS for control points and z_0; bathymetry described in the same ellipsoid vertical reference",
+        "local_water_reference": "Zero local water level is selected for a single-video tutorial; it is not a independently surveyed gauge datum or a river boundary depth",
+        "horizontal_representation_check": [
+          {
+            "section": 1,
+            "points": 27,
+            "source_crs": {
+              "type": "name",
+              "properties": {
+                "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+              }
+            },
+            "target_horizontal_epsg": 32735,
+            "operation": "Horizontal lon/lat to UTM conversion only; heights compared as stored, not transformed",
+            "max_xy_difference_m": 1.041250292910165e-09,
+            "max_stored_z_difference": 0.0
+          },
+          {
+            "section": 2,
+            "points": 25,
+            "source_crs": {
+              "type": "name",
+              "properties": {
+                "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+              }
+            },
+            "target_horizontal_epsg": 32735,
+            "operation": "Horizontal lon/lat to UTM conversion only; heights compared as stored, not transformed",
+            "max_xy_difference_m": 9.385703304198744e-10,
+            "max_stored_z_difference": 0.0
+          }
+        ],
+        "interpretation": "GeoJSON and CSV match the same 52 samples; they are two representations, not independent surveys or external accuracy validation. Stored heights were compared without conversion.",
+        "remaining_uncertainties": [
+          "Original observation-data use terms and rights-holder",
+          "Cross-section survey date and instrument/reference realization, height-unit specification",
+          "Flow direction, river chainage, structure effects, discharge/roughness/boundary conditions"
+        ]
+      }
     }
   ],
   "reviewed_timezone": "Asia/Tokyo"

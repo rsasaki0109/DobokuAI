@@ -2,9 +2,10 @@
 use crate::{validate_project, ApiError, ApiResult};
 use axum::{http::StatusCode, Json};
 use doboku_core::{
-    Boundary, DatasetProvenance, ImportProvenance, Point, Project, Regime, River, Section,
-    SpatialReference, Station,
+    DatasetProvenance, ImportProvenance, Point, Project, Section, SpatialReference, Station,
 };
+use doboku_geometry::DepthRange;
+use doboku_hydraulics::diagnostics::{inspect_geometry, TransitionCheck};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::HashSet;
@@ -44,12 +45,29 @@ pub struct Diagnostic {
 }
 #[derive(Serialize)]
 pub struct Preview {
+    pub engine_version: &'static str,
+    pub inspected_at: String,
     pub valid: bool,
     pub stations: Vec<Station>,
     pub reference: SpatialReference,
     pub diagnostics: Vec<Diagnostic>,
     pub warnings: Vec<String>,
     pub review_token: Option<String>,
+    pub geometry: Option<GeometryPreview>,
+}
+#[derive(Serialize)]
+pub struct GeometryPreview {
+    sections: Vec<PreviewSection>,
+    transitions: Vec<TransitionCheck>,
+    can_import: bool,
+    note: &'static str,
+}
+#[derive(Serialize)]
+pub struct PreviewSection {
+    id: String,
+    line: Option<u64>,
+    station: Station,
+    connected_depth_ranges: Vec<DepthRange>,
 }
 fn diagnostic(
     line: Option<u64>,
@@ -109,6 +127,7 @@ fn number(
     }
 }
 pub fn inspect(source: &Source) -> Preview {
+    let inspected_at = chrono::Utc::now().to_rfc3339();
     let mut errors = Vec::new();
     let mut warnings = vec!["全測点の置換と施工案のクリアを行います。流量・参照勾配・境界水深は保持します。反映後に条件を確認して再計算してください。".into(), "座標や基準高の変換は行いません。横断xと流下距離は同じ単位m、標高は共通の基準高が必要です。".into()];
     for (field, value) in [
@@ -160,7 +179,7 @@ pub fn inspect(source: &Source) -> Preview {
         import: Some(ImportProvenance {
             file_name: source.file_name.clone(),
             sha256: hash(source.csv.as_bytes()),
-            imported_at: chrono::Utc::now().to_rfc3339(),
+            imported_at: inspected_at.clone(),
             elevation_mode: match source.elevation_mode {
                 ElevationMode::Absolute => "absolute",
                 ElevationMode::Relative => "relative",
@@ -171,6 +190,7 @@ pub fn inspect(source: &Source) -> Preview {
         }),
     };
     let mut stations: Vec<Station> = Vec::new();
+    let mut geometry = None;
     if errors.is_empty() {
         let mut reader = csv::ReaderBuilder::new()
             .trim(csv::Trim::All)
@@ -258,23 +278,44 @@ pub fn inspect(source: &Source) -> Preview {
                     points.push(Point { x: *x, z });
                 }
             }
-            for (st, (line, id)) in stations.iter().zip(locations) {
+            for (st, (line, id)) in stations.iter().zip(&locations) {
                 if let Err(e) = doboku_geometry::validate(&st.section) {
-                    errors.push(diagnostic(line, Some(&id), "section", e));
+                    errors.push(diagnostic(*line, Some(id), "section", e));
                 }
             }
             if errors.is_empty() {
-                let river = River {
-                    discharge: 1.,
-                    normal_slope: 0.001,
-                    boundary: Boundary {
-                        regime: Regime::Subcritical,
-                        depth: 1.,
-                    },
-                    stations: stations.clone(),
-                };
-                if let Err(e) = doboku_hydraulics::validate(&river) {
-                    errors.push(diagnostic(None, None, "river", e));
+                match inspect_geometry(&stations) {
+                    Ok(checks) => {
+                        for (i, transition) in checks.transitions.iter().enumerate() {
+                            let label = format!("{} → {}", locations[i].1, locations[i + 1].1);
+                            for issue in &transition.issues {
+                                errors.push(diagnostic(
+                                    locations[i + 1].0,
+                                    Some(&label),
+                                    "transition",
+                                    issue,
+                                ));
+                            }
+                        }
+                        let sections = stations
+                            .iter()
+                            .zip(&locations)
+                            .zip(checks.sections)
+                            .map(|((station, (line, id)), check)| PreviewSection {
+                                id: id.clone(),
+                                line: *line,
+                                station: station.clone(),
+                                connected_depth_ranges: check.connected_depth_ranges,
+                            })
+                            .collect();
+                        geometry = Some(GeometryPreview {
+                            sections,
+                            transitions: checks.transitions,
+                            can_import: checks.can_import,
+                            note: checks.note,
+                        });
+                    }
+                    Err(error) => errors.push(diagnostic(None, None, "river", error)),
                 }
             }
         }
@@ -282,16 +323,22 @@ pub fn inspect(source: &Source) -> Preview {
     let valid = errors.is_empty();
     if !valid {
         stations.clear();
+        if geometry.is_some() {
+            warnings.push("取込みは拒否しました。元の点列を幾何点検用に表示します。プレビューの形状を確認しても、拒否条件のまま反映・計算はできません。".into());
+        }
     }
     let review_token =
         valid.then(|| hash(&serde_json::to_vec(source).expect("source serializable")));
     Preview {
+        engine_version: doboku_core::ENGINE_VERSION,
+        inspected_at,
         valid,
         stations,
         reference,
         diagnostics: errors,
         warnings,
         review_token,
+        geometry,
     }
 }
 pub async fn preview(Json(source): Json<Source>) -> Json<Preview> {

@@ -1,6 +1,6 @@
 //! Read-only checks using the same depth branches and transition guards as solve.
 //! Passing these checks does not establish existence of a longitudinal solution.
-use crate::{check_regime, depth_range, froude, validate_inputs};
+use crate::{check_regime, depth_range, froude, validate_inputs, validate_stations};
 use doboku_core::{Regime, Result, River, Station};
 use doboku_geometry::{connected_ranges, wet, DepthRange};
 use serde::Serialize;
@@ -40,6 +40,42 @@ pub struct RiverCheck {
     pub transitions: Vec<TransitionCheck>,
     pub boundary: BoundaryCheck,
     pub note: &'static str,
+}
+
+#[derive(Debug, Serialize)]
+pub struct SectionGeometryCheck {
+    pub chainage: f64,
+    pub connected_depth_ranges: Vec<DepthRange>,
+}
+#[derive(Debug, Serialize)]
+pub struct GeometryCheck {
+    pub can_import: bool,
+    pub sections: Vec<SectionGeometryCheck>,
+    pub transitions: Vec<TransitionCheck>,
+    pub note: &'static str,
+}
+
+/// Geometry and transition checks require no discharge, slope or boundary assumptions.
+pub fn inspect_geometry(stations: &[Station]) -> Result<GeometryCheck> {
+    validate_stations(stations)?;
+    let sections = stations
+        .iter()
+        .map(|station| {
+            Ok(SectionGeometryCheck {
+                chainage: station.chainage,
+                connected_depth_ranges: connected_ranges(&station.section)?,
+            })
+        })
+        .collect::<Result<Vec<_>>>()?;
+    let transitions: Vec<_> = stations
+        .windows(2)
+        .map(|pair| transition(&pair[0], &pair[1]))
+        .collect();
+    Ok(GeometryCheck {
+        can_import: transitions.iter().all(|t| t.issues.is_empty()),
+        sections, transitions,
+        note: "幾何と遷移の点検のみ。流量・参照勾配・境界水深を仮定せず、水位・限界水深・等流水深は計算しません。点列は入力のまま保持します。取込み可能でも水理計算の成立・実測基準の正しさは別途確認が必要です。",
+    })
 }
 
 pub(crate) fn transition(a: &Station, b: &Station) -> TransitionCheck {
@@ -175,6 +211,36 @@ pub fn inspect(river: &River) -> Result<RiverCheck> {
 mod tests {
     use super::*;
     use doboku_core::{sample, Point, Section};
+
+    #[test]
+    fn geometry_inspection_requires_no_hydraulic_assumptions_and_collects_all_failures() {
+        let mut stations = sample().river.stations;
+        stations[1].section = Section::Rectangle {
+            width: 100.,
+            bank_height: 8.,
+        };
+        stations[2].bed_elevation = 100.;
+        let result = inspect_geometry(&stations).unwrap();
+        assert!(!result.can_import);
+        assert_eq!(result.sections.len(), stations.len());
+        assert_eq!(result.transitions.len(), stations.len() - 1);
+        assert!(result.transitions[0].issues[0].contains("幅急変"));
+        assert_eq!(result.transitions[1].issues.len(), 2);
+        assert!(result.transitions[2].issues[0].contains("河床急変"));
+        assert!(result.transitions[3].issues.is_empty());
+        stations[2].chainage = stations[1].chainage;
+        assert!(inspect_geometry(&stations).is_err());
+        let mut stations = sample().river.stations;
+        stations[0].bed_elevation = f64::MAX;
+        stations[0].section = Section::Rectangle {
+            width: 20.,
+            bank_height: f64::MAX,
+        };
+        assert!(inspect_geometry(&stations)
+            .unwrap_err()
+            .to_string()
+            .contains("有限の標高"));
+    }
 
     #[test]
     fn preflight_uses_solver_branches_and_boundary_direction() {

@@ -94,13 +94,17 @@ export function SectionChart({
   station,
   analysis,
   index,
+  bounds,
+  groundLabel,
 }: {
   station: Station;
   analysis: Analysis | null;
   index: number;
+  bounds?: { xmin: number; xmax: number; ymin: number; ymax: number };
+  groundLabel?: string;
 }) {
   const g = ground(station.section, station.bed_elevation);
-  const series = [{ name: '施工前 地盤', points: g, color: '#879077', dashed: false }];
+  const series = [{ name: groundLabel ?? '施工前 地盤', points: g, color: '#879077', dashed: false }];
   if (analysis?.run.profile.rows[index]) {
     const stage = analysis.run.profile.rows[index].water_elevation;
     const [lo, hi] = waterExtent(g, stage);
@@ -133,8 +137,8 @@ export function SectionChart({
   const all = series.flatMap((s) => s.points);
   const valid = all.every((p) => Number.isFinite(p.x) && Number.isFinite(p.z));
   if (!valid) return <div className="empty">断面の座標に有限値を入力してください。</div>;
-  const ymin = Math.min(...all.map((p) => p.z)) - 0.5;
-  const ymax = Math.max(...all.map((p) => p.z)) + 0.5;
+  const ymin = bounds?.ymin ?? Math.min(...all.map((p) => p.z)) - 0.5;
+  const ymax = bounds?.ymax ?? Math.max(...all.map((p) => p.z)) + 0.5;
   return (
     <div className="chart section-chart" aria-label="同一基準高の河川横断図">
       <ResponsiveContainer width="100%" height="100%">
@@ -143,7 +147,7 @@ export function SectionChart({
           <XAxis
             type="number"
             dataKey="x"
-            domain={['dataMin', 'dataMax']}
+            domain={bounds ? [bounds.xmin, bounds.xmax] : ['dataMin', 'dataMax']}
             tickLine={false}
             axisLine={false}
             label={{ value: '横断距離 (m)', position: 'insideBottom', offset: -8 }}

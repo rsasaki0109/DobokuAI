@@ -500,3 +500,50 @@ pyHMT2D's README requires original-owner authorization for reuse; PyRASFile cont
 field geometry. Details and hashes: [model data review](public-data-model-review.md).
 No third-party data/code is shipped. Adopted field trials remain zero, hosted CI is unconfirmed,
 and the maturity score remains 44.0/100 (approximately 45%), against the current 50% target.
+
+## Rejected survey geometry inspection — 2026-10-12 (JST)
+
+CSV inspection now retains all complete, valid section point arrays when an adjacent
+width/bed transition prevents import. It reports every transition, original section ID and
+the downstream section's first CSV line. The same Rust transition checks guard actual
+calculations. No discharge, normal slope or boundary depth is assumed for geometry checks.
+
+Rejected import responses keep stations empty and review_token null; diagnostic geometry
+is separate. Direct apply is rejected and existing project/history remain unchanged.
+Malformed records, inconsistent units, missing/nonfinite values, invalid sections or station
+order do not produce partial diagnostic geometry. Absolute elevations are interpreted using
+the existing IEEE-754 subtraction; original CSV text is retained exactly in the export.
+Finite common elevations are checked before plotting/evaluation, including addition overflow.
+
+The UI inspects all sections with common horizontal/elevation axis bounds, input ground
+profiles and every transition. The plots contain no computed water surface. Their section
+legend says CSV input ground. JSON exports source CSV/interpretation/provenance, full preview,
+engine version and UTC inspection timestamp. Edits invalidate the preview/export.
+
+Verification passed:
+
+- All 78 Rust tests, fmt and clippy with warnings denied. Final timestamp/version assertions
+  were rerun in the new API integration case after adding inspection metadata.
+- TypeScript checks and native/Docker frontend builds; no dependencies or lockfiles changed.
+- Development-browser rejected-CSV inspection, existing irregular survey workflow and river
+  preflight. The API/browser fixtures use exactly representable synthetic bed increments for
+  strict point preservation, rather than relaxing numerical tolerances for decimal subtraction.
+- Docker full suite passed 17/18 initially; the combined gallery workflow exhausted its 45s
+  total deadline before GLB saving. Trace showed completed model/fullscreen operations.
+  That software-WebGL workflow alone now has a 90s bounded deadline. All its GLB, instancing,
+  metadata, fullscreen and browser-error assertions remain unchanged. It passed in the targeted
+  rerun (14.8s), along with the final CSV inspection (1.6s). All 18 distinct cases are verified.
+- The final CSV inspection exports exact original CSV and preview, preserves every point and
+  verifies no project/history mutation. Browser drawing was inspected with no client exceptions.
+
+Final production images:
+
+- API: sha256:71ca31cd81815113707ae1bcc86c0027011027d61c861719fbf8f56c0c14d776
+- Web: sha256:3dc12181e16dbda59adc6ea5512980004c6e3991655ca2fefbc0e9f286898ab8
+
+New Ngwerere primary notes describe RTK measurements and shared ellipsoid heights. Horizontal
+GeoJSON→UTM comparison agrees with the same CSV's 52 points to about 1e-9m and stored heights
+match exactly without height conversion. This checks representation consistency, not independent
+survey accuracy. Original use terms, survey realization/date and hydraulic reach conditions
+remain incomplete. No field dataset is adopted or bundled; maturity remains 44.0/100.
+Details: [survey inspection](survey-import.md) and [primary-source review](public-data-model-review.md).
