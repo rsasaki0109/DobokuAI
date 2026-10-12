@@ -3,30 +3,10 @@ import { Plus, Trash2 } from 'lucide-react';
 import type { Project, Section, Station } from './types';
 import { ground } from './types';
 import { SectionChart } from './Charts';
+import { DownstreamStationDraft } from './DownstreamStationDraft';
+import { NumberField } from './NumberField';
+export { NumberField } from './NumberField';
 
-export function NumberField({
-  label,
-  value,
-  onChange,
-  step = 'any',
-}: {
-  label: string;
-  value: number;
-  onChange: (v: number) => void;
-  step?: string | number;
-}) {
-  return (
-    <label className="field">
-      <span>{label}</span>
-      <input
-        type="number"
-        step={step}
-        value={Number.isFinite(value) ? value : ''}
-        onChange={(e) => onChange(e.target.value === '' ? NaN : Number(e.target.value))}
-      />
-    </label>
-  );
-}
 export function SectionFields({
   section,
   onChange,
@@ -187,6 +167,7 @@ export function SectionFields({
 export function Editor({ project, edit }: { project: Project; edit: (p: Project) => void }) {
   const [index, setIndex] = useState(0);
   const [all, setAll] = useState(false);
+  const [addition, setAddition] = useState<Project | null>(null);
   const idx = Math.min(index, project.river.stations.length - 1);
   const station = project.river.stations[idx];
   function update(patch: Partial<Station>) {
@@ -221,30 +202,21 @@ export function Editor({ project, edit }: { project: Project; edit: (p: Project)
           type="button"
           className="secondary full"
           disabled={project.river.stations.length >= 200}
-          onClick={() => {
-            const last = project.river.stations.at(-1)!;
-            edit({
-              ...project,
-              river: {
-                ...project.river,
-                stations: [
-                  ...project.river.stations,
-                  {
-                    ...structuredClone(last),
-                    chainage: last.chainage + 100,
-                    bed_elevation: last.bed_elevation - project.river.normal_slope * 100,
-                  },
-                ],
-              },
-            });
-            setIndex(project.river.stations.length);
-          }}
+          onClick={() => setAddition(project)}
         >
           <Plus size={15} />
           下流に断面を追加
         </button>
       </section>
       <div>
+        {addition === project && (
+          <DownstreamStationDraft project={project} cancel={() => setAddition(null)} apply={added => {
+            edit({ ...project, river: { ...project.river, stations: [...project.river.stations, added] } });
+            setIndex(project.river.stations.length);
+            setAll(false);
+            setAddition(null);
+          }} />
+        )}
         <section className="panel">
           <div className="panel-heading">
             <div>

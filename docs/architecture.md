@@ -40,6 +40,12 @@ to set the existing SI boundary depth. It is an alternative input representation
 new absolute-stage boundary mode. Base bed/regime edits retain depth and change the displayed
 level; construction comparisons retain stage through the existing Rust adjustment.
 See [boundary level input](boundary-water-level.md).
+Downstream station addition is an explicit draft: chainage defaults to last+100m,
+geometry/roughness are stated copies, and bed elevation requires user input. No bed is
+extrapolated from the normal-depth reference slope. Confirmation adds one station while
+retaining depth; subcritical stage moves with the new downstream bed, while supercritical
+upstream boundary remains unchanged. Saving and solving remain separate operations.
+See [station addition](station-addition.md).
 
 Rectangular/trapezoidal banks have a finite height. Surveyed sections are unsmoothed
 piecewise-linear polylines with strictly increasing x and relative minimum z=0.

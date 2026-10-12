@@ -978,3 +978,46 @@ observation time are retained in [hosted evidence](hosted-ci-evidence.json).
 Numeric counts above are local results, not independently counted hosted job logs.
 This establishes CI success for the implementation commit, not field applicability or
 the following documentation-only commit.
+
+## Confirmed downstream station addition / 2026-10-12 UTC
+
+The editor formerly added a copied station immediately at last+100m and extrapolated
+bed elevation from the normal-depth reference slope. It now opens a draft without editing
+the project. Distance defaults to last+100m and stated geometry/roughness copies; bed must
+be explicitly supplied. Preview shows declared reference, copied source, ground only and
+current/candidate boundary stage. Confirmation appends one station and selects it; saving
+and solving remain separate. Cancelling or changing original conditions discards the draft.
+Existing stations, Q, reference slope, scenarios and boundary depth are retained. The new
+downstream bed determines subcritical boundary stage; supercritical upstream stage stays
+unchanged. Source CSV provenance continues to describe the original file, not later edits.
+
+The NumberField component was moved verbatim to a shared module, with the original Editor
+re-export retained, to avoid a circular dependency between editor and draft component.
+No engine, API/storage contracts, schema, dependencies or lockfiles changed.
+Two focused synthetic browser cases passed (14.7 seconds): blank bed blocks application,
+duplicate chainage/invalid roughness are refused, candidate/cancellation do not affect
+saved geometry or history, original edits invalidate the proposal, and all 11 original
+stations remain exactly equal after adding the twelfth. Actual Rust profiles check
+subcritical new downstream stage 12.1m and supercritical upstream stage 10.55m, selected
+regime at every station, old immutable runs and saved project persistence. The all-station
+shape toggle cannot propagate an addition, and is reset after confirmation. The confirmation
+screenshot was inspected. This is not field-data adoption or observed-water calibration.
+
+The full `scripts/check.sh` exited zero: 91 Rust tests, fmt, clippy with warnings denied,
+independent references, five backup tests, five NCRO tests, ten review-pack audit tests,
+frontend type check/build and all 30 native-browser E2E cases (4.2 minutes). Engine version
+remains 0.2.0. Field adoption remains zero; fixed maturity remains 44.0/100 (about 45%),
+target 50%. [Addition semantics](station-addition.md).
+
+The final Docker distribution passed four targeted browser cases (24.1 seconds): both
+new station-addition cases, boundary-water-level input and the existing edit/steady-flow/
+construction/report/persistence workflow. Production images:
+
+- API: sha256:c342e353352744584948d3631ee446570b9f1f562d4f94d47ff3333f35e7ac2e
+- Web: sha256:4d7449fb21d850a113ad4e7d5359a585bec120b75ddad9394f588efd4f77c413
+
+Logs retained under `.local/station-addition-`: `focused-20261012.log`,
+`check-20261012.log`, `docker-build-20261012.log` and `docker-final-20261012.log`.
+All executed cases passed without skipped or loosened assertions. The dedicated
+`doboku-station-20261012` Compose project is stopped and its volume is retained;
+existing user services/database remain in place.
