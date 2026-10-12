@@ -35,6 +35,11 @@ Friction loss is the arithmetic mean of adjacent Manning friction slopes times r
 The solver uses bracketed bisection on the selected branch of specific energy.
 Subcritical flow requires downstream depth; supercritical flow requires upstream depth.
 Boundary water elevation stays fixed in construction comparisons unless the user edits it.
+The web boundary-level input subtracts the selected downstream/upstream bed elevation
+to set the existing SI boundary depth. It is an alternative input representation, not a
+new absolute-stage boundary mode. Base bed/regime edits retain depth and change the displayed
+level; construction comparisons retain stage through the existing Rust adjustment.
+See [boundary level input](boundary-water-level.md).
 
 Rectangular/trapezoidal banks have a finite height. Surveyed sections are unsmoothed
 piecewise-linear polylines with strictly increasing x and relative minimum z=0.

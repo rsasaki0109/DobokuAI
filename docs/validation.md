@@ -806,3 +806,42 @@ Hosted numeric test counts are not independently counted from downloaded logs. L
 dependencies or images changed during this evidence-only follow-up, and those passed
 tests were not repeated. Runtime network configuration still lacks the saved primary-data
 hosts; field trials remain zero and maturity remains 44.0/100, target 50%.
+
+## Common-datum boundary level input — 2026-10-12 (JST)
+
+The hydraulic conditions screen now accepts a boundary water elevation in SI metres.
+It subtracts the current downstream bed for subcritical flow or upstream bed for
+supercritical flow to update the existing boundary depth. The selected station's
+chainage, bed and declared vertical datum are displayed. Depth edits update the displayed
+level. This is an alternate input representation, not a new absolute-stage boundary mode:
+base bed/regime edits retain depth, whereas existing Rust construction comparisons
+retain the preconstruction stage. No datum/native-unit transformation is performed.
+
+Two new browser cases verify subcritical 9m bed/12.6m stage/3.6m depth and supercritical
+10m bed/10.55m stage/.55m depth, actual Rust calculations and boundary profile rows,
+the 1m excavation retaining 12.6m while depth increases to 4.6m, explicit save/reload,
+unchanged stored runs after edits and refusals, and derived stage changes after bed/regime
+edits. Below-bed, bed-equal and empty inputs remain invalid and create no new calculation
+history. The initial focused run completed the subcritical case and the actual
+supercritical calculation, then exposed a missing exact accessible label on the regime
+select. Its name is now explicit; the final complete runs passed without loosening tests.
+
+Full `scripts/check.sh` exited zero: 91 Rust tests, fmt/clippy, independent references,
+five backup tests, five NCRO tests, ten offline-audit tests, frontend type check/build and
+all 23 development-browser E2E cases (1.6 minutes). The rebuilt Docker distribution passed
+three targeted browser cases (8.5 seconds): both new boundary-level cases and the existing
+cross-section editing/construction/report/persistence workflow. The conditions screenshot
+was visually inspected. No numerical-engine, API contract, database schema, dependencies
+or lockfiles changed; engine version remains 0.2.0.
+
+Production images:
+
+- API: sha256:94e165ba1b602a76cb1c03fd9d16b7afc13118096907c265aa4379abe69efcb2
+- Web: sha256:a16ff8793bdb016d5f8b4f1d78f7b36ff67919ddbc3e106dabe349262bef4d49
+
+Logs: `.local/boundary-stage-focused-20261012.log` (initial focused failure),
+`.local/boundary-stage-check-20261012.log`, `.local/boundary-stage-docker-build-20261012.log`
+and `.local/boundary-stage-docker-e2e-20261012.log` (final passing runs).
+The inputs are synthetic and do not authenticate observed levels or field applicability.
+Original-data network settings remain unapplied, field adoption remains zero and fixed
+maturity stays 44.0/100 (about 45%), target 50%. [Input semantics](boundary-water-level.md).

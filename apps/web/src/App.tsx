@@ -40,6 +40,7 @@ import { SurveyImport } from './SurveyImport';
 import { Sensitivity } from './Sensitivity';
 import { Resolution } from './Resolution';
 import { RiverDiagnostics } from './RiverDiagnostics';
+import { BoundaryStageInput } from './BoundaryStageInput';
 import { ReviewPack } from './ReviewPack';
 const River3D = lazy(() => import('./River3D'));
 const Infrastructure3D = lazy(() => import('./Infrastructure3D'));
@@ -642,6 +643,7 @@ export default function App() {
                         <label className="field">
                           <span>境界条件 / 流況</span>
                           <select
+                            aria-label="境界条件 / 流況"
                             value={project.river.boundary.regime}
                             onChange={(e) =>
                               edit({
@@ -673,6 +675,7 @@ export default function App() {
                             })
                           }
                         />
+                        <BoundaryStageInput project={project} edit={edit} />
                         <div className="field">
                           <span>実河床への反映（明示的操作）</span>
                           <button
@@ -699,6 +702,7 @@ export default function App() {
                       </div>
                       <p className="muted">
                         不等流は各測点の実標高を使用。参照勾配の変更だけでは河床は変更されません。境界水位は施工比較中に固定します。
+                        水位欄は共通基準高のmで入力し、現在の境界河床を引いて水深を設定します。基本条件の河床や流況を編集すると表示水位も変わるため、境界を再確認してください。水位の標高基準・単位変換は行いません。
                       </p>
                     </section>
                     <section className="panel">
