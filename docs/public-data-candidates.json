@@ -269,6 +269,31 @@
           "path": "inst/extdata/NWO_Papillion_ColeCreek_Stream.gdb/a00000004.gdbtable",
           "bytes": 125224,
           "sha256": "a4aaf0153afb07ab9d4a5ec64ea1af463955dc9a7e03a649d59431052afc51f7"
+        },
+        {
+          "path": "inst/extdata/AntelopeCreek_2017.gdb/a000000d3.gdbtable",
+          "bytes": 16762,
+          "sha256": "1ebe252475179f5c5ed642a6affa1bc66e8d1f119a75834a0e828880803d2432"
+        },
+        {
+          "path": "inst/extdata/y2006_R1.gdb/a0000000c.gdbtable",
+          "bytes": 290836,
+          "sha256": "6a3dd27598366a3348e8b9be8bde03e4c848394133b7d1ce0217c8ee5efe1e96"
+        },
+        {
+          "path": "inst/extdata/y2010_R1.gdb/a0000000c.gdbtable",
+          "bytes": 290836,
+          "sha256": "5633b20fb175bb29af23f5a16254352629b05eed5508072dae9cdc6924cf8740"
+        },
+        {
+          "path": "inst/extdata/y2016_R1.gdb/a00000014.gdbtable",
+          "bytes": 290836,
+          "sha256": "04f471037476e5dbf4e3acbb4c786d0c7fc637fc88e69c60826812d6df7e0092"
+        },
+        {
+          "path": "inst/extdata/y2016_R1.gdb/a0000001d.gdbtable",
+          "bytes": 6630955,
+          "sha256": "89a26d930596fb790e301ba0c25989921bd358a7883e80684b6797a377b292d1"
         }
       ],
       "findings": "Data-only testing package identifies USACE authors and publishes CC0 terms. xs.csv contains 79 points in XS01/XS02 with explicit elev_m/elev_ft columns and bank/water-surface codes. Inspected FileGDB metadata includes Antelope Creek 2013/2017 and Cole Creek layers; Antelope 2017 process lineage references field-derived DEM. This does not establish original survey dates, bed survey provenance, vertical reference or three usable hydraulic cases. Related fluvgeo Sinsinawa documentation explicitly describes LiDAR-derived section elevations, not certified underwater bathymetry.",
@@ -276,11 +301,58 @@
       "vertical_unit": "xs.csv explicitly includes elev_m and elev_ft; units not verified for all FileGDB layers",
       "vertical_datum": "unconfirmed for selected CSV and field-derived layers; do not apply a related package convention to all fixtures",
       "adoption_blockers": [
-        "Identify original reach, survey source/date, horizontal CRS and common vertical reference for selected files",
-        "Distinguish measured underwater/dry-channel bed from LiDAR surface, interpolated terrain and synthetic fixtures",
-        "Select and inspect model-compatible reaches; document conversion, distance direction and hydraulic conditions before adoption"
+        "Confirm original survey attribution/date and common vertical reference for Antelope 2017; horizontal CRS and explicit elev_m do not establish datum",
+        "Antelope XS01/XS02 fail the current single-valley geometry contract; no silent smoothing or removal of ground points",
+        "Trace Cole Creek source DEMs, vertical reference/foot definition and underwater/dry-bed/LiDAR acquisition; reused sampling geometry is not independent measured bathymetry",
+        "Select model-compatible reaches and document measured or explicitly justified hydraulic conditions before complete trials"
       ],
-      "redistributed_data": false
+      "redistributed_data": false,
+      "additional_review": {
+        "reviewed_on": "2026-10-12",
+        "method": "GDAL 3.10.3 OpenFileGDB, 5 archives/87 GDB_Items records/16 selected data layers",
+        "report": "docs/public-data-filegdb-review.md",
+        "antelope_2017": {
+          "reach_name": "Antelope Creek",
+          "field_cross_section_points": 79,
+          "cross_sections": [
+            "XS01",
+            "XS02"
+          ],
+          "horizontal_crs": "EPSG:26914, metre",
+          "elevation_attributes": [
+            "elev_m",
+            "elev_ft"
+          ],
+          "geometry_z": "Matches feet elevation, not metre elevation; horizontal CRS does not establish vertical unit",
+          "datum": "unconfirmed",
+          "ground_points_excluding_WSE": [
+            40,
+            35
+          ],
+          "single_valley_reversals": [
+            6,
+            5
+          ]
+        },
+        "cole_creek": {
+          "reach_name": "Cole Creek R1",
+          "archive_years": [
+            2006,
+            2010,
+            2016
+          ],
+          "horizontal_crs": "EPSG:26914, metre",
+          "attributes": {
+            "POINT_M_units": "m",
+            "dem_units": "ft"
+          },
+          "riffle_channel_points_per_archive": 869,
+          "riffle_floodplain_points_per_archive": 1418,
+          "xs_points_per_archive": 21248,
+          "cross_archive_comparison": "XY identical for all compared layers; 3D riffle geometry Z identical. DEM_Z and Detrend_DEM_Z differ at all points. These are reused sampling geometries with year-specific DEM attributes, not proof of 3 independent underwater field surveys.",
+          "vertical_reference": "Some process lineage names NAVD88 - Geoid09 (Feet)/Foot_US with VDATUM unknown and NO_VERTICAL. Final layer definitions lack vertical CRS. Do not apply another layer datum or foot definition without verification."
+        }
+      }
     }
   ],
   "reviewed_timezone": "Asia/Tokyo"
