@@ -602,6 +602,111 @@
           "Flow direction, river chainage, structure effects, discharge/roughness/boundary conditions"
         ]
       }
+    },
+    {
+      "revision": "2c34575d109b055a7dd38409a0c74de56dc18bec",
+      "source_url": "https://github.com/cfbrush/cv-stream-rating-data/tree/2c34575d109b055a7dd38409a0c74de56dc18bec",
+      "redistributed_data": false,
+      "data_usage_terms": "Compiled CSV/JSON: CC BY 4.0, attribution Brush, C.F. / Hydrolytics LLC; DATA_LICENSE.md says original source terms also apply. Cached CKAN copy reports CC Attribution for NAVD88 update; original catalogue direct verification blocked.",
+      "id": "dwr-dsm2-navd88",
+      "status": "pending_primary_metadata_and_reach_selection",
+      "findings": "10680 cross-section CSV point rows across 470 channel IDs; 1179 rows have xs_index 0. Parser resets xs_index as within-block point index, not longitudinal station or unique section ID. CSV lacks section location/block identity. README identifies Delta-only 2009 calibrated data; tidal/network effects require reach applicability checks.",
+      "vertical_reference": "NAVD88 adoption described in copied primary catalogue metadata; acquisition script describes elevation US Survey Feet and horizontal NAD83 / UTM 10N. Original files/manual not directly verified.",
+      "inspected_files": [
+        {
+          "name": "ratings-readme",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/README.md",
+          "bytes": 8331,
+          "sha256": "d4cd670f5a0062341012072a51bc3b60ebd87c3c8b7daaf7ae5c2f74b5652898"
+        },
+        {
+          "name": "ratings-terms",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/DATA_LICENSE.md",
+          "bytes": 1416,
+          "sha256": "1433e183588c58b7746ad4420888a3668c4e78993ade5d9863182e6e54ec0395"
+        },
+        {
+          "name": "ratings-dsm-script",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/fetch_dsm2_cross_sections.py",
+          "bytes": 10522,
+          "sha256": "645c25327acdf898593744e309d0962f564be87788d53651f067f95e9c618a40"
+        },
+        {
+          "name": "ratings-ncro-script",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/fetch_ncro_bathymetry.py",
+          "bytes": 9401,
+          "sha256": "ff8fa8a8a19f276cafaf7028d6c744100b36202fc6f1360c8de3eaad67649dbf"
+        },
+        {
+          "name": "ratings-data-readme",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/README.md",
+          "bytes": 6375,
+          "sha256": "11ca580f98a9a40b567eed37d38a5a4d58193817bcb023585a4177db87f7943a"
+        },
+        {
+          "name": "ratings-catalog",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ckan_packages_raw.json",
+          "bytes": 646880,
+          "sha256": "9c1f484468ca196df6d24969ebe98c86f9469479246313fadcbcda144223ee42"
+        },
+        {
+          "name": "ratings-ncro-index",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ncro_bathymetry/_index.csv",
+          "bytes": 54557,
+          "sha256": "1ee0ea12013152e85abdc093308180872537d2c59b5fd07e3948abce5166ec61"
+        },
+        {
+          "name": "ratings-cross-sections",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/dsm2_cross_sections/cross_sections.csv",
+          "bytes": 260672,
+          "sha256": "111273375c927268ef0fe31a6cc31b3ed6b6791a9bb8b516094805e6271f69e3"
+        }
+      ],
+      "adoption_blockers": [
+        "Verify original catalogue and CSDP manual/file units and individual survey attribution",
+        "Recover section block identity, location, spacing and flow direction from original network",
+        "Identify a supported steady single-reach case with defensible flow, roughness and boundary conditions; do not ignore tidal/network effects"
+      ]
+    },
+    {
+      "revision": "2c34575d109b055a7dd38409a0c74de56dc18bec",
+      "source_url": "https://github.com/cfbrush/cv-stream-rating-data/tree/2c34575d109b055a7dd38409a0c74de56dc18bec",
+      "redistributed_data": false,
+      "data_usage_terms": "Compiled CSV/JSON: CC BY 4.0, attribution Brush, C.F. / Hydrolytics LLC; DATA_LICENSE.md says original source terms also apply. Cached CKAN copy reports CC Attribution for NAVD88 update; original catalogue direct verification blocked.",
+      "id": "dwr-ncro-samples",
+      "status": "pending_original_service_metadata",
+      "findings": "Three public sample CSV prefixes inspected, 16384 bytes each; complete files exceed 8 MiB inspection limit and were not saved or validated. Headers include XYZ, source, field-work dates, equipment and report fields but no explicit coordinate/height units or datum. Original service and survey report remain unverified.",
+      "prefix_inspection": [
+        {
+          "name": "i06-bathy-ncro-20230214-elkslough",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ncro_bathymetry/i06-bathy-ncro-20230214-elkslough.csv",
+          "inspection": "First 16384 bytes only; not a complete file or survey",
+          "prefix_bytes": 16384,
+          "prefix_sha256": "4928f012f83dcb0d6eb94a235f2b628da96cfb7f126454e83f5efcf63164b365",
+          "header": "ï»¿OBJECTID,X,Y,Z,Source,Last_Modified_Date,Last_Modified_By,Date_Data_Refers_To,Data_Format,Data_Equipment_Type,Date_Field_Work_Started,Date_Field_Work_Ended,Feature_Class_Name,Survey_Report,Comments"
+        },
+        {
+          "name": "i06-bathy-ncro-20230720-middleriversouth",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ncro_bathymetry/i06-bathy-ncro-20230720-middleriversouth.csv",
+          "inspection": "First 16384 bytes only; not a complete file or survey",
+          "prefix_bytes": 16384,
+          "prefix_sha256": "1dbc6c11bee3f2b0adc06aa7c769ddf44114e016e77235aebf7c3d0edcd8837c",
+          "header": "ï»¿OBJECTID,X,Y,Z,SOURCE,LAST_MODIFIED_DATE,MODIFIED_BY,DATE_DATA_REFERS_TO,DATA_FORMAT,DATA_EQUIPMENT_TYPE,DATE_STARTED,DATE_COMPLETED,FEATURE_CLASS_NAME,SURVEY_REPORT,COMMENTS"
+        },
+        {
+          "name": "i06-bathy-ncro-20240123-sacramentoriver",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ncro_bathymetry/i06-bathy-ncro-20240123-sacramentoriver.csv",
+          "inspection": "First 16384 bytes only; not a complete file or survey",
+          "prefix_bytes": 16384,
+          "prefix_sha256": "c50c11a5af00ee8b11bc418f339e3863b0e0b4f08ccf5e8df5d973aebed2b7f4",
+          "header": "ï»¿OBJECTID,X,Y,Z,Source,Last_Modified_Date,Modified_By,Date_Data_Refers_To,Data_Format,Data_Equipment_Type,Date_Fieldwork_Started,Date_Fieldwork_Ended,Feature_Class_Name,Survey_Report,Comments"
+        }
+      ],
+      "adoption_blockers": [
+        "Confirm native horizontal/vertical reference, units and field survey reports in original services",
+        "Resolve index-to-resource mismatches: Sacramento-labelled file identifies GrantLine/FabianBell Canal; Middle River filename date and method differ from internal attributes",
+        "Extract defensible full-bank cross sections and supported reach/hydraulic conditions; do not count three CSV names as three adopted rivers"
+      ]
     }
   ],
   "reviewed_timezone": "Asia/Tokyo"
