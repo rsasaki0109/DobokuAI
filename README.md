@@ -1,10 +1,12 @@
 # DobokuAI
 
+[![MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/workflows/check.yml/badge.svg?branch=main)](https://github.com/rsasaki0109/DobokuAI/actions/workflows/check.yml)
+
 AI-native Civil Engineering Platform の **河川エンジニアリング MVP**。
 Rust の決定論的な水理エンジンと、条件を整理する AI 操作提案を分離しています。
 ブラウザで横断面を編集し、1 次元定常不等流を計算して、施工前後の水面形・土量を比較できます。
 現時点では設計認証済みのソフトウェアではありません。利用権を付与する OSS ライセンスは設定していません。
-[利用条件](NOTICE.md) · [GitHub公開の準備状況](docs/publication.md)
+[利用条件](NOTICE.md) · [GitHub公開の確認記録](docs/publication.md)
 
 施設ギャラリーには、ダム・橋梁・砂防の架空の3D形状モデルを追加しています。
 別画面の **「ダム予備照査」** で、自由越流容量・静水圧・自重・揚圧・滑動比・転倒比・基礎接触をRustで計算できます。

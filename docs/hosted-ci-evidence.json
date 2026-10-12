@@ -1,0 +1,96 @@
+{
+  "observed_on_jst": "2026-10-12",
+  "recorded_at_utc": "2026-10-12T12:08:44Z",
+  "implementation_commit": "f6c826d78cbcbb00d5052c2c0f8984d3bbddfeb5",
+  "workflow": "MVP checks",
+  "run_id": 38245445172,
+  "run_number": 19,
+  "event": "push",
+  "branch": "main",
+  "triggered_at_utc": "2026-10-12T11:52:20Z",
+  "run_status": "Success",
+  "total_duration": "4m 33s",
+  "job": {
+    "name": "validate",
+    "id": 114798029592,
+    "status": "completed successfully",
+    "duration": "4m 21s"
+  },
+  "verified_workflow_commands": [
+    "rustup toolchain install 1.90.0 --profile minimal --component rustfmt --component clippy",
+    "npm ci --prefix apps/web",
+    "npx --prefix apps/web playwright install --with-deps chromium",
+    "python3 tests/swashes_reference.py --download --check",
+    "bash scripts/check.sh"
+  ],
+  "repository_visibility": {
+    "public_label": true,
+    "repository_public": true,
+    "isPrivate": false,
+    "logged_in": false,
+    "changed_by_agent": false
+  },
+  "observations": [
+    {
+      "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38245445172",
+      "bytes": 201368,
+      "sha256": "259c4ff73d69b24535899b0aa5538b118401836efd50ae34ace7be6432899498"
+    },
+    {
+      "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38245445172/job/114798029592",
+      "bytes": 208440,
+      "sha256": "f9967da572ed34a99ebff2171445f068e239829415544f792d7b7b62b27b6cb8"
+    },
+    {
+      "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38245445172/workflow",
+      "bytes": 189078,
+      "sha256": "4606c2a9b3d2cfb71a659f38d8f61719641e3ecc14520eda9fc9d717484f514f"
+    },
+    {
+      "url": "https://github.com/rsasaki0109/DobokuAI",
+      "bytes": 447189,
+      "sha256": "8d59beeeb89cbf30edab5e33fdaeea48556199785d10864e72da68e355c394f6"
+    }
+  ],
+  "warning": "Original job reports Node.js 20 deprecation for actions/checkout@v4 and actions/setup-node@v4; replaced with pinned Node.js 24 v6 action commits in this change.",
+  "action_upgrade_sources": [
+    {
+      "repo": "actions/checkout",
+      "revision": "d23441a48e516b6c34aea4fa41551a30e30af803",
+      "path": "action.yml",
+      "url": "https://raw.githubusercontent.com/actions/checkout/d23441a48e516b6c34aea4fa41551a30e30af803/action.yml",
+      "bytes": 5144,
+      "sha256": "d59219cb79590abdb877deaa14e3b65a00c05318bf5a6f3b989b9162b5d08c35"
+    },
+    {
+      "repo": "actions/checkout",
+      "revision": "d23441a48e516b6c34aea4fa41551a30e30af803",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/actions/checkout/d23441a48e516b6c34aea4fa41551a30e30af803/README.md",
+      "bytes": 13426,
+      "sha256": "cefdca2c4a468cf7032e60cd6d95ffda3b27e578c93abe392a8a262f2a9d67cf"
+    },
+    {
+      "repo": "actions/setup-node",
+      "revision": "249970729cb0ef3589644e2896645e5dc5ba9c38",
+      "path": "action.yml",
+      "url": "https://raw.githubusercontent.com/actions/setup-node/249970729cb0ef3589644e2896645e5dc5ba9c38/action.yml",
+      "bytes": 2797,
+      "sha256": "ad45f1922115116fb4706651d0a9262332bc4e4f11eb2021e09789dd1af18085"
+    },
+    {
+      "repo": "actions/setup-node",
+      "revision": "249970729cb0ef3589644e2896645e5dc5ba9c38",
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/actions/setup-node/249970729cb0ef3589644e2896645e5dc5ba9c38/README.md",
+      "bytes": 14029,
+      "sha256": "cc9b4c3d047fc8cd194be182981e693aa169cd8a87647cea6d90e4adff04ead1"
+    }
+  ],
+  "limits": [
+    "Observed official GitHub web pages, not API JSON or authenticated downloaded job logs.",
+    "Hosted numeric test counts are not independently counted from job logs; local counts are recorded separately in validation.md.",
+    "Visibility actor/change time not established; no OSS licence granted.",
+    "No field dataset adopted and no field accuracy or engineering approval established."
+  ]
+}

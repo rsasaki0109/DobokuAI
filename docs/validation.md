@@ -718,3 +718,34 @@ section length, metadata and datum/unit choices/defaults. They do not establish 
 under the current network configuration; field adoption stays zero, hosted CI remains
 unconfirmed and maturity stays 44.0/100. [Unit specification](survey-import.md) and
 [pinned original-format evidence](public-data-dwr-review.md).
+
+## Hosted CI and public repository verification — 2026-10-12 (JST)
+
+The official GitHub web pages now provide evidence for implementation commit
+`f6c826d78cbcbb00d5052c2c0f8984d3bbddfeb5`: [MVP checks #19](https://github.com/rsasaki0109/DobokuAI/actions/runs/38245445172)
+reports Success, the sole `validate` job completed successfully, and the run matches the
+main-branch push at 2026-10-12T11:52:20Z. Total duration is 4m 33s; job duration is 4m 21s.
+The run's workflow includes pinned Rust installation, npm frozen install, Chromium,
+external SWASHES regeneration and the complete `scripts/check.sh`. Hosted test counts
+are not independently counted from downloaded logs; the prior local 86 Rust/20 browser
+counts remain separate evidence. [Recorded page URLs/hashes and limits](hosted-ci-evidence.json).
+
+The repository page displays Public, `repository_public=true`, `isPrivate=false` and
+`logged_in=false`. This confirms current visibility, not who changed it or when.
+The agent did not change visibility and did not grant an OSS licence.
+
+The original job's Node.js 20 deprecation warning identifies checkout/setup-node v4.
+The workflow now uses fixed commits from both official v6 tags, whose action manifests
+declare `using: node24`; existing Node 24, npm lockfile cache and validation commands
+remain. Workflow permissions are limited to `contents: read`. The fixed source files and
+hashes are recorded in the evidence JSON. Updated executions are available through
+the README workflow badge. No hydraulic engine, UI, dependencies or Docker build changed.
+
+Pinned CSDP/DSM2/BayDeltaSCHISM trees (867/603/644 tracked paths) and six resource files
+were also reviewed. CSDP's 1166 landmark labels declare NGVD29, not the separate
+NAVD88 network; they do not contain surveyed cross-section vertices. No `.cdn` exists in
+these three revisions, DSM2 fixtures do not supply original survey provenance, and the
+SCHISM bathymetry directory contains only an initial-empty-directory README. Other
+revisions/releases were not exhaustively searched. No field dataset was imported/adopted.
+The hosted CI gate is now supported, but real-river trials and continuous operations
+remain incomplete; fixed maturity stays 44.0/100 (approximately 45%), target 50%.

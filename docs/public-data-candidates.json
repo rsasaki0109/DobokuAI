@@ -744,6 +744,104 @@
           "Author paper describes manual/automatic model sections guided by bathymetry/DEM. Model vertices are not necessarily untouched survey observations."
         ],
         "limits": "Source-format inspection only; original 2009 network file/header, processing history, reach applicability and hydraulic conditions remain unverified. No real dataset adopted."
+      },
+      "primary_repository_data_review": {
+        "tree_review": [
+          {
+            "repo": "CADWRDeltaModeling/csdp",
+            "revision": "3c9882c210c9945ad10c8707017c323afb7d5698",
+            "file_count": 867,
+            "path_list_sha256": "ff8a5043a01f98293e106d4dc6dc5f2ef102e887c8ab26cedf336ee7836377f3",
+            "network_geometry_paths": [],
+            "bathymetry_paths": []
+          },
+          {
+            "repo": "CADWRDeltaModeling/dsm2",
+            "revision": "55e0b0b7e59f1dc3af4dd56174b5014628a94f2e",
+            "file_count": 603,
+            "path_list_sha256": "94c7710d08d706187a4f62d5ef505975dfbd4fe80bced06d2dd129b149850499",
+            "network_geometry_paths": [],
+            "bathymetry_paths": []
+          },
+          {
+            "repo": "CADWRDeltaModeling/BayDeltaSCHISM",
+            "revision": "fdbc46ae80534ecd0b6355acecf2938ecaeea95f",
+            "file_count": 644,
+            "path_list_sha256": "77ded4d88d9794799b465e73f6fab327c2998b5833e25e4052fe876f6a2b464e",
+            "network_geometry_paths": [],
+            "bathymetry_paths": [
+              "bathymetry/readme.md"
+            ]
+          }
+        ],
+        "landmark": {
+          "repo": "CADWRDeltaModeling/csdp",
+          "revision": "3c9882c210c9945ad10c8707017c323afb7d5698",
+          "path": "csdp/resources/xsects.cdl",
+          "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/resources/xsects.cdl",
+          "bytes": 98814,
+          "sha256": "b4494a5d6ebae3bf7639a8fbcdae579f1c3cf65707df911329ce1cbc929fe637",
+          "metadata": {
+            "HorizontalDatum": "UTMNAD83",
+            "HorizontalZone": "10",
+            "HorizontalUnits": "Meters",
+            "VerticalDatum": "NGVD29",
+            "VerticalUnits": "USSurveyFeet",
+            "Filetype": "landmark",
+            "NumElements": "1166"
+          },
+          "record_count": 1166,
+          "unique_label_count": 1166
+        },
+        "reviewed_files": [
+          {
+            "repo": "CADWRDeltaModeling/csdp",
+            "revision": "3c9882c210c9945ad10c8707017c323afb7d5698",
+            "path": "csdp/resources/README.dat",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/resources/README.dat",
+            "bytes": 895,
+            "sha256": "4cfed01c8e16f6d65d05824b422a6ac5e1b4f4661ad46669eb94bdbc54d47973"
+          },
+          {
+            "repo": "CADWRDeltaModeling/dsm2",
+            "revision": "55e0b0b7e59f1dc3af4dd56174b5014628a94f2e",
+            "path": "dsm2_tests/tests/test_boundary_conditions/channel.inp",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/dsm2/55e0b0b7e59f1dc3af4dd56174b5014628a94f2e/dsm2_tests/tests/test_boundary_conditions/channel.inp",
+            "bytes": 950,
+            "sha256": "4c479229fd51be516fdc2b2a0f98bf75e7e7f1ccbe20b21a5197fd7f5674f611"
+          },
+          {
+            "repo": "CADWRDeltaModeling/dsm2",
+            "revision": "55e0b0b7e59f1dc3af4dd56174b5014628a94f2e",
+            "path": "dsm2_tests/tests/test_symmetrical_channelonly/hydro.inp",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/dsm2/55e0b0b7e59f1dc3af4dd56174b5014628a94f2e/dsm2_tests/tests/test_symmetrical_channelonly/hydro.inp",
+            "bytes": 3893,
+            "sha256": "9d438626785790f3c5ad49e5019deae54a7f72b84da731a18550b5f8c2552fb5"
+          },
+          {
+            "repo": "CADWRDeltaModeling/dsm2",
+            "revision": "55e0b0b7e59f1dc3af4dd56174b5014628a94f2e",
+            "path": "dsm2_tests/tests/test_symmetrical_channelonly/readme.txt",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/dsm2/55e0b0b7e59f1dc3af4dd56174b5014628a94f2e/dsm2_tests/tests/test_symmetrical_channelonly/readme.txt",
+            "bytes": 115,
+            "sha256": "f2e3a16f300878e5fd5e065de7240a151f5801db1a142da87e20c9be71a7a7b7"
+          },
+          {
+            "repo": "CADWRDeltaModeling/BayDeltaSCHISM",
+            "revision": "fdbc46ae80534ecd0b6355acecf2938ecaeea95f",
+            "path": "bathymetry/readme.md",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/BayDeltaSCHISM/fdbc46ae80534ecd0b6355acecf2938ecaeea95f/bathymetry/readme.md",
+            "bytes": 92,
+            "sha256": "5e39006104a03b00f72d5665a103453c8500fe8094f4a5b8d5c5f0e433dadbf0"
+          }
+        ],
+        "findings": [
+          "Pinned complete tracked-path inventories: CSDP 867 paths, DSM2 603 paths, BayDeltaSCHISM 644 paths; no .cdn network file in these revisions. This does not establish absence in other revisions, releases or repositories.",
+          "CSDP xsects.cdl declares Filetype landmark and contains 1166 unique location labels, not station/elevation cross-section vertices. Its header records UTMNAD83 zone 10 horizontal metres and NGVD29/USSurveyFeet vertical reference; do not transfer this metadata to the separately distributed 2009 NAVD88 network.",
+          "DSM2 test input contains repeated XSECT_LAYER summaries and a symmetrical-channel test description, without original survey attribution/date/datum. These fixtures are not evidence of distinct field-survey trials.",
+          "BayDeltaSCHISM bathymetry directory contains only a README saying the directory is initially empty and large files will be provided through a loader. It supplies no NCRO survey specification or retained field observations in this revision."
+        ],
+        "limits": "Read-only repository resource inspection. No third-party files/code redistributed, no datum transform or section matching, no imported or adopted river dataset. Original CNRA/NCRO files, metadata and supported steady-reach conditions still required."
       }
     },
     {
@@ -1059,7 +1157,13 @@
           "index_feature_matches": 0,
           "index_sha256": "1ee0ea12013152e85abdc093308180872537d2c59b5fd07e3948abce5166ec61"
         }
-      ]
+      ],
+      "primary_bathymetry_repository_review": {
+        "source_url": "https://github.com/CADWRDeltaModeling/BayDeltaSCHISM/tree/fdbc46ae80534ecd0b6355acecf2938ecaeea95f/bathymetry",
+        "revision": "fdbc46ae80534ecd0b6355acecf2938ecaeea95f",
+        "finding": "Only bathymetry/readme.md in the tracked directory; no original NCRO survey report/specification acquired.",
+        "evidence": "Primary repository file metadata and hashes recorded under dwr-dsm2-navd88.primary_repository_data_review."
+      }
     }
   ],
   "reviewed_timezone": "Asia/Tokyo"

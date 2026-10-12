@@ -1,9 +1,16 @@
-# GitHub公開の準備 — 2026-10-12（JST）
+# GitHub公開の確認記録 — 2026-10-12（JST）
 
 ユーザーが公開対象をGitHubリポジトリと指定しました。
 Webサイトの公開・OSSライセンスの付与とは別の操作です。
 [利用条件の現状](../NOTICE.md)をREADMEでも明示しています。
-現時点では公開設定の変更を確認できていません。
+**現在、GitHubリポジトリのPublic表示を確認済みです。**
+2026-10-12の公式[リポジトリページ](https://github.com/rsasaki0109/DobokuAI)は未ログイン表示で取得でき、
+Publicラベル、`repository_public=true`、リポジトリ情報の`isPrivate=false`を照合しました。
+確認した実装コミットは`f6c826d78cbcbb00d5052c2c0f8984d3bbddfeb5`です。
+公開設定を変更した実行者・時刻は確認していません。今回エージェントから可視性の変更はしていません。
+リポジトリ公開によってOSSライセンスを付与したとは扱いません。
+[ホストCI成功も確認](https://github.com/rsasaki0109/DobokuAI/actions/runs/38245445172)。
+[取得ページのメタデータ](hosted-ci-evidence.json)を保存しています。
 
 ## 公開対象を確認した範囲
 
@@ -20,7 +27,7 @@ GitHub CLI用の既存変数は存在しますが、値を表示・抽出せず�
 `api.github.com`は通信制限の403で遮断され、リポジトリの可視性APIを取得できませんでした。
 Gitアクセス成功や匿名HTTPの404だけから、public/private・管理権限・CI成功を断定しません。
 
-## 公開設定
+## 以前の通信制限と公開設定の案内
 
 追加の認証トークンを依頼する前に、既存認証で対象APIへ接続できることを確認します。
 既存の`geospatial.jp`/`www.geospatial.jp`を残し、`api.github.com`を環境設定の許可先下書きに追加しました。

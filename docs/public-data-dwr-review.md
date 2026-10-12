@@ -137,6 +137,34 @@ NCRO原サービスの照合には`gis.data.cnra.ca.gov`等の元サービスホ
 作者論文・10クラスの固定URL/bytes/SHA-256は[候補台帳](public-data-candidates.json)へ記録。
 プログラムやデータを製品に同梱しておらず、コードのライセンスを原測量の利用条件に転用しません。
 
+### 公式リポジトリのデータ収録状況
+
+上の固定CSDP版と、公式[DSM2版](https://github.com/CADWRDeltaModeling/dsm2/tree/55e0b0b7e59f1dc3af4dd56174b5014628a94f2e)、
+[BayDeltaSCHISM版](https://github.com/CADWRDeltaModeling/BayDeltaSCHISM/tree/fdbc46ae80534ecd0b6355acecf2938ecaeea95f)
+の追跡ファイル全一覧（それぞれ867、603、644パス）を点検しました。
+この3版には`.cdn`ファイルがありません。別の版・リリース・リポジトリにも存在しないとは断定しません。
+
+| 原資料 | 確認できた内容 | 採用に使えない理由 |
+|---|---|---|
+| CSDP `csdp/resources/xsects.cdl` | `Filetype=landmark`、1,166件の異なる位置ラベル。水平UTMNAD83・zone 10・m、鉛直NGVD29・USSurveyFeetのヘッダー | 横断の距離/河床標高点列ではない。このヘッダーを別配布の2009年NAVD88断面の単位・基準高へ転用できない |
+| DSM2 `test_boundary_conditions/channel.inp`、`test_symmetrical_channelonly/hydro.inp`と説明 | 反復する`XSECT_LAYER`の面積・幅・潤辺要約と、対称なチャネル列のテスト | 原測量の帰属・日付・共通基準高を示さず、異なる実河川の試行証拠にはならない |
+| BayDeltaSCHISM `bathymetry/readme.md` | 当該ディレクトリの唯一の追跡ファイル。空の初期状態で大型ファイルはローダーで提供予定という説明 | NCROの原測量仕様・報告や測深点は取得できていない |
+
+`xsects.cdl`は98,814 bytes、SHA-256は
+`b4494a5d6ebae3bf7639a8fbcdae579f1c3cf65707df911329ce1cbc929fe637`です。
+ヘッダーの1,166件と実際の行数/ラベル種類数が一致します。
+集約断面表の1,179個のブロック開始行との対応は確定していません。
+位置ラベルを名前だけで結合して縦断位置を作ったり、NGVD29/NAVD88間の高さを推定補正したりしません。
+参照した5資料と位置ラベルの固定URL・bytes・SHA-256、全パス一覧のハッシュを候補台帳に追加しました。
+第三者ファイルやソフトウェアは製品へ追加していません。実河川の採用・試行は0件です。
+
+追加実装後の対象コミット`f6c826d78cbcbb00d5052c2c0f8984d3bbddfeb5`のコミットページと
+Actionsページは今回は200を返しました。対応する[MVP checks #19](https://github.com/rsasaki0109/DobokuAI/actions/runs/38245445172)は
+`Success`、`validate`も成功、対象コミット・`main`・pushトリガー・実行workflowを照合しました。
+これはホストCI成功の証拠です。[確認メタデータ](hosted-ci-evidence.json)。
+環境の設定下書きはrevision 7で必要な9通信先を保持していますが、稼働設定はrevision 11で
+追加通信先を含みません。下書きの保存成功を原資料・APIへの通信成功として扱いません。
+
 取得説明・カタログ・横断表・部分CSV点検は`.local/research/goal50/`に保管。
 完全な3CSV・取得記録・全量点検JSONは`.local/research/goal50/full-20261012/`に保管。
 全体SHA-256と部分SHA-256を分けて[候補台帳](public-data-candidates.json)へ記録しています。
