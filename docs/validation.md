@@ -791,3 +791,18 @@ SQLite schema, dependencies and locks remain unchanged. Old metadata without the
 field and old report unit text remain compatible. The bundled mixed-unit example is
 synthetic. This is not original DWR/NCRO metadata verification, field adoption or datum
 conversion; adopted field datasets remain zero and maturity stays 44.0/100 (about 45%).
+
+## Mixed-unit hosted CI follow-up — 2026-10-12 (JST)
+
+The previous Queued observation is superseded. Implementation commit
+`fffb533c94403e76df8e00d34b95a669244227be` completed [MVP checks #21](https://github.com/rsasaki0109/DobokuAI/actions/runs/38250915009)
+with Success; `validate` job 114816675657 completed successfully. The associated job
+page matches that exact commit and has no Node.js 20 deprecation warning. Its workflow
+uses both fixed official v6 action commits and `bash scripts/check.sh`. Run/job/workflow
+page hashes and observation time are recorded in [hosted evidence](hosted-ci-evidence.json).
+The summary reports 15m 23s total duration; it is not a numerical-solver timing measurement.
+Hosted numeric test counts are not independently counted from downloaded logs. Local
+91 Rust/21 browser and Docker four-case evidence above remains distinct. No source,
+dependencies or images changed during this evidence-only follow-up, and those passed
+tests were not repeated. Runtime network configuration still lacks the saved primary-data
+hosts; field trials remain zero and maturity remains 44.0/100, target 50%.

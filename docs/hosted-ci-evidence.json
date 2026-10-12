@@ -92,5 +92,51 @@
     "Hosted numeric test counts are not independently counted from job logs; local counts are recorded separately in validation.md.",
     "Visibility actor/change time not established; no OSS licence granted.",
     "No field dataset adopted and no field accuracy or engineering approval established."
+  ],
+  "subsequent_verified_runs": [
+    {
+      "commit": "ae1f179c3f43da790938f3232e88dd560d29eeaf",
+      "run_id": 38247517793,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38247517793",
+      "status": "Success",
+      "observed_at_utc": "2026-10-12T12:18:40.615628+00:00",
+      "page_bytes": 198988,
+      "page_sha256": "5e004fbf34f1c4f59a254a3c429091f8cbb1dcb8f1dad5ca0105eb96e547d0b7",
+      "job_id": 114805039820,
+      "job_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38247517793/job/114805039820",
+      "job_page_sha256": "aae11d9854803407c81283df7aac6439fdf05d62be6709e69e8cc54104decec7",
+      "node20_deprecation_warning_present": false
+    },
+    {
+      "commit": "fffb533c94403e76df8e00d34b95a669244227be",
+      "run_id": 38250915009,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38250915009",
+      "status": "Success",
+      "observed_at_utc": "2026-10-12T13:03:19.201577+00:00",
+      "page_bytes": 198965,
+      "page_sha256": "8f807eb99170291aa7daa53d535c9cfda1eed97d2f053d33712edcb90785ffe4",
+      "job_id": 114816675657,
+      "job_status": "completed successfully",
+      "node20_deprecation_warning_present": false,
+      "verified_workflow": "Pinned official v6 actions and full scripts/check.sh",
+      "observations": [
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38250915009/job/114816675657",
+          "bytes": 206240,
+          "sha256": "2ebe1a4608d089b17da88eb3dd8f1cf4fead89da39c03e549f9d271ced289226"
+        },
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38250915009/workflow",
+          "bytes": 189699,
+          "sha256": "20426b866195d5de4ceae262509312946f41f9264ea97bd7ab35f4f971c88760"
+        }
+      ],
+      "total_duration_reported": "15m 23s",
+      "limits": [
+        "Success and job/workflow were read from official GitHub web pages. Hosted numeric test counts were not independently counted from downloaded job logs.",
+        "The prior check observed Queued; that pending observation is superseded by this Success observation.",
+        "Field dataset adoption remains zero."
+      ]
+    }
   ]
 }
