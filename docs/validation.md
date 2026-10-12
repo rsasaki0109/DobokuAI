@@ -969,3 +969,12 @@ browser phase), `build-final-20261012.log`, `native-final-20261012.log`,
 `docker-build-final-20261012.log` and `docker-final-20261012.log` (final passing runs).
 The dedicated `doboku-import-20261012` Compose project is stopped after testing and its
 volume is retained. The existing user database/services remain in place.
+
+The implementation commit `c06e9a6d6e9f70fb3ca2fd93eee3dff31da56086` subsequently
+completed [MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38304858522)
+with Success. Its `validate` job completed successfully and the associated workflow
+contains the pinned v6 actions and full `scripts/check.sh`. Official page hashes and UTC
+observation time are retained in [hosted evidence](hosted-ci-evidence.json).
+Numeric counts above are local results, not independently counted hosted job logs.
+This establishes CI success for the implementation commit, not field applicability or
+the following documentation-only commit.

@@ -1,4 +1,4 @@
-# 成熟度50%の達成判定 — 2026-10-12（JST）
+# 成熟度50%の達成判定 — 2026-10-13（JST）
 
 現在は固定した評価基準で **44.0/100（表示約45%）**。当面の目標50%は未達です。
 CSVの[反映前の条件確認](survey-import.md#反映前の条件確認)を追加しました。粗度のCSV値への置換と、
@@ -12,8 +12,8 @@ CSVの[反映前の条件確認](survey-import.md#反映前の条件確認)を�
 単位指定・合成例の検証は、原測量確認や実河川試行の完了とは数えません。[仕様](survey-import.md)。
 直近の公式DWR 3リポジトリ調査でも、原断面・NCRO測量仕様は確定できていません。
 取得したCSDP位置ラベルはNGVD29表記で、別配布のNAVD88断面と結合していません。
-直近に成功を確認したホストCIは、実装コミット`5aba023`の[MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38267126753)です。
-確認付き断面形式切替を含むMVP checksと`validate`が成功しています。
+直近に成功を確認したホストCIは、実装コミット`c06e9a6`の[MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38304858522)です。
+CSVの反映前条件確認を含むMVP checksと`validate`が成功しています。
 リポジトリもGitHub上のPublic表示・`isPrivate=false`で[公開を確認](publication.md)。
 [原資料・固定版・ハッシュを含む追加記録](public-data-dwr-review.md#公式リポジトリのデータ収録状況)。
 ユーザーが独立した技術者のレビューを実施できないことを伝え、目標を50%へ変更しました。
@@ -29,7 +29,7 @@ CSVの[反映前の条件確認](survey-import.md#反映前の条件確認)を�
 | 利用可能な異なる実務相当データ3件の試行 | **採用0件**。候補のファイル/属性は確認したが、原測量・利用条件・共通基準高などが不足。[候補台帳](public-data-candidates.json) |
 | 固定基準での採点 | 現在44.0点。50点以上かつ当面の必須条件を完了して到達判定する。[目標像](maturity-goal.md) |
 | 再現性・復旧・配布 | 保存結果を再計算せず再表示/出力。別Compose volumeへの復旧で12履歴・24成果の完全一致を確認。[復旧手順](recovery.md) |
-| ホストCI | **確認済み**。実装コミット`5aba0233fa0f56358e3149a37a274378ec59c850`のMVP checksと`validate`が成功。APIホストの制限は残るが、GitHub公式Webの実行ページ・当該workflowを直接照合。[記録](hosted-ci-evidence.json) |
+| ホストCI | **確認済み**。実装コミット`c06e9a6d6e9f70fb3ca2fd93eee3dff31da56086`のMVP checksと`validate`が成功。APIホストの制限は残るが、GitHub公式Webの実行ページ・当該workflowを直接照合。[記録](hosted-ci-evidence.json) |
 | AI操作の確認・失敗処理 | キー不要の操作提案/確認、失敗時の無変更、外部ProviderのモックHTTP契約を検証。実キー通信は未検証 |
 
 既存の河川実装に、独立した [ダム予備照査](dam-calculations.md) を追加しました。
