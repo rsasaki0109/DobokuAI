@@ -1021,3 +1021,11 @@ Logs retained under `.local/station-addition-`: `focused-20261012.log`,
 All executed cases passed without skipped or loosened assertions. The dedicated
 `doboku-station-20261012` Compose project is stopped and its volume is retained;
 existing user services/database remain in place.
+
+The implementation commit `64ebd61bc4ab8b9726476112c2ec276db591663e` subsequently
+completed [MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38310017471)
+with Success. Its `validate` job completed successfully and the associated workflow
+contains the pinned v6 actions and full `scripts/check.sh`. Official page hashes and UTC
+observation time are retained in [hosted evidence](hosted-ci-evidence.json).
+Counts above are local results, not independently counted hosted job logs. This validates
+the implementation commit, not field applicability or the later documentation-only commit.

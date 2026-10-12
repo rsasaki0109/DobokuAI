@@ -219,6 +219,33 @@
         "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
         "Synthetic import condition review validation; no field dataset adopted."
       ]
+    },
+    {
+      "commit": "64ebd61bc4ab8b9726476112c2ec276db591663e",
+      "observed_at_utc": "2026-10-12T21:25:13.080368+00:00",
+      "run_id": 38310017471,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38310017471",
+      "status": "Success",
+      "page_bytes": 195154,
+      "page_sha256": "4ebfc370e5f57455d7172c45103064e952903f1619ee22dffb0db27a2962b1f0",
+      "job_id": 115013160581,
+      "job_status": "completed successfully",
+      "observations": [
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38310017471/job/115013160581",
+          "bytes": 202435,
+          "sha256": "e999ea3c202cb8833b66f9dc7946c1080fa5c0e23262d7a4fa8fefbf9cc180e0"
+        },
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38310017471/workflow",
+          "bytes": 185901,
+          "sha256": "56b02e036436fe538a3fb9eb3878ec8fa6d6c2c7a178fe531503d0af7b9f5b04"
+        }
+      ],
+      "limits": [
+        "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
+        "Synthetic station addition validation; no field dataset adopted."
+      ]
     }
   ]
 }
