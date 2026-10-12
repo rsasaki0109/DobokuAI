@@ -675,7 +675,7 @@
       "data_usage_terms": "Compiled CSV/JSON: CC BY 4.0, attribution Brush, C.F. / Hydrolytics LLC; DATA_LICENSE.md says original source terms also apply. Cached CKAN copy reports CC Attribution for NAVD88 update; original catalogue direct verification blocked.",
       "id": "dwr-ncro-samples",
       "status": "pending_original_service_metadata",
-      "findings": "Three public sample CSV prefixes inspected, 16384 bytes each; complete files exceed 8 MiB inspection limit and were not saved or validated. Headers include XYZ, source, field-work dates, equipment and report fields but no explicit coordinate/height units or datum. Original service and survey report remain unverified.",
+      "findings": "Three complete public sample CSVs inspected: 355484 rows with finite XYZ. No coordinate/datum conversion or river-section extraction. Survey report field empty in every row; source/feature/equipment/dates each one distinct value within each file. Index aliases point 2, 2 and 9 rows to the same respective resource URLs; none matches the observed feature basename. Original services/units/datums/conditions remain unverified.",
       "prefix_inspection": [
         {
           "name": "i06-bathy-ncro-20230214-elkslough",
@@ -706,6 +706,281 @@
         "Confirm native horizontal/vertical reference, units and field survey reports in original services",
         "Resolve index-to-resource mismatches: Sacramento-labelled file identifies GrantLine/FabianBell Canal; Middle River filename date and method differ from internal attributes",
         "Extract defensible full-bank cross sections and supported reach/hydraulic conditions; do not count three CSV names as three adopted rivers"
+      ],
+      "full_inspection": [
+        {
+          "name": "i06-bathy-ncro-20230214-elkslough",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ncro_bathymetry/i06-bathy-ncro-20230214-elkslough.csv",
+          "revision": "2c34575d109b055a7dd38409a0c74de56dc18bec",
+          "complete_download": true,
+          "bytes": 23374338,
+          "sha256": "ac7ebc5c9acfda50d4bc6635f25fb311c939fcb150faae5347271fb3bee53053",
+          "inspection_format": "doboku-ncro-inspection-1",
+          "inspected_at": "2026-10-12T09:47:50.646775+00:00",
+          "rows": 120114,
+          "finite_xyz_rows": 120114,
+          "nonempty_survey_report_rows": 0,
+          "issue_count": 1,
+          "first_issues": [
+            {
+              "code": "mojibake_header_prefix",
+              "csv_line": 1
+            }
+          ],
+          "metadata": {
+            "source": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "NCRO",
+                  "rows": 120114
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "feature": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "i06_Bathy_NCRO_20230214_ElkSlough",
+                  "rows": 120114
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "equipment": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "Singlebeam",
+                  "rows": 120114
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "reference_date": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2023/02/14 00:00:00+00",
+                  "rows": 120114
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "started": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2023/01/26 00:00:00+00",
+                  "rows": 120114
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "ended": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2023/02/14 00:00:00+00",
+                  "rows": 120114
+                }
+              ],
+              "omitted_distinct_values": 0
+            }
+          },
+          "index_url_rows": 2,
+          "index_feature_matches": 0,
+          "index_sha256": "1ee0ea12013152e85abdc093308180872537d2c59b5fd07e3948abce5166ec61"
+        },
+        {
+          "name": "i06-bathy-ncro-20230720-middleriversouth",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ncro_bathymetry/i06-bathy-ncro-20230720-middleriversouth.csv",
+          "revision": "2c34575d109b055a7dd38409a0c74de56dc18bec",
+          "complete_download": true,
+          "bytes": 23981905,
+          "sha256": "08159ccf2ea706e269916b79f445fc6f667b5d2bf1c341ff581a7ba3bc9228dc",
+          "inspection_format": "doboku-ncro-inspection-1",
+          "inspected_at": "2026-10-12T09:47:50.618574+00:00",
+          "rows": 121501,
+          "finite_xyz_rows": 121501,
+          "nonempty_survey_report_rows": 0,
+          "issue_count": 1,
+          "first_issues": [
+            {
+              "code": "mojibake_header_prefix",
+              "csv_line": 1
+            }
+          ],
+          "metadata": {
+            "source": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "NCRO",
+                  "rows": 121501
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "feature": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "Bathy_NCRO_202307_MiddleRiverSouth_SB",
+                  "rows": 121501
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "equipment": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "Multibeam",
+                  "rows": 121501
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "reference_date": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2023/07/18 00:00:00+00",
+                  "rows": 121501
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "started": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2023/07/13 00:00:00+00",
+                  "rows": 121501
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "ended": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2023/07/18 00:00:00+00",
+                  "rows": 121501
+                }
+              ],
+              "omitted_distinct_values": 0
+            }
+          },
+          "index_url_rows": 2,
+          "index_feature_matches": 0,
+          "index_sha256": "1ee0ea12013152e85abdc093308180872537d2c59b5fd07e3948abce5166ec61"
+        },
+        {
+          "name": "i06-bathy-ncro-20240123-sacramentoriver",
+          "url": "https://raw.githubusercontent.com/cfbrush/cv-stream-rating-data/2c34575d109b055a7dd38409a0c74de56dc18bec/cv_ratings_data/ncro_bathymetry/i06-bathy-ncro-20240123-sacramentoriver.csv",
+          "revision": "2c34575d109b055a7dd38409a0c74de56dc18bec",
+          "complete_download": true,
+          "bytes": 34562087,
+          "sha256": "2a99c720f06097a28c19685d3ac952e8eb1c73fa892b85f955cc76348305656f",
+          "inspection_format": "doboku-ncro-inspection-1",
+          "inspected_at": "2026-10-12T09:47:47.805271+00:00",
+          "rows": 113869,
+          "finite_xyz_rows": 113869,
+          "nonempty_survey_report_rows": 0,
+          "issue_count": 1,
+          "first_issues": [
+            {
+              "code": "mojibake_header_prefix",
+              "csv_line": 1
+            }
+          ],
+          "metadata": {
+            "source": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "NCRO",
+                  "rows": 113869
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "feature": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "https://gis.water.ca.gov/arcgis/rest/services/Elevation/i06_Singlebeam_Bathymetry/MapServer/i06_Bathy_NCRO_20240123_GrantLine_FabianBell_Canal",
+                  "rows": 113869
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "equipment": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "Singlebeam",
+                  "rows": 113869
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "reference_date": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2024/01/23 00:00:00+00",
+                  "rows": 113869
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "started": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2024/01/23 00:00:00+00",
+                  "rows": 113869
+                }
+              ],
+              "omitted_distinct_values": 0
+            },
+            "ended": {
+              "distinct_nonempty": 1,
+              "empty_rows": 0,
+              "values": [
+                {
+                  "value": "2024/01/23 00:00:00+00",
+                  "rows": 113869
+                }
+              ],
+              "omitted_distinct_values": 0
+            }
+          },
+          "index_url_rows": 9,
+          "index_feature_matches": 0,
+          "index_sha256": "1ee0ea12013152e85abdc093308180872537d2c59b5fd07e3948abce5166ec61"
+        }
       ]
     }
   ],

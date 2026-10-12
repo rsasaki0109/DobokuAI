@@ -594,3 +594,38 @@ database schema are unchanged. Pack assembly timestamps are distinguished from o
 calculation times; non-manifest files remain byte-identical for the same stored selection
 and exporter version. This trial does not establish field accuracy or hosted CI success.
 Adopted field datasets remain zero and the maturity score stays 44.0/100 (approximately 45%).
+
+## Complete NCRO CSV inspection — 2026-10-12 (JST)
+
+Three public NCRO sample CSVs were fully downloaded from cfbrush/cv-stream-rating-data
+at 2c34575d109b055a7dd38409a0c74de56dc18bec. The previous 16 KiB prefix inspection is
+retained separately. The full files total 81,918,330 bytes and 355,484 records:
+120,114 Elk Slough, 121,501 Middle River South and 113,869 records in the Sacramento-labelled
+file, whose internal feature name identifies GrantLine/FabianBell Canal.
+
+scripts/inspect-ncro-survey.py verified complete CSV parsing, column counts and finite XYZ
+in every row, and records complete-file SHA-256, original-coordinate bounds, metadata counts,
+calendar date checks and the first 20 issue locations. All three files retain the mojibake
+header prefix without correction. Survey_Report is empty in all records. The index associates
+2, 2 and 9 entries with their respective resource URLs; none of their feature basenames
+matches the observed CSV feature. This is a string correspondence check, not proof of
+geographic mismatch or survey identity. No coordinate/datum transformation, section
+extraction, engineering calculation, project import or adoption occurred.
+
+Five new synthetic tests verify a nonfinite point beyond 16 KiB, index aliasing, metadata
+date aliases/reversal and mojibake, malformed CSV/headers/columns, and rejected-report retention
+with overwrite prevention. They are included in scripts/check.sh. The complete check script
+finished with exit status zero: 82 Rust tests, fmt/clippy, existing independent reference
+generators, five backup checks, five inspection tests, frontend type check/build and all
+19 development-browser E2E cases (1.3 minutes). No assertions were skipped. Docker images and
+numerical engine were not changed; Docker was not rebuilt or rerun for this script change.
+Logs and complete source/report files remain ignored under .local/ncro-check-20261012.log
+and .local/research/goal50/full-20261012/. Third-party data/code are not bundled.
+
+The environment draft was read and its previous custom hosts, install script and startup
+instructions preserved. Six data/metadata destinations were added; draft revision 7 saving
+and reread confirmed them. Running spec revision 11 remains unchanged. This is a pending
+configuration update, not successful original-source or hosted-CI access. Field survey units,
+reference realization, original terms/reports and a supported hydraulic reach remain
+unverified. Adopted field trials stay zero and maturity remains 44.0/100 against target 50%.
+Details: [DWR review and reproduction](public-data-dwr-review.md).
