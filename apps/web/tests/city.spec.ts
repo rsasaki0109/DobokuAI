@@ -7,14 +7,49 @@ const geographic = `<?xml version="1.0"?><core:CityModel xmlns:core="http://www.
 <core:cityObjectMember><bldg:Building gml:id="synthetic-roof"><bldg:lod1MultiSurface><gml:MultiSurface><gml:surfaceMember><gml:Polygon><gml:exterior><gml:LinearRing><gml:posList>35 139 110 35 139.001 110 35.001 139.001 110 35.001 139 110 35 139 110</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon></gml:surfaceMember></gml:MultiSurface></bldg:lod1MultiSurface></bldg:Building></core:cityObjectMember>
 </core:CityModel>`;
 
+test('bundled PLATEAU Yokohama model displays original data with licensed provenance and no external requests', async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  const external: string[] = [];
+  const origin = new URL(test.info().project.use.baseURL as string).origin;
+  page.on('request', r => { if (r.url().startsWith('http') && new URL(r.url()).origin !== origin) external.push(r.url()); });
+  await page.route('**/api/**', r => r.abort());
+  await page.goto('/?view=city');
+  // The cold Vite transform includes the bundled real model; wait for readiness.
+  await expect(page.getByRole('heading', { name: '横浜・みなとみらい（PLATEAU 2024）', exact: true })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByLabel('都市と地形の3Dビュー').locator('canvas')).toBeVisible();
+  await expect(page.getByText('公開都市モデル・表示用抜粋', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '都市を真上から', exact: true }).click();
+  const exported = page.waitForEvent('download');
+  await page.getByRole('button', { name: '都市の表示条件JSONを保存', exact: true }).click();
+  const data = JSON.parse(await readFile((await (await exported).path())!, 'utf8'));
+  expect(data.synthetic).toBe(false); expect(data.data_kind).toBe('public_city_model');
+  expect(data.numerical_solver_linked).toBe(false); expect(data.dataset.license).toBe('CC BY 4.0');
+  expect(data.dataset.building_ids).toHaveLength(38); expect(data.dataset.terrain_triangles).toBe(12206);
+  expect(data.crs).toBe('EPSG:6697'); expect(data.bounds.max[1]).toBeGreaterThan(290);
+  for (const source of data.sources) {
+    const bytes = await readFile(`src/data/yokohama/${source.name}`);
+    expect(bytes.length).toBe(source.bytes);
+    expect(createHash('sha256').update(bytes).digest('hex')).toBe(source.sha256);
+  }
+  await page.screenshot({ path: '../../.local/plateau-yokohama-20261012.png', fullPage: true });
+  await page.getByRole('button', { name: '合成都市デモを表示', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '合成都市デモ', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: '横浜の公開モデルを確認', exact: true }).click();
+  await expect(page.getByRole('region', { name: '都市モデルの取込み確認' })).toBeVisible();
+  await page.getByRole('button', { name: '確認して都市モデルを表示', exact: true }).click();
+  await expect(page.getByRole('heading', { name: '横浜・みなとみらい（PLATEAU 2024）', exact: true })).toBeVisible();
+  expect(external).toEqual([]); expect(errors).toEqual([]);
+});
+
 test('city demo works without API and confirms overlays without using uncommitted inputs', async ({ page }) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   const posts: string[] = []; page.on('request', r => { if (r.method() === 'POST') posts.push(r.url()); });
   await page.route('**/api/**', r => r.abort());
   await page.goto('/?view=city');
+  await page.getByRole('button', { name: '合成都市デモを表示', exact: true }).click();
   await expect(page.getByRole('heading', { name: '都市・地形3D', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: '合成都市デモ', exact: true })).toBeVisible();
-  await expect(page.getByText('実都市未取込み', { exact: true })).toBeVisible();
+  await expect(page.getByText('合成例', { exact: true })).toBeVisible();
   const stage = page.getByLabel('都市と地形の3Dビュー');
   await expect(stage.locator('canvas')).toBeVisible();
   expect(await stage.locator('canvas').evaluate(c => { const g = (c as HTMLCanvasElement).getContext('webgl2'); return !!g && !g.isContextLost(); })).toBe(true);
@@ -33,7 +68,7 @@ test('city demo works without API and confirms overlays without using uncommitte
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: '都市の表示条件JSONを保存', exact: true }).click();
   const json = JSON.parse(await readFile((await (await download).path())!, 'utf8'));
-  expect(json.synthetic).toBe(true); expect(json.numerical_solver_linked).toBe(false);
+  expect(json.synthetic).toBe(true); expect(json.data_kind).toBe('synthetic'); expect(json.numerical_solver_linked).toBe(false);
   expect(json.footprint.width).toBe(55); expect(json.feature_count).toBe(22);
   expect(json.polygon_count).toBe(477); expect(json.sources).toEqual([]);
   await page.getByRole('button', { name: '施工範囲の編集を取消', exact: true }).click();
@@ -51,6 +86,7 @@ test('CityGML import confirms exact source hashes, common CRS and heights with i
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.route('**/api/**', r => r.abort());
   await page.goto('/?view=city');
+  await page.getByRole('button', { name: '合成都市デモを表示', exact: true }).click();
   const select = async () => page.getByLabel('CityGMLファイル', { exact: true }).setInputFiles({ name: 'synthetic-geographic.gml', mimeType: 'application/xml', buffer: Buffer.from(geographic) });
   await select();
   await page.getByLabel('都市モデルの原データURL').fill('https://example.invalid/synthetic-fixture');
@@ -76,6 +112,7 @@ test('CityGML import confirms exact source hashes, common CRS and heights with i
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: '都市の表示条件JSONを保存', exact: true }).click();
   const json = JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+  expect(json.synthetic).toBeNull(); expect(json.data_kind).toBe('unspecified');
   expect(json.crs).toBe('EPSG:6697'); expect(json.origin).toEqual([35.0005, 139.0005, 100]);
   expect(json.bounds.min[1]).toBe(0); expect(json.bounds.max[1]).toBe(10);
   // Independent GDAL/PROJ Transverse Mercator reference on GRS80, lat/lon
@@ -93,6 +130,7 @@ test('CityGML import confirms exact source hashes, common CRS and heights with i
 test('invalid CityGML leaves confirmed display unchanged and rejects missing or ambiguous geometry', async ({ page }) => {
   await page.route('**/api/**', r => r.abort());
   await page.goto('/?view=city');
+  await page.getByRole('button', { name: '合成都市デモを表示', exact: true }).click();
   const cases = [
     { xml: geographic.replaceAll('EPSG::6697', 'EPSG::4326'), message: '未対応の座標系' },
     { xml: geographic.replace('srsDimension="3"', 'srsDimension="2"'), message: 'srsDimension=3' },
@@ -120,6 +158,7 @@ test('invalid CityGML leaves confirmed display unchanged and rejects missing or 
 test('explicit LOD selection and mixed-CRS rejection preserve the last confirmed city and clear old overlays', async ({ page }) => {
   await page.route('**/api/**', r => r.abort());
   await page.goto('/?view=city');
+  await page.getByRole('button', { name: '合成都市デモを表示', exact: true }).click();
   await page.getByRole('button', { name: '確認して施工範囲を表示', exact: true }).click();
   const roof = geographic.match(/<core:cityObjectMember><bldg:Building[\s\S]+?<\/core:cityObjectMember>/)![0]
     .replaceAll('lod1MultiSurface', 'lod2MultiSurface').replaceAll('110', '190').replace('synthetic-roof', 'synthetic-roof-lod2');
@@ -167,6 +206,10 @@ test('city import and planning overlay preserve saved river conditions and exist
   await expect(page.getByRole('region', { name: '都市モデルの取込み確認' })).toBeVisible();
   await page.getByRole('button', { name: '確認して都市モデルを表示', exact: true }).click();
   await page.getByRole('button', { name: '確認して施工範囲を表示', exact: true }).click();
+  const exported = page.waitForEvent('download');
+  await page.getByRole('button', { name: '都市の表示条件JSONを保存', exact: true }).click();
+  const metadata = JSON.parse(await readFile((await (await exported).path())!, 'utf8'));
+  expect(metadata.synthetic).toBeNull(); expect(metadata.data_kind).toBe('unspecified');
   expect(posts).toEqual([]);
   expect(await (await request.get(`/api/projects/${project.id}`)).json()).toEqual(project);
   expect(await (await request.get(`/api/runs/${run.id}`)).json()).toEqual(run);

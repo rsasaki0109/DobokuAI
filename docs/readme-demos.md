@@ -125,3 +125,8 @@ WebGLコンテキストと元フレームの変化も確認します。元PNG、
 APIなしで操作し、18フレームの実画面を撮影します。斜め・真上・夕景・施工範囲マーカーを含みます。
 元フレーム・ハッシュ・撮影日時・ソースハッシュは `.local/city-capture/manifest.json` に保存。
 FFmpegで `docs/assets/hero-city.gif` を作成します。実都市取得済みや数値解析として紹介しません。
+
+`scripts/capture-city.mjs <専用デモURL> yokohama` は同梱した横浜市2024年度PLATEAUの
+表示用抜粋を撮影し、`hero-yokohama.gif` を作成します。原データ・加工・CC BY 4.0の
+出典をREADMEに併記。地形・建物の形状表示と施工範囲マーカーで、水理/構造計算ではありません。
+元フレーム・ソース/データハッシュは `.local/yokohama-capture/manifest.json` に保存します。

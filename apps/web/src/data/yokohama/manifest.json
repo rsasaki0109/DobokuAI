@@ -1,0 +1,98 @@
+{
+  "dataset_id": "plateau-yokohama-2024-minatomirai",
+  "title": "横浜・みなとみらい（PLATEAU 2024）",
+  "data_kind": "public_city_model",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "出典：国土交通省 Project PLATEAU（横浜市2024年度）。表示用に加工して作成",
+  "source_url": "https://api.plateauview.mlit.go.jp/datacatalog/citygml/r:139.6314,35.4547?types=bldg",
+  "processing": "指定矩形と交差する建物を丸ごと選択しLOD1以外・テクスチャを除外。対応外の建物はIDと理由を記録。地形は指定矩形内に全頂点がある原Triangleを抽出。座標の変更・補間・平滑化なし。表示用抜粋で完全な市街地モデルではありません。",
+  "selection_bbox_lat_lon": [
+    35.4527,
+    139.6289,
+    35.4567,
+    139.6339
+  ],
+  "terrain_bbox_lat_lon": [
+    35.4527,
+    139.6289,
+    35.4567,
+    139.6339
+  ],
+  "building_ids": [
+    "bldg_c548541a-51df-4872-9074-549247880dff",
+    "bldg_0401f06b-1ef9-4f8e-a348-4d5d59729e0d",
+    "bldg_69a627f6-25ba-4713-9051-02756aad1fcc",
+    "bldg_bbbc845d-5ea0-41f8-beaf-9c247e2734ab",
+    "bldg_337d740f-12ea-4f19-a1e3-1977a4f642cf",
+    "bldg_e7657e04-bf30-41a7-ab5e-db409c640439",
+    "bldg_3c849b1d-4987-40d5-aa49-06cd7e19a20b",
+    "bldg_11ca1dd4-81d8-4f97-8e74-f68932a0fb24",
+    "bldg_82431c8a-1c1d-43b4-af24-229fb17e3f10",
+    "bldg_399f5dae-919d-4ce8-a631-cc0320668495",
+    "bldg_59430e98-02ca-41ee-b072-f251a494a6d5",
+    "bldg_7843b8e6-85d9-4632-98ba-a737a763e689",
+    "bldg_ea6a4cae-beab-4edd-b11a-486a3ad1aeaa",
+    "bldg_75656d4d-deda-4dcb-8ea9-6e718902225b",
+    "bldg_76f69d6e-e0c7-4090-95c3-7fc934a1b5af",
+    "bldg_5c504e88-3366-4212-8b7e-7abdd52f7deb",
+    "bldg_17f9e83e-03d1-4e04-8906-8a54cd3eea36",
+    "bldg_b59761f9-4f55-4669-a6dd-bb71775c5189",
+    "bldg_51bcc742-c691-4a73-a643-87a33c5589b6",
+    "bldg_86ecb631-0c74-4c86-8133-63762db8b4a0",
+    "bldg_3f58af6d-ba62-48a0-95e8-060b9de09243",
+    "bldg_39a9f29c-d2e1-4865-955a-d42855408e31",
+    "bldg_3255ddfc-d9dc-4bb1-a020-4cb45eff4a1e",
+    "bldg_1532c5ce-c78d-44d3-8d73-9f7b6b81cfcc",
+    "bldg_e6956ba1-a70f-4a7e-9ef7-f4f40da2c37f",
+    "bldg_724c584d-42c1-430f-8e80-ea9194238e31",
+    "bldg_9f8d2aae-e08e-46db-8f27-acf1a25c0708",
+    "bldg_0e537523-167d-4e19-b7c8-e456395677d4",
+    "bldg_941ca191-bb6a-4c41-8b6c-040ea5bf432b",
+    "bldg_93b24383-01ce-4128-a476-3dccb0023470",
+    "bldg_3eb58c58-1d71-410e-a2c1-b93f2f14772c",
+    "bldg_d2c9bea9-c68f-443a-8df0-d88a560412b3",
+    "bldg_8c66dd3e-7aa4-47ae-8271-751be751f8dc",
+    "bldg_698b37a4-29cf-4f3a-af1f-0ec39167e6d8",
+    "bldg_1e61ae40-7c31-4d5e-8c33-9bf7d386e888",
+    "bldg_aa20284e-9143-49d5-a3e0-b44c605f3205",
+    "bldg_4823d50c-a6e6-4aa1-91da-308dd60b1c38",
+    "bldg_1cc620d2-0557-4841-a9e6-643835e7722f"
+  ],
+  "excluded_buildings": [],
+  "terrain_triangles": 12206,
+  "crs": "EPSG:6697",
+  "files": [
+    {
+      "name": "buildings.gml",
+      "bytes": 2031781,
+      "sha256": "b46217f9589f7b1340592b78a1316d00c36aa26131df7bcbf4ea49b76d884547"
+    },
+    {
+      "name": "terrain.gml",
+      "bytes": 4291946,
+      "sha256": "8528615ce11b65a7d2f095cd9e1b696cae14d24a1f310d17577b62d64d2a520b"
+    }
+  ],
+  "original_sources": [
+    {
+      "kind": "buildings",
+      "url": "https://assets.cms.plateau.reearth.io/assets/04/96d45a-a30b-4c9f-88c0-c1323b5a0f86/14100_yokohama-shi_city_2024_citygml_2_op/udx/bldg/53391540_bldg_6697_op.gml",
+      "bytes": 64608069,
+      "sha256": "f9906d114834bb58b316b583cb91725da76fbf5b4839ab06aed55aa6720b3202"
+    },
+    {
+      "kind": "terrain",
+      "url": "https://assets.cms.plateau.reearth.io/assets/04/96d45a-a30b-4c9f-88c0-c1323b5a0f86/14100_yokohama-shi_city_2024_citygml_2_op/udx/dem/533915_dem_6697_00_op.gml",
+      "bytes": 458657353,
+      "sha256": "421f2e5b24877718295fbe26df523b38e336fc3b3a4af4fff5cd5c9407f14193"
+    },
+    {
+      "kind": "metadata",
+      "url": "https://assets.cms.plateau.reearth.io/assets/fe/6feefc-3312-4aa2-83ee-ebaaaa248684/14100_yokohama-shi_city_2024_citygml_2_op_metadata.zip",
+      "member": "metadata/udx_14100_city_2024_op.xml",
+      "bytes": 40588,
+      "sha256": "e638f32e7b6a7bef81b719fb5da02fcb55257ae6549c4e53abcf8b2171060856"
+    }
+  ]
+}

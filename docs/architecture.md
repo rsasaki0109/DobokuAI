@@ -33,8 +33,11 @@ validates declared CRS/dimensions and rings, and triangulates display geometry.
 `CityWorkspace.tsx` separates input, reviewed candidates and confirmed display/footprints.
 EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display approximation;
 source heights are retained. No datum conversion or solver integration is implied.
-The synthetic demo is explicitly labelled; official city/terrain download and adoption
-remain pending environment network configuration and source-specific terms.
+The default scene is a licensed display subset of the original Yokohama 2024 PLATEAU
+buildings and terrain; the synthetic demo remains explicitly labelled. Known bundled
+public data and unclassified uploaded files have separate export metadata. Original
+coordinates are retained, with source/derived hashes, extraction bounds and CC BY 4.0
+attribution. City display trials do not establish hydraulic field-data adoption.
 No API/storage/schema or numerical-engine dependencies changed. [Scope](city-workspace.md).
 
 ## Hydraulic contract

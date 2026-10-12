@@ -30,9 +30,15 @@ CSV取込みや施工案削除で断面が入れ替わると、未反映の測�
 
 **「都市・地形3D」** でCityGMLを点検・確認して取り込み、建物・地形・道路・橋・水域を表示できます。
 レイヤー切替、視点・夕景・地物選択、確認付き施工範囲マーカーと表示条件JSONに対応。
-初期画面は [合成都市](examples/synthetic-city.gml)。PLATEAU実都市・地理院の実地形は未取得で、
-原配布先への通信設定と利用条件の照合が残っています。施工範囲は表示専用で、土量・浸水計算とは未連携です。
+初期画面は **横浜・みなとみらい（PLATEAU 2024）**。原配信から取得した建物38件と実地形の抜粋を、
+CC BY 4.0の出典・加工記録付きで同梱しました。[データ記録](apps/web/src/data/yokohama/README.md)。
+[合成都市](examples/synthetic-city.gml)にも切り替えられます。施工範囲は表示専用で、土量・浸水計算とは未連携です。
 [操作・対応する座標系・制約](docs/city-workspace.md)。
+
+![横浜・みなとみらい — PLATEAU公開都市モデルと原地形、施工範囲マーカーの実画面](docs/assets/hero-yokohama.gif)
+
+出典：国土交通省 Project PLATEAU（横浜市2024年度）。表示用に加工して作成、
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。水理・構造計算とは未連携です。
 
 ![CityGML都市ビュー — 合成都市のレイヤー・視点・施工範囲マーカーの実画面](docs/assets/hero-city.gif)
 

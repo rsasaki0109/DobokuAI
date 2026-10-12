@@ -153,7 +153,9 @@ export function parseCityFiles(files: { name: string; xml: string }[], lod: numb
   for (const s of surfaces) {
     const points = s.points.map(p => displayPoint(p, origin, crs!));
     for (const p of points) for (let i = 0; i < 3; i++) { displayMin[i] = Math.min(displayMin[i], p[i]); displayMax[i] = Math.max(displayMax[i], p[i]); }
-    const positions = triangulate(points);
+    let positions: number[];
+    try { positions = triangulate(points); }
+    catch (e) { throw new Error(`${s.feature.id}: ${(e as Error).message}`); }
     const key = `${s.feature.layer}:${s.feature.id}`;
     const feature = features.get(key) ?? { ...s.feature, positions: [], triangleCount: 0 };
     feature.positions.push(...positions); feature.triangleCount += positions.length / 9; features.set(key, feature);

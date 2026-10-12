@@ -6,6 +6,9 @@ import { parseCityFiles, syntheticCityXML, localCityCRS } from './cityModel';
 import type { CityFeature, CityLayer, CityModel } from './cityModel';
 import { NumberField } from './NumberField';
 import { saveBlob } from './types';
+import publicBuildings from './data/yokohama/buildings.gml?raw';
+import publicTerrain from './data/yokohama/terrain.gml?raw';
+import publicManifest from './data/yokohama/manifest.json';
 
 const layers: Record<CityLayer, { name: string; color: string }> = {
   building: { name: '建物', color: '#e1d9c2' }, terrain: { name: '地形', color: '#79936c' },
@@ -13,7 +16,16 @@ const layers: Record<CityLayer, { name: string; color: string }> = {
   water: { name: '水域', color: '#4ab3cd' }, other: { name: 'その他', color: '#b0bdc3' },
 };
 type Source = { name: string; bytes: number; sha256: string };
-type Loaded = { model: CityModel; sources: Source[]; inspectedAt: string; synthetic: boolean; sourceURL: string; attribution: string; terms: string };
+type Loaded = { model: CityModel; sources: Source[]; inspectedAt: string; synthetic: boolean; sourceURL: string; attribution: string; terms: string; dataset?: typeof publicManifest };
+const publicCity = (): Loaded => ({
+  model: parseCityFiles([{ name: 'buildings.gml', xml: publicBuildings }, { name: 'terrain.gml', xml: publicTerrain }], 1),
+  sources: publicManifest.files, inspectedAt: new Date().toISOString(), synthetic: false,
+  sourceURL: publicManifest.source_url, attribution: publicManifest.attribution, terms: 'CC BY 4.0 / 原メタデータで確認', dataset: publicManifest,
+});
+const syntheticCity = (): Loaded => ({
+  model: parseCityFiles([{ name: 'synthetic-city.gml', xml: syntheticCityXML() }], 1), sources: [],
+  inspectedAt: new Date().toISOString(), synthetic: true, sourceURL: '', attribution: 'DobokuAI合成例', terms: '実在都市・測量データではありません',
+});
 type Footprint = { east: number; north: number; width: number; length: number; elevation: number };
 function Controls({ model, top, rotating }: { model: CityModel; top: boolean; rotating: boolean }) {
   const { camera, gl, invalidate } = useThree();
@@ -45,10 +57,7 @@ function Feature({ feature, selected, select }: { feature: CityFeature; selected
 }
 const defaultFootprint = (m: CityModel): Footprint => ({ east: 0, north: 0, width: 40, length: 30, elevation: Math.round((m.origin[2] + (m.bounds.min[1] + m.bounds.max[1]) / 2) * 100) / 100 });
 export default function CityWorkspace() {
-  const [loaded, setLoaded] = useState<Loaded>(() => ({
-    model: parseCityFiles([{ name: 'synthetic-city.gml', xml: syntheticCityXML() }], 1), sources: [],
-    inspectedAt: new Date().toISOString(), synthetic: true, sourceURL: '', attribution: 'DobokuAI合成例', terms: '実在都市・測量データではありません',
-  }));
+  const [loaded, setLoaded] = useState<Loaded>(publicCity);
   const [files, setFiles] = useState<File[]>([]);
   const [lod, setLOD] = useState(1);
   const [sourceURL, setSourceURL] = useState('');
@@ -88,6 +97,8 @@ export default function CityWorkspace() {
         <label className="field">利用条件・確認状況<input aria-label="都市モデルの利用条件" value={terms} onChange={e => { changeSource(); setTerms(e.target.value); }} /></label>
       </div>
       <div className="city-actions">
+        <button type="button" className="secondary" onClick={() => { changeSource(); setLoaded(syntheticCity()); setSelected(null); setDraft(null); setShowFootprint(false); setFootprint(defaultFootprint(syntheticCity().model)); }}>合成都市デモを表示</button>
+        <button type="button" className="secondary" onClick={() => { changeSource(); setPending(publicCity()); }}>横浜の公開モデルを確認</button>
         <button type="button" className="secondary" disabled={!files.length || busy} onClick={async () => {
           const version = revision.current; setBusy(true); setError(''); setPending(null);
           try {
@@ -114,16 +125,16 @@ export default function CityWorkspace() {
       </div>}
     </section>
     <section className="panel city-scene-panel">
-      <div className="panel-heading"><div><div className="eyebrow">DOBOKUAI / CITY & TERRAIN</div><h2>{loaded.synthetic ? '合成都市デモ' : '取り込んだ都市・地形'}</h2></div><span className="badge">{loaded.synthetic ? '実都市未取込み' : 'ファイル読込み・出典未認証'}</span></div>
+      <div className="panel-heading"><div><div className="eyebrow">DOBOKUAI / CITY & TERRAIN</div><h2>{loaded.dataset ? loaded.dataset.title : loaded.synthetic ? '合成都市デモ' : '取り込んだ都市・地形'}</h2></div><span className="badge">{loaded.dataset ? '公開都市モデル・表示用抜粋' : loaded.synthetic ? '合成例' : 'ファイル読込み・出典未認証'}</span></div>
       <div className="city-actions">
         <button type="button" className="secondary" aria-pressed={!top} onClick={() => setTop(false)}>都市を斜めから</button>
         <button type="button" className="secondary" aria-pressed={top} onClick={() => setTop(true)}>都市を真上から</button>
         <button type="button" className="secondary" aria-pressed={rotating} onClick={() => setRotating(!rotating)}>都市を自動回転</button>
         <button type="button" className="secondary" aria-pressed={sunset} onClick={() => setSunset(!sunset)}>都市を夕景で表示</button>
-        <button type="button" className="secondary" onClick={() => saveBlob(new Blob([JSON.stringify({ schema_version: 1, model_type: 'citygml_display', numerical_solver_linked: false, synthetic: loaded.synthetic, sources: loaded.sources, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms, inspected_at: loaded.inspectedAt, crs: model.crs, origin: model.origin, bounds: model.bounds, lod: model.lod, feature_count: model.features.length, polygon_count: model.polygonCount, visible_layers: visible, selected_feature: selected, footprint: showFootprint ? footprint : null, top, rotating, sunset }, null, 2)], { type: 'application/json' }), 'doboku-city-display.json')}>都市の表示条件JSONを保存</button>
+        <button type="button" className="secondary" onClick={() => saveBlob(new Blob([JSON.stringify({ schema_version: 1, model_type: 'citygml_display', numerical_solver_linked: false, synthetic: loaded.synthetic ? true : loaded.dataset ? false : null, data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null, sources: loaded.sources, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms, inspected_at: loaded.inspectedAt, crs: model.crs, origin: model.origin, bounds: model.bounds, lod: model.lod, feature_count: model.features.length, polygon_count: model.polygonCount, visible_layers: visible, selected_feature: selected, footprint: showFootprint ? footprint : null, top, rotating, sunset }, null, 2)], { type: 'application/json' }), 'doboku-city-display.json')}>都市の表示条件JSONを保存</button>
       </div>
       <div className="city-stage" aria-label="都市と地形の3Dビュー">
-        <div className="city-hud"><span>{loaded.synthetic ? 'SYNTHETIC CITY · 実在都市ではありません' : 'CITYGML · 読込みモデル'}</span><strong>{model.features.length} 地物 / {model.polygonCount} 面</strong><small>鉛直・水平とも1倍 · m</small></div>
+        <div className="city-hud"><span>{loaded.dataset ? 'PLATEAU / YOKOHAMA 2024 · 公開モデル抜粋' : loaded.synthetic ? 'SYNTHETIC CITY · 実在都市ではありません' : 'CITYGML · 読込みモデル'}</span><strong>{model.features.length} 地物 / {model.polygonCount} 面</strong><small>鉛直・水平とも1倍 · m</small></div>
         <Canvas frameloop={rotating ? 'always' : 'demand'} dpr={[1, 1.25]} camera={{ fov: 40 }} onPointerMissed={() => setSelected(null)}>
           <color attach="background" args={[sunset ? '#e4c4ac' : '#bed3de']} />
           <hemisphereLight args={['#e3f0fa', '#71654a', 2]} />
@@ -138,6 +149,7 @@ export default function CityWorkspace() {
       <div className="city-layers">{counts.filter(c => c.count).map(c => <label key={c.key}><input type="checkbox" checked={visible.includes(c.key)} onChange={e => setVisible(e.target.checked ? [...visible, c.key] : visible.filter(k => k !== c.key))} />{layers[c.key].name} ({c.count})</label>)}</div>
       {feature && <p role="status">選択地物：{feature.id} / {layers[feature.layer].name} / {feature.triangleCount} 三角形</p>}
       <p className="muted city-provenance">{model.crs === localCityCRS ? '局所座標：東・北・高さ（m）。' : 'EPSG:6697：緯度・経度・高さ。GRS80接平面で水平を表示用に近似し、原高さを保持します。測量座標変換・標高基準変換ではありません。'} {loaded.attribution || '出典未入力'} / {loaded.terms || '利用条件未入力'}。元CityGMLは別途保持してください。</p>
+      {loaded.dataset && <p className="muted">{loaded.dataset.processing} 建物 {loaded.dataset.building_ids.length} 件 / 地形 {loaded.dataset.terrain_triangles} 三角形。<a href={loaded.dataset.license_url} target="_blank" rel="noreferrer">CC BY 4.0</a></p>}
     </section>
     <section className="panel">
       <div className="panel-heading"><div><div className="eyebrow">PLANNING OVERLAY</div><h2>施工範囲を重ねる</h2></div><span className="badge">計画用マーカー</span></div>
@@ -147,6 +159,6 @@ export default function CityWorkspace() {
       {!validFootprint(plan) && <p role="alert">有限値・正の幅/長さと、読込みモデルの水平範囲・標高範囲内を指定してください。</p>}
       {showFootprint && <p role="status">反映済み施工範囲：東 {footprint.east} m・北 {footprint.north} m / {footprint.width} × {footprint.length} m / 標高 {footprint.elevation} m</p>}
     </section>
-    <p className="muted">都市モデルと施工範囲は表示専用です。河川プロジェクト・Rust計算条件とは未連携です。原データの確認・実都市への適用試行は、通信設定の反映後に進めます。</p>
+    <p className="muted">都市モデルと施工範囲は表示専用です。河川プロジェクト・Rust計算条件とは未連携です。公開都市モデルの表示確認は、実河川の水理検証・校正とは別です。</p>
   </div>;
 }

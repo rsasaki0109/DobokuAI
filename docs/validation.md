@@ -889,29 +889,6 @@ No numerical engine, API contracts, database schema, dependencies or lockfiles c
 engine version remains 0.2.0. Field adoption remains zero and maturity remains
 44.0/100 (about 45%), target 50%.
 
-The rebuilt Docker distribution passed four final browser cases (13.8 seconds): all three
-section-conversion cases and the existing edit/steady-flow/construction/report/persistence
-workflow. The confirmation screenshot was visually inspected. Production images:
-
-- API: sha256:8f03d56a07d906fe21cced2b3287553ab6e1cf9da4b17d4470b3ca806b70d7ad
-- Web: sha256:9be9d75776832006fa5b814e38e9e233ab6f97b426cc9743b9cd97bb02e7020a
-
-Logs retained under `.local/section-conversion-`: `focused-20261012.log` (initial selector
-failure), `focused-fixed-20261012.log` (three passing cases), `check-20261012.log` and
-`docker-e2e-20261012.log` (artifact-collision failures), `native-final-20261012.log` and
-`docker-final-20261012.log` (final successful browser runs), and `docker-build-20261012.log`.
-Only the dedicated `doboku-section-20261012` Compose project is stopped after validation;
-its data volume and the user's existing native services/database are retained.
-
-The implementation commit `5aba0233fa0f56358e3149a37a274378ec59c850` subsequently
-completed [MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38267126753)
-with Success. The associated `validate` job also completed successfully; its workflow
-contains the pinned v6 checkout/setup-node actions and full `scripts/check.sh` command.
-Official page hashes and observation time are retained in [hosted evidence](hosted-ci-evidence.json).
-The test counts above are from local execution; hosted numeric counts were not independently
-counted from downloaded job logs. This establishes CI success for the implementation
-commit, not field applicability or the later documentation-only commit.
-
 ## Survey import condition review / 2026-10-12
 
 The import panel incorrectly said existing Manning roughness would be retained, although
@@ -1197,7 +1174,117 @@ message-expectation failure), `check-20261012.log`, `docker-build-20261012.log`,
 
 Environment draft revision 8 preserves the original nine custom hosts and tested
 install/start scripts, adding four original-data hosts documented in the scope page.
-Saving was verified separately from runtime enforcement; runtime revision 11 had
-not applied those hosts. No blocked-data relays or TLS/proxy bypasses were used.
+Saving was verified separately from runtime enforcement; the runtime revision 11
+status did not list those hosts and reported network state unknown. Subsequent direct
+endpoint checks below corrected the initial access inference. No blocked-data relays or TLS/proxy bypasses were used.
 Engine version stays 0.2.0; real river adoption stays zero, with fixed maturity
 44.0/100 (about 45%), target 50%.
+
+## Original Yokohama PLATEAU city/terrain display / 2026-10-12 UTC
+
+The original API/docs/asset endpoints were directly reachable (HTTP200), despite
+the environment-status custom-host list remaining unchanged and network state unknown.
+The initial inference that these downloads required an environment update was corrected.
+The GSI DEM test tile also returned HTTP200; its data was inspected but is not mixed
+with the bundled city. www.gsi.go.jp terms and www.mlit.go.jp site policy returned
+proxy CONNECT403. No proxy/TLS bypass or blocked-source relay was used.
+
+Original Yokohama 2024 data was obtained from the official PLATEAU catalogue/assets.
+The primary `metadata/udx_14100_city_2024_op.xml` (40,588 bytes,
+SHA-256 e638f32e7b6a7bef81b719fb5da02fcb55257ae6549c4e53abcf8b2171060856)
+declares `Licensed under CC BY 4.0`. Application-source licensing remains separate;
+NOTICE and the dataset README provide data-specific attribution, processing and licence.
+The metadata records a specification-4.1 update of the R5 model, LOD1 buildings based
+on urban-planning base maps and terrain from aerial photogrammetry. This is a public
+city model, not independent survey or hydraulic field-validation evidence.
+
+`scripts/prepare-plateau-scene.py` pins original hashes, selects whole building members
+intersecting latitude 35.4527–35.4567 / longitude 139.6289–139.6339, retains LOD1 and
+removes other LOD/appearance content. Original terrain triangles whose full vertices
+are inside the same box are extracted, without clipping vertices, smoothing or
+interpolation. The result contains 38 building members (55 drawable building/part
+features) and 12,206 terrain triangles: 56 display features and 13,728 surfaces total.
+All 1,522 copied building posLists match original LOD1 coordinate-token sequences.
+Derived file sizes/hashes and original URLs/sizes/hashes are retained in the
+[dataset manifest](../apps/web/src/data/yokohama/manifest.json).
+
+- Original building: 64,608,069 bytes; f9906d114834bb58b316b583cb91725da76fbf5b4839ab06aed55aa6720b3202.
+- Original terrain stream: 458,657,353 bytes; 421f2e5b24877718295fbe26df523b38e336fc3b3a4af4fff5cd5c9407f14193.
+- Building subset: 2,031,781 bytes; b46217f9589f7b1340592b78a1316d00c36aa26131df7bcbf4ea49b76d884547.
+- Terrain subset: 4,291,946 bytes; 8528615ce11b65a7d2f095cd9e1b696cae14d24a1f310d17577b62d64d2a520b.
+
+A whole-source save with a 1GiB bound was rejected by automatic approval review for
+workspace-capacity risk. The safer extraction reads 64KiB chunks, keeps only bounded
+selected triangles, removes processed XML nodes, hashes the full stream and saves no
+whole terrain file. The earlier incomplete 256MiB file was removed after confirming
+that no complete-source record existed. A wrong terrain quadrant first produced no
+selected triangles and was rejected; original Envelopes then identified the correct
+00 quadrant, with a containment check added before extraction. The initial 450-triangle
+central-only trial was expanded to the full selection box; it is not the final bundle.
+
+Capacity was restored by removing only four identified, reclaimable and unshared
+cache IDs from this turn's two Web builds: 5w2gdtr5evrtezbv0tqib0hsz,
+ut1dzqwp8s8dqgqijjectvz3b, q6nengpfv8uo1yx63cawiepdv and
+lovsrfivsoo3i57ttxuuivntd. Distribution images, volumes, user services and unrelated
+caches were retained. No global prune was used.
+
+The default city page now loads the bundled public Yokohama model without external
+data/API access. Synthetic examples remain explicitly selectable. Uploaded files are
+`data_kind:unspecified`, `synthetic:null`; they are not automatically classified as
+measured. The verified bundle is `public_city_model`, `synthetic:false`. Original and
+subset hashes, source declaration and the processing manifest accompany display export.
+
+All 45 unique browser cases have been verified across the final runs. The full native
+run passed 44 and failed the new public-scene first readiness check while Vite was still
+displaying its preparation state (5-second expectation under concurrent Docker build).
+That cold-load expectation was made explicit at 15 seconds, preserving every data/hash/
+numeric assertion, and all six city cases passed on a fresh test server (48.1 seconds).
+External browser requests, page errors and unintended project/run changes are checked.
+Final type check and Vite build pass; the lazy city chunk is 6.35MB / 474KB gzipped.
+The unchanged Rust engine's earlier full checks passed 91 tests, fmt, clippy with warnings
+denied, independent references and backup/NCRO/offline-audit checks. No Rust/API/schema/
+dependency/lockfile changes were made for the city data.
+
+The final Docker Web build passed seven browser cases (27.2 seconds): all six city cases
+and the existing editing/steady-flow/construction/report/persistence workflow.
+
+- API: sha256:8e51c9d1f872edf4545988a4942f05ae9824ebffc101c3228d418810f05a30cb (unchanged).
+- Web: sha256:4b51c66c4a682547658d481d2cf75c6739698c025f118eab772218760675cc00.
+
+The actual final public model was captured in 18 distinct frames, with incidental feature
+highlight cleared so it cannot be mistaken for the planning marker. The README attributes
+the processed city/terrain to MLIT Project PLATEAU and links CC BY 4.0. `hero-yokohama.gif`
+is 1120×562, 34 encoded frames and 1,530,621 bytes, SHA-256
+530ce77e2d1df27abc4b93b0b29761c229131735003ce7250a88917bdda3ce4c.
+Timestamp and source/data/frame hashes are in `.local/yokohama-capture/manifest.json`.
+Logs under `.local/plateau-` retain extraction failures/success, builds, full native
+run, final focused/type checks, Docker checks and final capture. Primary material and
+licence/subset audit records remain in `.local/research/plateau-live-20261012/`.
+
+City/terrain display and a planning marker are not river bathymetry, hydraulic
+calibration, excavation-volume computation or structural design validation. Engine
+version remains 0.2.0; adopted river trials remain zero and fixed maturity stays
+44.0/100 (about 45%), target 50%.
+
+The rebuilt Docker distribution passed four final browser cases (13.8 seconds): all three
+section-conversion cases and the existing edit/steady-flow/construction/report/persistence
+workflow. The confirmation screenshot was visually inspected. Production images:
+
+- API: sha256:8f03d56a07d906fe21cced2b3287553ab6e1cf9da4b17d4470b3ca806b70d7ad
+- Web: sha256:9be9d75776832006fa5b814e38e9e233ab6f97b426cc9743b9cd97bb02e7020a
+
+Logs retained under `.local/section-conversion-`: `focused-20261012.log` (initial selector
+failure), `focused-fixed-20261012.log` (three passing cases), `check-20261012.log` and
+`docker-e2e-20261012.log` (artifact-collision failures), `native-final-20261012.log` and
+`docker-final-20261012.log` (final successful browser runs), and `docker-build-20261012.log`.
+Only the dedicated `doboku-section-20261012` Compose project is stopped after validation;
+its data volume and the user's existing native services/database are retained.
+
+The implementation commit `5aba0233fa0f56358e3149a37a274378ec59c850` subsequently
+completed [MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38267126753)
+with Success. The associated `validate` job also completed successfully; its workflow
+contains the pinned v6 checkout/setup-node actions and full `scripts/check.sh` command.
+Official page hashes and observation time are retained in [hosted evidence](hosted-ci-evidence.json).
+The test counts above are from local execution; hosted numeric counts were not independently
+counted from downloaded job logs. This establishes CI success for the implementation
+commit, not field applicability or the later documentation-only commit.
