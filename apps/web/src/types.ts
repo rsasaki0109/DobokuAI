@@ -32,6 +32,7 @@ export type SpatialReference = {
     imported_at: string;
     elevation_mode: string;
     unit: string;
+    vertical_unit?: string | null;
     dataset?: DatasetProvenance | null;
   };
 };

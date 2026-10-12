@@ -33,6 +33,8 @@ pub struct Source {
     pub file_name: String,
     pub elevation_mode: ElevationMode,
     pub unit: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub vertical_unit: Option<String>,
     pub vertical_datum: String,
     pub horizontal_reference: String,
     #[serde(default)]
@@ -138,7 +140,7 @@ fn number(
 pub fn inspect(source: &Source) -> Preview {
     let inspected_at = chrono::Utc::now().to_rfc3339();
     let mut errors = Vec::new();
-    let mut warnings = vec!["全測点の置換と施工案のクリアを行います。流量m³/s・参照勾配・境界水深m・粗度nは保持します。反映後に条件を確認して再計算してください。".into(), "水平CRSや基準高の変換は行いません。横断x・流下距離・高さは選択した同じ単位、標高は共通の基準高が必要です。".into()];
+    let mut warnings = vec!["全測点の置換と施工案のクリアを行います。流量m³/s・参照勾配・境界水深m・粗度nは保持します。反映後に条件を確認して再計算してください。".into(), "水平CRSや基準高の変換は行いません。横断x・流下距離は距離の単位、河床標高・高さは高さの単位と一致するヘッダーが必要です。標高は共通の基準高が必要です。".into()];
     for (field, value) in [
         ("file_name", &source.file_name),
         ("vertical_datum", &source.vertical_datum),
@@ -153,16 +155,23 @@ pub fn inspect(source: &Source) -> Preview {
             ));
         }
     }
-    let scale = metres_per_unit(&source.unit);
-    if let Some(scale) = scale {
-        warnings.push(format!("CSVの距離・高さは {} × {:.17} でmに換算します。ftは国際フィート、us_survey_ftはUS Survey Foot（1200/3937 m）です。単位の選択は原資料で確認してください。", source.unit, scale));
-    } else {
-        errors.push(diagnostic(
-            None,
-            None,
-            "unit",
-            "単位はm・ft（国際フィート）・us_survey_ftのみ対応。推定や別名の解釈は行いません",
-        ));
+    let height_unit = source.vertical_unit.as_deref().unwrap_or(&source.unit);
+    let distance_scale = metres_per_unit(&source.unit);
+    let height_scale = metres_per_unit(height_unit);
+    for (field, label, unit, scale) in [
+        ("unit", "距離", source.unit.as_str(), distance_scale),
+        ("vertical_unit", "高さ", height_unit, height_scale),
+    ] {
+        if let Some(scale) = scale {
+            warnings.push(format!("CSVの{label}は {unit} × {scale:.17} でmに換算します。ftは国際フィート、us_survey_ftはUS Survey Foot（1200/3937 m）です。単位の選択は原資料で確認してください。"));
+        } else {
+            errors.push(diagnostic(
+                None,
+                None,
+                field,
+                "単位はm・ft（国際フィート）・us_survey_ftのみ対応。推定や別名の解釈は行いません",
+            ));
+        }
     }
     if let Some(data) = &source.dataset {
         if let Err(error) = crate::provenance::validate(data) {
@@ -198,14 +207,23 @@ pub fn inspect(source: &Source) -> Preview {
             }
             .into(),
             unit: source.unit.clone(),
+            vertical_unit: source.vertical_unit.clone(),
             dataset: source.dataset.clone(),
         }),
     };
     let mut stations: Vec<Station> = Vec::new();
     let mut geometry = None;
     if errors.is_empty() {
-        let scale = scale.expect("unit validated");
-        let headers = HEADERS.map(|h| h.replace("_m", &format!("_{}", source.unit)));
+        let distance_scale = distance_scale.expect("distance unit validated");
+        let height_scale = height_scale.expect("height unit validated");
+        let headers = std::array::from_fn::<_, 6, _>(|i| {
+            let unit = if matches!(i, 2 | 5) {
+                height_unit
+            } else {
+                &source.unit
+            };
+            HEADERS[i].replace("_m", &format!("_{unit}"))
+        });
         let mut reader = csv::ReaderBuilder::new()
             .trim(csv::Trim::All)
             .from_reader(source.csv.trim_start_matches('\u{feff}').as_bytes());
@@ -216,8 +234,9 @@ pub fn inspect(source: &Source) -> Preview {
                 None,
                 "header",
                 format!(
-                    "選択単位 {} のヘッダーと順序は {}",
+                    "選択単位（距離 {} / 高さ {}）のヘッダーと順序は {}",
                     source.unit,
+                    height_unit,
                     headers.join(",")
                 ),
             )),
@@ -276,8 +295,12 @@ pub fn inspect(source: &Source) -> Preview {
                     ));
                     continue;
                 }
-                let z = native_z * scale;
-                let (chainage, bed, x) = (*chainage * scale, *bed * scale, *x * scale);
+                let z = native_z * height_scale;
+                let (chainage, bed, x) = (
+                    *chainage * distance_scale,
+                    *bed * height_scale,
+                    *x * distance_scale,
+                );
                 if [chainage, bed, x, z].iter().any(|v| !v.is_finite()) {
                     errors.push(diagnostic(
                         line,

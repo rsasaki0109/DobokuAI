@@ -8,6 +8,7 @@ type Source = {
   file_name: string;
   elevation_mode: 'absolute' | 'relative';
   unit: 'm' | 'ft' | 'us_survey_ft';
+  vertical_unit?: Source['unit'];
   vertical_datum: string;
   horizontal_reference: string;
   dataset: DatasetProvenance;
@@ -45,6 +46,8 @@ export function SurveyImport({
   });
   const [preview, setPreview] = useState<Preview | null>(null);
   const revision = useRef(0);
+  const heightUnit = source.vertical_unit ?? source.unit;
+  const distanceLabel = source.vertical_unit === undefined ? 'CSVの距離・高さの単位' : 'CSVの距離の単位';
   const change = (patch: Partial<Source>) => {
     revision.current++;
     setSource((s) => ({ ...s, ...patch }));
@@ -65,21 +68,38 @@ export function SurveyImport({
           UTF-8、64
           KiB以内、ヘッダーは選択単位の次の順序で指定。同じ断面の行を連続させ、流下距離と横断xを昇順に配置してください。2〜200断面、断面ごとに3〜200点、全2000行以内。地盤の起伏を保持し、計算水深で連続する1流路が必要です。点の並べ替え・平滑化・補間・水平CRS/標高基準の変換は行いません。
         </p>
-        <code>{`station,chainage_${source.unit},bed_elevation_${source.unit},roughness,x_${source.unit},elevation_${source.unit}`}</code>
+        <code>{`station,chainage_${source.unit},bed_elevation_${heightUnit},roughness,x_${source.unit},elevation_${heightUnit}`}</code>
         <p>
-          距離・高さは同じ選択単位を使い、mへ換算します。絶対標高は元単位で河床標高を差し引いてから換算、相対高さは直接換算します。各断面の最低点は河床から0でなければなりません。単位が未確認・混在する原データは先に出典を確認してください。
+          距離・高さをmへ換算します。異なる単位を使うCSVでは高さの単位を別に指定してください。絶対標高は元単位で河床標高を差し引いてから換算、相対高さは直接換算します。各断面の最低点は河床から0でなければなりません。単位は原資料で確認してください。
         </p>
       </details>
       <div className="form-grid">
         <label className="field">
-          CSVの距離・高さの単位
-          <select aria-label="CSVの距離・高さの単位" value={source.unit}
+          {distanceLabel}
+          <select aria-label={distanceLabel} value={source.unit}
             onChange={e => change({ unit: e.target.value as Source['unit'] })}>
             <option value="m">m（換算なし）</option>
             <option value="ft">ft（国際フィート = 0.3048 m）</option>
             <option value="us_survey_ft">US Survey Foot（1200/3937 m）</option>
           </select>
         </label>
+        <label className="check">
+          <span>高さの単位を別に指定</span>
+          <input type="checkbox" aria-label="高さの単位を別に指定"
+            checked={source.vertical_unit !== undefined}
+            onChange={e => change({ vertical_unit: e.target.checked ? source.unit : undefined })} />
+        </label>
+        {source.vertical_unit !== undefined && (
+          <label className="field">
+            CSVの高さの単位
+            <select aria-label="CSVの高さの単位" value={heightUnit}
+              onChange={e => change({ vertical_unit: e.target.value as Source['unit'] })}>
+              <option value="m">m（換算なし）</option>
+              <option value="ft">ft（国際フィート = 0.3048 m）</option>
+              <option value="us_survey_ft">US Survey Foot（1200/3937 m）</option>
+            </select>
+          </label>
+        )}
         <label className="field">
           横断測量CSV
           <input
@@ -133,7 +153,7 @@ export function SurveyImport({
       </div>
       <DatasetFields value={source.dataset} change={dataset => change({ dataset })} />
       <p className="muted">
-        CSVの距離・高さ: {source.unit} → m。現在の全測点を置換し、施工案をクリアします。流量m³/s・参照勾配・境界水深m・粗度nは保持します。
+        CSVの距離: {source.unit} → m / 高さ: {heightUnit} → m。現在の全測点を置換し、施工案をクリアします。流量m³/s・参照勾配・境界水深m・粗度nは保持します。
       </p>
       <button
         className="secondary"
@@ -242,6 +262,8 @@ export function SurveyImport({
           取込み元: {project.reference.import.file_name} / {project.reference.import.imported_at}
           <br />
           取込み元CSVのSHA-256: {project.reference.import.sha256}
+          <br />
+          元CSVの距離: {project.reference.import.unit} / 高さ: {project.reference.import.vertical_unit ?? project.reference.import.unit}。保存済みの断面はmです。
           <br />
           取込み後の編集はこのハッシュに含まれません。現在の条件は再現用JSON・計算履歴に記録します。
         </p>

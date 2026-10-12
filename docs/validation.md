@@ -749,3 +749,45 @@ SCHISM bathymetry directory contains only an initial-empty-directory README. Oth
 revisions/releases were not exhaustively searched. No field dataset was imported/adopted.
 The hosted CI gate is now supported, but real-river trials and continuous operations
 remain incomplete; fixed maturity stays 44.0/100 (approximately 45%), target 50%.
+
+## Independent distance/height import units — 2026-10-12 (JST)
+
+Survey CSV now accepts optional `vertical_unit`, separately from distance `unit`.
+Horizontal x/chainage and bed/point heights must have their respective explicit header
+suffixes. Both support m, international ft and US Survey Foot. Missing/null vertical unit
+keeps the legacy common-unit interpretation; it is omitted again during serialization.
+Absolute height differences are formed in native height units before conversion. Native
+conditions/negative heights, finite converted values and existing geometry/transition
+guards remain checked. No coordinate or datum transformation is performed.
+
+The nine-case API suite passed, including the existing four tests. New coverage checks all
+nine distance/height combinations in both absolute/relative modes against independent
+3937-unit and 29.5275-unit identities, unknown height-unit/header refusal, metadata-only
+reconfirmation, project-write validation, exact legacy JSON round trips, stored SI runs and
+original units in CSV/HTML. Actual exported ZIPs for horizontal m/vertical survey feet and
+the reverse pairing passed the separate Python geometry/energy auditor. A real temporary
+SQLite database was backed up online and restored through `scripts/database.py`; the
+restored API returned identical projects, stored runs and CSV/HTML after live metadata/
+flow edits. Tests do not access the user's database.
+
+Full `scripts/check.sh` exited zero: 91 Rust tests, fmt/clippy, independent references,
+five backup tests, five NCRO tests, ten offline-audit tests, frontend type check/build and
+21 development-browser E2E cases (1.5 minutes). New browser coverage checks explicit
+height selection, unchanged horizontal distances, unchanged project before confirmation,
+inspection JSON retaining original CSV/units, invalidation/refusal after unit changes,
+apply/save/calculate/reload and original-unit display/reports.
+
+The rebuilt Docker distribution passed four targeted browser cases (11.9 seconds): new
+mixed units, legacy same-unit survey feet, existing m import/provenance/sensitivity and
+rejected-geometry inspection. Production images:
+
+- API: sha256:bc5ca5e6e4e6826f9d9ab6d6ac61034faffc8b1e57be2fd359a48f0beec238a0
+- Web: sha256:a9834b4430abf776f770b167b7154f359ec3f65dd24ba2ab509a776ac1fc5ae2
+
+Evidence logs: `.local/mixed-survey-check-20261012.log`,
+`.local/mixed-survey-docker-build-20261012.log`, `.local/mixed-survey-docker-e2e-20261012.log`.
+The editor screenshot was visually inspected. Numeric-engine version remains 0.2.0;
+SQLite schema, dependencies and locks remain unchanged. Old metadata without the new
+field and old report unit text remain compatible. The bundled mixed-unit example is
+synthetic. This is not original DWR/NCRO metadata verification, field adoption or datum
+conversion; adopted field datasets remain zero and maturity stays 44.0/100 (about 45%).

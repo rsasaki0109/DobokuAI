@@ -109,6 +109,9 @@ pub struct ImportProvenance {
     pub imported_at: String,
     pub elevation_mode: String,
     pub unit: String,
+    /// Native height unit; absent means heights used `unit` too. Stored geometry is SI.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub vertical_unit: Option<String>,
     #[serde(default)]
     pub dataset: Option<DatasetProvenance>,
 }

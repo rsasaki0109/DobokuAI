@@ -26,7 +26,7 @@ S00,0,10,0.03,22,18
 | `ft` | 国際フィート | 0.3048（定義値） |
 | `us_survey_ft` | US Survey Foot | 1200/3937（定義値） |
 
-距離・高さは全列で同じ単位を使い、ヘッダーの`_m`も選んだ単位の接尾辞へ変更します。
+既定では距離・高さに同じ単位を使い、ヘッダーの`_m`も選んだ単位の接尾辞へ変更します。
 例えばUS Survey Footは次のヘッダーです。
 
 ```csv
@@ -34,7 +34,19 @@ station,chainage_us_survey_ft,bed_elevation_us_survey_ft,roughness,x_us_survey_f
 ```
 
 選択単位とヘッダーが食い違う場合や、`feet`等の曖昧な別名は拒否します。
-水平m・高さft等が混在する元データは、原資料で単位を確認し、明示した前処理で揃えてください。
+距離と高さが異なる単位なら「高さの単位を別に指定」を有効にして選びます。
+APIでは`unit`が横断x・流下距離の単位、任意の`vertical_unit`が河床標高・高さの単位です。
+`vertical_unit`の省略または`null`は従来どおり`unit`を使います。空文字や曖昧な別名は拒否します。
+高さの単位を明示した後に距離の単位を変えても、高さの選択は保持します。
+距離の2列と高さの2列は、それぞれ選択と一致する接尾辞が必要です。
+例えば`unit=m`、`vertical_unit=us_survey_ft`は次のヘッダーです。
+
+```csv
+station,chainage_m,bed_elevation_us_survey_ft,roughness,x_m,elevation_us_survey_ft
+```
+
+高さの単位だけを変えても旧プレビューを解除し、再点検・確認が必要です。
+点の並べ替えやヘッダーからの単位自動推定は行いません。
 数値の大きさ、ファイル名、プログラムの既定値から単位を推定しません。
 例えば3,937 US Survey Feetは1,200m、3,937国際フィートは1,199.9976mです。
 
@@ -46,7 +58,7 @@ CSV数値は倍精度で読み込み、換算前の値で同一断面条件の�
 換算係数を確認でき、単位等を変えると旧プレビューと反映ボタンを隠します。
 単位換算は水平CRS/標高基準の変換を意味しません。共通基準高は別途確認が必要です。
 
-元CSVのSHA-256と元単位を取込み記録・計算履歴・成果へ保存します。
+元CSVのSHA-256と元単位（指定時は高さの単位も）を取込み記録・計算履歴・成果へ保存します。
 River・図・計算結果・出力CSVの数値はSIです。保存結果を開くときは再換算しません。
 Manning粗度nはSIエンジンへの入力としてCSVの値を使い、座標の換算係数を掛けません。
 既存の流量m³/s・参照勾配・境界水深mは保持します。反映後に新断面との整合を確認してください。
@@ -54,6 +66,12 @@ Manning粗度nはSIエンジンへの入力としてCSVの値を使い、座標�
 [synthetic-us-survey-foot.csv](../examples/synthetic-us-survey-foot.csv)は2断面の合成例です。
 単位に`us_survey_ft`、高さに「河床からの相対高さ」、基準高に「合成の共通基準高」を選びます。
 現地測量ではありません。取込み後の流下距離は0/1,200m、堤岸の相対高さは9mです。
+
+[synthetic-mixed-units.csv](../examples/synthetic-mixed-units.csv)は距離m・絶対標高US Survey Footの
+2断面合成例です。距離をm、高さを別指定のUS Survey Foot、高さの解釈を絶対標高とし、
+標高系には「合成の共通基準高」と入力します。流下距離0/1,200m、横断両端x=±22m、
+上流河床標高1,200m、堤岸の相対高さ9mになります。現地測量やNAVD88変換の例ではありません。
+旧履歴は高さ単位欄がなくても従来の同一単位として読み、SIの断面・水位を再換算しません。
 
 | 列 | 意味・制約 |
 |---|---|
@@ -148,6 +166,7 @@ URLを自動取得する処理はありません。著作者1000、利用条件2
 
 APIは `POST /api/imports/survey/preview` で `{csv,file_name,elevation_mode,unit,vertical_datum,horizontal_reference}` を受けます。
 `elevation_mode` は `absolute` / `relative`、`unit` は `m` / `ft` / `us_survey_ft`。
+任意の`vertical_unit`も同じ3値です。省略時の既存のリクエスト・記録形式は保持します。
 `POST /api/imports/survey/apply` は `{source,project,confirmed:true,review_token}` を受けて
 変更したProjectを返します。どちらも保存・水理計算は行いません。
 

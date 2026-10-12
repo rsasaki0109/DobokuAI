@@ -132,6 +132,8 @@ NCRO原サービスの照合には`gis.data.cnra.ca.gov`等の元サービスホ
 この照合を受け、DobokuAIには[明示的なCSV単位換算](survey-import.md)を追加しました。
 国際ftとUS Survey Footを区別し、選択単位とCSVヘッダーの一致を要求します。
 原データのメタデータ確認・取込み・採用が完了したとは扱いません。
+距離/高さが異なる単位の場合も個別に明示できるようにしました。
+この機能から元の2009年断面やNCROの実際の単位を推定しません。
 
 資料は`.local/research/goal50/dwr-primary-20261012/`に保管。
 作者論文・10クラスの固定URL/bytes/SHA-256は[候補台帳](public-data-candidates.json)へ記録。

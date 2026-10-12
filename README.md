@@ -18,6 +18,9 @@ Rust の決定論的な水理エンジンと、条件を整理する AI 操作�
 
 [起動する](#起動) · [機能と操作](#操作) · [計算の検証](docs/validation.md)
 
+横断測量CSVはm・国際ft・US Survey Footに対応し、距離と高さを別の単位で指定できます。
+[距離m・高さUS Survey Footの合成サンプル](examples/synthetic-mixed-units.csv)と[取込み仕様](docs/survey-import.md)。
+
 ## 3D施設ショーケース
 
 ブラウザの **「3D施設ギャラリー」** でモデルを切り替え、全景・設備詳細・上流側・真上を確認できます。
