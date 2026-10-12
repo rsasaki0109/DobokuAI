@@ -876,8 +876,8 @@ suites and field validation.
 An initial focused test used an exact label locator that did not resolve the construction
 selector; the accessible combobox locator fixed that test and all three cases passed.
 The first complete and Docker browser invocations were mistakenly run concurrently with
-the same Playwright artifact directory. They failed during trace/context cleanup with
-ENOENT, despite completed assertions. Those runs are retained as failures. Final browser
+the same Playwright artifact directory. Their reported errors were missing trace/context
+artifact files (ENOENT). Those runs are retained as failures. Final browser
 runs use separate output directories. Rust, reference, recovery, audit and build checks
 had already passed and were not repeated for this artifact-directory issue.
 
@@ -902,3 +902,12 @@ failure), `focused-fixed-20261012.log` (three passing cases), `check-20261012.lo
 `docker-final-20261012.log` (final successful browser runs), and `docker-build-20261012.log`.
 Only the dedicated `doboku-section-20261012` Compose project is stopped after validation;
 its data volume and the user's existing native services/database are retained.
+
+The implementation commit `5aba0233fa0f56358e3149a37a274378ec59c850` subsequently
+completed [MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38267126753)
+with Success. The associated `validate` job also completed successfully; its workflow
+contains the pinned v6 checkout/setup-node actions and full `scripts/check.sh` command.
+Official page hashes and observation time are retained in [hosted evidence](hosted-ci-evidence.json).
+The test counts above are from local execution; hosted numeric counts were not independently
+counted from downloaded job logs. This establishes CI success for the implementation
+commit, not field applicability or the later documentation-only commit.
