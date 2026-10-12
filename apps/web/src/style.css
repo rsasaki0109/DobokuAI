@@ -962,10 +962,33 @@ footer {
   margin-top: 2px;
 }
 .three-view {
-  height: 430px;
-  border-radius: 8px;
+  height: 570px;
+  position: relative;
+  border-radius: 14px;
   overflow: hidden;
+  background: #0a1c28;
 }
+.river-3d { background:#0a1c28; border-radius:14px; padding:16px; color:#ddeaf0; }
+.river-3d-toolbar { display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; margin:0 0 16px; }
+.river-3d-toolbar label { display:flex; gap:10px; align-items:center; font-weight:600; }
+.river-3d-toolbar select { width:auto; max-width:250px; }
+.river-3d-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.river-3d-actions button { border:1px solid #dce5df; background:#f7faf8; color:#36594b; padding:8px 12px; border-radius:6px; }
+.river-3d-actions button[aria-pressed="true"] { background:#24624f; color:white; border-color:#24624f; }
+.river-3d-hud { position:absolute; z-index:1; top:28px; left:30px; right:30px; color:#deeff5; display:flex; justify-content:space-between; pointer-events:none; }
+.river-3d-hud strong { display:block; font-size:27px; margin-top:8px; }
+.river-3d-hud span { display:block; font-size:11px; letter-spacing:2px; color:#8fb6c7; }
+.river-3d-hud b { font-size:27px; }
+.river-3d-hud > div:last-child { text-align:right; }
+.river-3d-legend { position:absolute; bottom:22px; left:30px; right:30px; display:flex; gap:25px; color:#b5d0dc; font-size:12px; pointer-events:none; }
+.river-3d-legend span { display:flex; align-items:center; gap:7px; }
+.river-3d-legend i { width:9px; height:9px; border-radius:2px; }
+.river-3d-legend .land { background:#8fbd8c; }.river-3d-legend .water { background:#1ab6df; }
+.river-3d-note { color:#91abba; font-size:12px; line-height:1.8; }
+.river-3d:fullscreen { padding:20px 28px; background:#0a1c28; color:#ddeaf0; display:flex; flex-direction:column; }
+.river-3d:fullscreen .three-view { flex:1; height:auto; min-height:0; }
+.river-3d:fullscreen .river-3d-note { color:#91abba; }
+@media(max-width:700px) { .three-view { height:420px; }.river-3d-hud { left:16px; right:16px; }.river-3d-hud strong { font-size:20px; }.river-3d-legend { left:16px; right:16px; gap:12px; flex-wrap:wrap; } }
 .spin {
   animation: spin 1s linear infinite;
 }

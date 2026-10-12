@@ -171,8 +171,6 @@ try {
     await sleep(1500);
     const box = await canvas.boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.wheel(0, -1700);
-    await sleep(200);
     const region = page.locator('.three-view');
     for (let i = 0; i < 8; i++) {
       if (i) {
@@ -194,7 +192,7 @@ try {
   if (issues.length) throw new Error(issues.join('\n'));
 } finally { await browser.close(); }
 
-if (!only) clips.push({ name: 'hero', frames: clips.flatMap(c => [c.frames[0], c.frames.at(-1)]).map(f => ({ ...f, seconds: 1.6 })) });
+if (!only) clips.push({ name: 'hero-workflows', frames: clips.flatMap(c => [c.frames[0], c.frames.at(-1)]).map(f => ({ ...f, seconds: 1.6 })) });
 for (const { name, frames } of clips) {
   const manifest = resolve(work, `${name}.ffconcat`);
   await writeFile(manifest, 'ffconcat version 1.0\n' + frames.map(f => `file '${f.path}'\nduration ${f.seconds}\n`).join('') + `file '${frames.at(-1).path}'\n`);

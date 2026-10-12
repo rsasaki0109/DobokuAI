@@ -11,7 +11,7 @@ export default defineConfig({
     viewport: { width: 1440, height: 1000 },
     launchOptions: {
       executablePath: process.env.CHROMIUM_PATH || undefined,
-      args: ['--no-sandbox'],
+      args: ['--no-sandbox', '--enable-unsafe-swiftshader'],
     },
     trace: 'retain-on-failure',
   },
