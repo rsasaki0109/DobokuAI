@@ -7,6 +7,7 @@ python3 tests/irregular_reference.py --check
 python3 tests/dam_reference.py --check
 python3 tests/backups.py
 python3 tests/test_ncro_inspection.py
+python3 tests/test_review_audit.py
 bash scripts/run-cargo.sh clippy --workspace --all-targets --locked -j 4 -- -D warnings
 bash scripts/run-cargo.sh test --workspace --locked -j 4
 npm run build --prefix apps/web

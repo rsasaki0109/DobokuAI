@@ -629,3 +629,45 @@ configuration update, not successful original-source or hosted-CI access. Field 
 reference realization, original terms/reports and a supported hydraulic reach remain
 unverified. Adopted field trials stay zero and maturity remains 44.0/100 against target 50%.
 Details: [DWR review and reproduction](public-data-dwr-review.md).
+
+## Offline hydraulic balance audit — 2026-10-12 (JST)
+
+scripts/audit-review-pack.py reads stored review packs without API, extraction, solving or
+project/history changes. It validates the allowed archive entries, CRC, size/file hashes,
+conditions hash, saved record metadata and identical study baselines. Python independently
+clips ground polylines and integrates wetted geometry, then recomputes velocity, Froude,
+Manning friction, critical/normal diagnostics, boundary and per-segment energy balances.
+Saved residuals alone cannot make the check pass. Tolerances are fixed and reported.
+This is consistency verification, not an independent water-surface solution or field accuracy.
+
+Ten synthetic tests pass: analytic uniform subcritical/supercritical profiles, closed-form
+trapezoid/survey geometry, irregular vertices and dry-ridge separation, corrupted hashes and
+unsafe archive paths, physically wrong values even after rehashing, incorrect bed with stored
+zero residual, inconsistent conditions/unsupported engines/nonfinite JSON, preserved failed
+studies with no invented results, and CLI failure report/overwrite handling.
+
+The full scripts/check.sh completed with exit zero: 82 Rust tests, fmt/clippy, independent
+reference regeneration, five backup checks, five NCRO checks, frontend type check/build and
+all 19 development-browser E2E cases (1.7 minutes). The initial eight audit tests passed in
+that run. Final irregular/large-bank cases and the stricter failed-case schema were tested
+with the complete ten-case audit suite afterward. The finite 1e20m bank stress test exposed
+cancellation in clip-fraction subtraction; direct wet-fraction calculation fixed the lost
+wetted wall. The final original ZIP was rerun and the same 117 rows/110 segments passed.
+No API, numerical engine, UI behavior,
+dependencies or Docker images changed; no additional Docker build was performed.
+
+The original synthetic sample ZIP (SHA-256
+49a4cfd5c640dde51b2bb084bf7857ffa90b80a97d9aaff37edfa9e80450ad1c) passed the final auditor:
+13 entries, seven successful profiles, 117 rows, 110 segments and one retained failed
+sensitivity case. Maximum independently recomputed energy residual was
+3.7886892928495897e-10m, against the fixed 1e-7m balance threshold. Evidence:
+.local/review-pack-trial-20261012/offline-audit-verified.json;
+pipeline log: .local/review-audit-check-20261012.log.
+
+CSV/HTML are checked by hash; numerical checks read JSON. Derived case differences, earthwork
+volumes, critical-root uniqueness and full original-input applicability are outside this
+auditor. The manifest's Rust-encoded baseline profile hash is not re-encoded in Python;
+baseline objects are compared directly. Hashes do not authenticate the original survey.
+Running network configuration is still unchanged; original metadata and hosted CI remain
+unconfirmed. Adopted field datasets remain zero and maturity stays 44.0/100 (approximately
+45%), against the 50% target. [Audit scope and usage](offline-audit.md).

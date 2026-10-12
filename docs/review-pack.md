@@ -5,6 +5,7 @@
 内容を確認してZIPを保存します。以前の比較履歴もページ単位で読み込めます。
 ZIPを展開して`index.html`を開くと、各図付きレポート・CSV・保存JSONへ移動できます。
 閲覧にDobokuAI APIやLLMキーは不要です。
+PythonでZIPと保存JSONの収支を照査する[オフライン照査ツール](offline-audit.md)も利用できます。
 
 ## 同じ条件の成果を収録する
 
