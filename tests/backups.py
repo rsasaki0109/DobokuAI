@@ -11,6 +11,23 @@ spec.loader.exec_module(database)
 
 
 class RecoveryFailures(unittest.TestCase):
+    def test_dam_snapshots_restore_and_corruption_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, backup, restored, rejected = [Path(tmp)/name for name in ('source.sqlite','backup.sqlite','restored.sqlite','rejected.sqlite')]
+            body = '{"conditions":{"name":"dam"},"statics":{"toe_pressure_kpa":null},"executed_at":"2026-10-12T00:00:00Z"}'
+            with sqlite3.connect(source) as connection:
+                for table in ('projects','runs','dam_runs'):
+                    connection.execute(f'CREATE TABLE {table} (body TEXT)')
+                connection.execute('INSERT INTO dam_runs VALUES (?)', (body,))
+            self.assertEqual(database.copy_database(source, backup)['counts']['dam_runs'], 1)
+            database.copy_database(backup, restored)
+            with sqlite3.connect(restored) as connection:
+                self.assertEqual(connection.execute('SELECT body FROM dam_runs').fetchone()[0], body)
+            with sqlite3.connect(source) as connection:
+                connection.execute('UPDATE dam_runs SET body=?', ('broken json',))
+            with self.assertRaises(ValueError):
+                database.copy_database(source, rejected)
+            self.assertFalse(rejected.exists())
     def test_resolution_snapshots_are_counted_and_corruption_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             source, backup, target = [Path(tmp)/name for name in ('source.sqlite','backup.sqlite','restore.sqlite')]

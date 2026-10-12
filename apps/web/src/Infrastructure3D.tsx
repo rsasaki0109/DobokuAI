@@ -37,7 +37,7 @@ function Facility({ kind, settings, flow, environment, water, sceneRef }: { kind
   return <primitive object={scene.root} />;
 }
 
-export default function Infrastructure3D() {
+export default function Infrastructure3D({ onOpenDam }: { onOpenDam?: () => void }) {
   const [kind, setKind] = useState<FacilityKind>('gravity');
   const [settings, setSettings] = useState<FacilitySettings>({ height: 72, waterRatio: .83, gate: .6 });
   const [view, setView] = useState<View>('overview');
@@ -62,6 +62,7 @@ export default function Infrastructure3D() {
         </button>)}
       </div>
       <div className="facility-tools">
+        {kind === 'gravity' && onOpenDam && <button type="button" onClick={onOpenDam}>別条件で重力式ダムの予備照査を開く</button>}
         <div className="facility-view-buttons">{([['overview', '全景'], ['detail', '施設詳細'], ['upstream', '上流側'], ['top', '真上']] as const).map(([v, title]) => <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)}>{title}</button>)}</div>
         <div className="facility-view-buttons">
           <button type="button" aria-pressed={rotating} onClick={() => setRotating(!rotating)}>自動回転</button>
@@ -106,7 +107,7 @@ export default function Infrastructure3D() {
           <label><input type="checkbox" checked={flow} onChange={e => setFlow(e.target.checked)} />水面・放流の演出</label>
         </div>
       </div>
-      <p className="facility-note">架空の土木施設を形状検討用に制作したモデルです。寸法・地形は作例、放流は装飾表現です。河川の数値計算とは独立しており、ダムの水理・構造・安全性を評価する機能は未実装です。</p>
+      <p className="facility-note">架空の土木施設を形状検討用に制作したモデルです。寸法・地形は作例、放流は装飾表現です。この形状・水位は計算条件ではありません。重力式ダムの予備照査は別画面・別条件で行います。耐震・FEM・設計基準の安全判定は未対応です。</p>
       {exportError && <p role="alert">モデルを書き出せませんでした: {exportError}</p>}
     </div>
   );

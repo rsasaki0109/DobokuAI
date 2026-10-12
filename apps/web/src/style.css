@@ -1239,3 +1239,38 @@ footer {
 .survey-import code {
   overflow-wrap: anywhere;
 }
+
+.dam-workspace { display: grid; gap: 22px; }
+.dam-scope { display: flex; gap: 14px; padding: 18px 22px; border: 1px solid #cbdde5; border-radius: 12px; background: #edf5f7; color: #2b5266; }
+.dam-scope svg { flex-shrink: 0; margin-top: 2px; }
+.dam-scope p { font-size: 12px; line-height: 1.8; margin: 6px 0 0; }
+.dam-notice { color: #38677a; font-size: 13px; margin: 0; }
+.dam-layout { display: grid; grid-template-columns: 340px minmax(0,1fr); gap: 22px; align-items: start; }
+.dam-inputs fieldset { border: 0; border-top: 1px solid #e6ebef; padding: 16px 0 5px; margin: 18px 0 0; min-width: 0; }
+.dam-inputs legend { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12px; padding-right: 12px; }
+.dam-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.dam-fields .field:nth-child(6), .dam-fields .field:nth-child(7) { grid-column: 1 / -1; }
+.dam-fields .field span { font-size: 11px; }
+.dam-confirm { display: flex; align-items: start; gap: 9px; margin: 20px 0 14px; font-size: 12px; }
+.dam-inputs > .primary { width: 100%; justify-content: center; }
+.dam-results { display: grid; gap: 20px; min-width: 0; }
+.dam-section { width: 100%; display: block; }
+.dam-results > .panel > svg { width: 100%; }
+.dam-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+.dam-metrics > div { border: 1px solid #dce5eb; border-radius: 12px; padding: 20px; background: white; }
+.dam-metrics span, .dam-metrics small { display: block; color: #758694; font-size: 11px; }
+.dam-metrics strong { display: block; font-size: 28px; color: #294f64; padding: 10px 0 6px; font-variant-numeric: tabular-nums; }
+.dam-diagnostic { background: #fff0dc !important; color: #a46b2d !important; }
+.dam-table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.dam-table td, .dam-table th { text-align: right; padding: 10px 8px; border-bottom: 1px solid #e6edf1; }
+.dam-table td:first-child, .dam-table th:first-child { text-align: left; white-space: nowrap; }
+.dam-table th { color: #697f8d; font-weight: 500; background: #f4f8fa; }
+.dam-baseline { border-left: 3px solid #d09b48; background: #fbf7ef; padding: 10px 14px; font-size: 12px; color: #866b45; }
+.dam-exports { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.dam-notes p { font-size: 12px; line-height: 1.9; color: #647986; }
+.dam-history h2 { display: flex; gap: 8px; align-items: center; }
+.dam-history-items { display: grid; gap: 8px; margin-bottom: 12px; }
+.dam-history-items button { justify-content: space-between; text-align: left; gap: 15px; }
+.dam-history-items span { font-size: 11px; font-weight: 400; }
+@media(max-width: 1100px) { .dam-layout { grid-template-columns: 285px minmax(0,1fr); } .dam-metrics { gap: 8px; } .dam-metrics > div { padding: 14px; } .dam-metrics strong { font-size: 23px; } }
+@media(max-width: 800px) { .dam-layout { grid-template-columns: 1fr; } .dam-history-items button { flex-direction: column; align-items: start; } }

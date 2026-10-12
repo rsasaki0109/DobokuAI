@@ -8,6 +8,7 @@ publish.workspace = true
 doboku-core.workspace = true
 doboku-geometry.workspace = true
 doboku-hydraulics.workspace = true
+doboku-structures.workspace = true
 doboku-planning.workspace = true
 doboku-agent.workspace = true
 serde.workspace = true

@@ -1,12 +1,14 @@
 # Architecture / MVP implementation plan
 
-DobokuAI 0.1: private-source, SI units (m, m², m³, m³/s, s); no license grant is implied.
+DobokuAI 0.1: source visibility is separate from licensing; no OSS license grant is implied.
+SI units (m, m², m³, m³/s, s); dam statics use kN/m³, kN/m, kN·m/m and kPa.
 
 | Module | Responsibility |
 |---|---|
 | doboku-core | Typed project, boundary, station and scenario contracts; engineering errors |
 | doboku-geometry | Section validation, wet geometry, bank elevations, survey coordinates |
 | doboku-hydraulics | Deterministic Manning, critical/normal depth, standard-step energy solver |
+| doboku-structures | Gravity-dam rigid-body statics, full linear uplift, foundation contact diagnostics |
 | doboku-earthwork | Survey-ground differences and trapezoidal reach-volume integration |
 | doboku-planning | Explicit construction transformations and same-datum hydraulic comparison |
 | doboku-agent | Proposed typed actions; offline Japanese parser; optional HTTP LLM adapter |
@@ -15,6 +17,12 @@ DobokuAI 0.1: private-source, SI units (m, m², m³, m³/s, s); no license grant
 
 Dependency direction: core ← geometry ← hydraulics; geometry ← earthwork;
 planning composes hydraulics + earthwork; API composes planning + agent. No LLM is used inside a numerical function.
+
+`doboku-structures` depends only on core and serialization. The separate dam API composes
+`hydraulics::spillway` and structures without coupling them to the river solver or illustrative
+facility meshes. Only explicitly confirmed typed conditions are calculated and appended to
+`dam_runs`; read/export/recovery use the original snapshot and model versions.
+See [dam model and validation](dam-calculations.md).
 
 Implementation order: workspace/contracts → engine → independent numerical validation → API → web/editor → profile/comparison → agent → report → containers/E2E.
 

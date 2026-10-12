@@ -21,7 +21,7 @@ def inspect(connection):
     counts = {}
     snapshot_tables = ["projects", "runs"]
     # Older databases remain recoverable; the API adds optional tables on startup.
-    for table in ("sensitivity_runs", "resolution_runs"):
+    for table in ("sensitivity_runs", "resolution_runs", "dam_runs"):
         if table in tables:
             snapshot_tables.append(table)
     for table in snapshot_tables:

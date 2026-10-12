@@ -290,6 +290,7 @@ dependencies = [
  "doboku-geometry",
  "doboku-hydraulics",
  "doboku-planning",
+ "doboku-structures",
  "http-body-util",
  "rusqlite",
  "serde",
@@ -342,6 +343,15 @@ dependencies = [
  "doboku-geometry",
  "doboku-hydraulics",
  "serde",
+]
+
+[[package]]
+name = "doboku-structures"
+version = "0.1.0"
+dependencies = [
+ "doboku-core",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

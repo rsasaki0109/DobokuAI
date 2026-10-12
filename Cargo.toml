@@ -15,6 +15,7 @@ thiserror = "2"
 doboku-core = { path = "crates/doboku-core" }
 doboku-geometry = { path = "crates/doboku-geometry" }
 doboku-hydraulics = { path = "crates/doboku-hydraulics" }
+doboku-structures = { path = "crates/doboku-structures" }
 doboku-earthwork = { path = "crates/doboku-earthwork" }
 doboku-planning = { path = "crates/doboku-planning" }
 doboku-agent = { path = "crates/doboku-agent" }

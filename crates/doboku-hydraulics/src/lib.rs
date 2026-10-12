@@ -4,6 +4,7 @@ use doboku_geometry::{max_depth, validate as validate_section, wet};
 use serde::{Deserialize, Serialize};
 
 pub mod resolution;
+pub mod spillway;
 
 pub const DEPTH_TOL: f64 = 1e-9;
 pub const ENERGY_TOL: f64 = 1e-7;

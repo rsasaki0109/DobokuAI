@@ -13,6 +13,7 @@ use rusqlite::{params, Connection};
 use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 use tokio::sync::Semaphore;
+pub mod dam;
 pub mod history;
 mod provenance;
 pub mod report;
@@ -36,6 +37,7 @@ pub fn state(path: &str) -> std::result::Result<AppState, rusqlite::Error> {
     history::initialize(&db)?;
     sensitivity_history::initialize(&db)?;
     resolution_history::initialize(&db)?;
+    dam::initialize(&db)?;
     let p = doboku_core::sample();
     db.execute(
         "INSERT OR IGNORE INTO projects(id,name,body) VALUES (?1,?2,?3)",
@@ -77,6 +79,11 @@ pub fn app(state: AppState) -> Router {
             }),
         )
         .route("/api/sample", get(|| async { Json(doboku_core::sample()) }))
+        .route("/api/dams/sample", get(|| async { Json(dam::sample()) }))
+        .route("/api/dams/runs", get(dam::list).post(dam::create))
+        .route("/api/dams/runs/{id}", get(dam::load))
+        .route("/api/dams/runs/{id}/reports/html", get(dam::html))
+        .route("/api/dams/runs/{id}/reports/csv", get(dam::csv))
         .route("/api/projects", get(list_projects).post(save_project))
         .route("/api/projects/{id}", get(load_project))
         .route("/api/simulate", post(simulate))

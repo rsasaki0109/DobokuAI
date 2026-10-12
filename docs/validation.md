@@ -345,3 +345,53 @@ authorization or CI success. Hosted CI remains unobserved. Practical datasets an
 external technical reviewers were not added. Fixed-rubric maturity remains44.0/100
 (displayed about45%), target60%. Retention limits and future schema compatibility remain
 unimplemented; same-version synthetic recovery is not proof of operational reliability.
+
+## Gravity dam hydraulics and statics — 2026-10-12 (JST)
+
+The independent gravity-dam workspace adds a free-overflow capacity model and rigid-body
+static equilibrium for a trapezoid with vertical upstream face. See
+[contracts, units, formulas and exclusions](dam-calculations.md).
+The numerical modules depend on neither HTTP, SQLite nor LLM. The illustrative gallery
+is not linked to these inputs or outputs; arch/bridge/sabo structural calculations remain unimplemented.
+
+Analytic tests cover rectangular loads/bearing, dry/equal-water cases, head scaling,
+undefined ratios, invalid/nonfinite input, unknown earthquake/gate fields, submergence,
+partial contact, outside-base resultants and loss of compression.
+Seven synthetic structural cases are independently integrated by Python composite Simpson
+quadrature (4096 intervals) and compared against Rust loads, centroids, moments, resultants,
+ratios, contact state and applicable bearing pressures. The fixed acceptance rule is
+absolute difference ≤ 1e−9 × max(1, |reference|). The production API comparison measured
+maximum normalized difference 1.7763568394002505e−15; no field calibration is implied.
+The checked-in fixture can be regenerated/checked with `tests/dam_reference.py` and is
+included in Cargo tests; `scripts/check.sh` checks it before the workspace suite.
+
+The final workspace passed 65 Rust tests, `cargo fmt --all --check`,
+`cargo clippy --workspace --all-targets --locked -- -D warnings`, and frontend typecheck/build.
+The provider mock requires a local TCP listener: an initial sandbox-only run was denied by
+socket restrictions, then the complete suite passed with local test networking enabled.
+Five Python recovery checks include optional dam-table JSON validation and corruption rejection.
+
+The development web and Docker production build each passed all 15 browser tests, including
+confirmation, edit invalidation, baseline comparison, immutable history restore, CSV/HTML
+exports, invalid depth/submergence rejection and explicit absent partial-contact pressure.
+The final load-arrow adjustment passed the two dam tests in development and Docker; it adds the downward
+component of the downstream face-pressure resultant without changing any numerical results.
+
+The new `dam_runs` table retains server-generated conditions, numerical results, engine/model
+versions and original execution timestamps. API integration confirms cursor paging, failure
+without append, unchanged river projects/history, reopen with byte-identical JSON/CSV/HTML,
+and independently parsed CSV column/condition alignment. Full-contact pressures alone are
+computed. Unsupported contact pressure and zero-denominator ratios remain null/empty.
+
+A running Compose database was backed up through SQLite's online API with the source volume
+mounted read-only into a Python helper. Its snapshot contained 7 projects, 6 river runs,
+2 sensitivity runs, 3 spacing runs and 11 dam runs. Restoration into a new file and reopening
+with a separate production API confirmed the 7 retained reference-run JSON snapshots and
+all 14 CSV/HTML reports were exactly unchanged. A concurrent later screen capture appended
+another source run without altering the backup. Local evidence is in
+`.local/dam-public-validation/`; these synthetic verification artifacts are not product data.
+
+This validates the stated simple static/capacity models. It does not validate earthquake,
+FEM, cracking, foundation deformation, uplift drainage reduction, gate discharge, reservoir
+routing, spillway-flow loads or any code-of-practice safety criteria. Maturity remains
+44.0/100 (display approximately 45%); actual-river trials and hosted CI remain unverified.
