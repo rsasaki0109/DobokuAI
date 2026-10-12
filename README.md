@@ -22,6 +22,7 @@ Rust の決定論的な水理エンジンと、条件を整理する AI 操作�
 [距離m・高さUS Survey Footの合成サンプル](examples/synthetic-mixed-units.csv)と[取込み仕様](docs/survey-import.md)。
 水理計算画面では[共通基準高の境界水位から水深を入力](docs/boundary-water-level.md)できます。
 常流は下流端、射流は上流端の河床を使い、境界位置・河床標高・標高系を確認できます。
+[断面形式の切替](docs/section-conversion.md)は変更候補の確認後に反映します。垂直岸を測量点へ変換するための座標補正は行いません。
 
 ## 3D施設ショーケース
 

@@ -852,3 +852,53 @@ with Success. Its `validate` job and associated workflow were matched to that co
 the fixed v6 actions and full `scripts/check.sh` were verified. Official run/job/workflow
 page hashes and observation time are retained in [hosted evidence](hosted-ci-evidence.json).
 Hosted test counts are not independently counted from downloaded job logs.
+
+## Explicit section conversion / 2026-10-12
+
+The section selector previously shifted the x coordinates of vertical banks by 0.1m
+when converting parametric geometry to survey points. That implicit geometry change is
+removed. Conversion now proposes the original and candidate dimensions/points and target
+scope; only explicit application edits conditions. Rectangular and zero-side-slope banks
+are refused for survey conversion. Rectangle-to-trapezoid preserves custom dimensions
+with side slope zero; positive-slope trapezoid-to-survey retains every original coordinate.
+Survey-to-parametric candidates disclose initial dimensions rather than claiming a fit.
+Empty survey drafts remain empty and fail parsing instead of reusing the original points.
+
+Three new browser cases check confirmation/cancellation, persistence before confirmation,
+all-station application, exact points, custom width/height retention, station-switch
+proposal invalidation, vertical-bank refusal, unchanged saved history, and construction
+replacement with an unchanged base river and retained downstream stage. The synthetic
+trapezoid and converted survey results agree within absolute 1e-7 for depth, stage, area,
+velocity, Froude, normal depth and critical depth. This comparison uses the same Rust
+engine and is a conversion consistency check, separate from the independent reference
+suites and field validation.
+
+An initial focused test used an exact label locator that did not resolve the construction
+selector; the accessible combobox locator fixed that test and all three cases passed.
+The first complete and Docker browser invocations were mistakenly run concurrently with
+the same Playwright artifact directory. They failed during trace/context cleanup with
+ENOENT, despite completed assertions. Those runs are retained as failures. Final browser
+runs use separate output directories. Rust, reference, recovery, audit and build checks
+had already passed and were not repeated for this artifact-directory issue.
+
+The complete numerical/build portion passed: 91 Rust tests, fmt, clippy with warnings
+denied, independent reference regeneration, five backup tests, five NCRO tests, ten
+offline review-pack audit tests, frontend type check and production build. The final
+isolated native-browser invocation exited zero with all 26 cases passing (2.5 minutes).
+No numerical engine, API contracts, database schema, dependencies or lockfiles changed;
+engine version remains 0.2.0. Field adoption remains zero and maturity remains
+44.0/100 (about 45%), target 50%.
+
+The rebuilt Docker distribution passed four final browser cases (13.8 seconds): all three
+section-conversion cases and the existing edit/steady-flow/construction/report/persistence
+workflow. The confirmation screenshot was visually inspected. Production images:
+
+- API: sha256:8f03d56a07d906fe21cced2b3287553ab6e1cf9da4b17d4470b3ca806b70d7ad
+- Web: sha256:9be9d75776832006fa5b814e38e9e233ab6f97b426cc9743b9cd97bb02e7020a
+
+Logs retained under `.local/section-conversion-`: `focused-20261012.log` (initial selector
+failure), `focused-fixed-20261012.log` (three passing cases), `check-20261012.log` and
+`docker-e2e-20261012.log` (artifact-collision failures), `native-final-20261012.log` and
+`docker-final-20261012.log` (final successful browser runs), and `docker-build-20261012.log`.
+Only the dedicated `doboku-section-20261012` Compose project is stopped after validation;
+its data volume and the user's existing native services/database are retained.

@@ -49,6 +49,11 @@ stationary points. A unique minimum-energy root selects one continuous band; bou
 standard-step and normal-depth roots stay in that band. Multiple/discontinuous roots,
 separated surface water and vertical survey segments are rejected.
 See [irregular cross sections](irregular-sections.md).
+The web section-type selector proposes explicit changes before application. Parametric
+dimensions are retained; positive-slope trapezoids become surveyed points without shifting
+coordinates. Vertical banks cannot be converted to the strictly increasing-x survey format
+and are refused. Survey-to-parametric candidates use stated initial dimensions, not a fitted
+approximation. See [section conversion](section-conversion.md).
 Critical flow (within a 2% Froude margin), missing branch roots, nonconvergence,
 nonfinite inputs/results, adverse/flat normal-depth slopes, bank overflow, reach bed slopes
 over 0.1, and adjacent width changes over 25% are rejected. This width check is a conservative

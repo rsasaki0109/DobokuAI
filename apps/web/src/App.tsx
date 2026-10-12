@@ -873,7 +873,9 @@ export default function App() {
                             {s.modification.kind === 'replace_section' && (
                               <div className="form-grid section-replacement">
                                 <SectionFields
+                                  key={`${project.id}-${i}-${s.modification.section.kind}`}
                                   section={s.modification.section}
+                                  scope={`施工案「${s.name}」の全測点の断面形状`}
                                   onChange={(section) =>
                                     updateScenarios(
                                       scenarios.map((s, j) =>
