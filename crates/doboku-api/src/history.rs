@@ -64,7 +64,7 @@ pub(super) fn save(s: &AppState, a: &Analysis) -> ApiResult<i64> {
         params![a.project.id, a.project.name, a.run.executed_at, a.run.engine_version, a.run.river.discharge, a.run.profile.rows.len(), a.comparisons.len(), a.staged, body]).map_err(|_| internal())?;
     Ok(db.last_insert_rowid())
 }
-fn snapshot(s: &AppState, id: i64) -> ApiResult<Analysis> {
+pub(super) fn snapshot(s: &AppState, id: i64) -> ApiResult<Analysis> {
     let db = s.db.lock().map_err(|_| internal())?;
     let body: String = db
         .query_row("SELECT body FROM runs WHERE id=?1", [id], |row| row.get(0))

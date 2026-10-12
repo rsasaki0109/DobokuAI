@@ -68,7 +68,7 @@ pub async fn create(
         comparison,
     }))
 }
-fn snapshot(s: &AppState, id: i64) -> ApiResult<sensitivity::Response> {
+pub(super) fn snapshot(s: &AppState, id: i64) -> ApiResult<sensitivity::Response> {
     let db = s.db.lock().map_err(|_| internal())?;
     let body: String = db
         .query_row("SELECT body FROM sensitivity_runs WHERE id=?1", [id], |r| {

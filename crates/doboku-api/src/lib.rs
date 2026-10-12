@@ -21,6 +21,7 @@ pub mod report;
 pub mod resolution;
 pub mod resolution_history;
 pub mod resolution_report;
+pub mod review_pack;
 pub mod sensitivity;
 pub mod sensitivity_history;
 pub mod sensitivity_report;
@@ -90,6 +91,8 @@ pub fn app(state: AppState) -> Router {
         .route("/api/simulate", post(simulate))
         .route("/api/diagnostics/river", post(diagnostics::inspect))
         .route("/api/compare", post(compare))
+        .route("/api/review-packs/preview", post(review_pack::preview))
+        .route("/api/review-packs/zip", post(review_pack::archive))
         .route("/api/imports/survey/preview", post(survey::preview))
         .route("/api/imports/survey/apply", post(survey::apply))
         .route("/api/sensitivity", post(sensitivity::compare))

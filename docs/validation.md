@@ -547,3 +547,50 @@ match exactly without height conversion. This checks representation consistency,
 survey accuracy. Original use terms, survey realization/date and hydraulic reach conditions
 remain incomplete. No field dataset is adopted or bundled; maturity remains 44.0/100.
 Details: [survey inspection](survey-import.md) and [primary-source review](public-data-model-review.md).
+
+## Saved review packs and synthetic trial — 2026-10-12 (JST)
+
+The two review-pack endpoints read immutable construction, sensitivity and resolution
+snapshots. They never call the solver or write project/history data. Optional studies must
+match project ID, all river/reference conditions, archived engine version and baseline
+profile, including warnings. Renaming a project alone is allowed. Unknown IDs and mismatches
+are rejected. CSV size is conservatively budgeted before generating repeated condition rows;
+a 200-station, six-case study verifies refusal rather than truncated output.
+
+Verification passed:
+
+- All 82 Rust tests; cargo fmt and clippy with warnings denied; frontend type check/build.
+- API integration tests read the actual ZIP and verify all file hashes/sizes, selection,
+  condition hash, stored JSON objects and exact equality with six existing CSV/HTML exports.
+  They edit the current project, reconnect to the real temporary SQLite file and verify
+  unchanged archived output, histories and current project. These are SQLite reconnect
+  checks, not a new Docker backup/restore exercise.
+- All 19 Docker browser E2E cases passed in one run (59.1 seconds). The new workflow
+  selects exact project/history IDs, invalidates previews on edits, rejects an incompatible
+  study, downloads the ZIP, verifies it using Python zipfile/hashlib/csv and opens index/report
+  HTML with API access blocked. Failed sensitivity values remain empty and no calculation
+  requests occur during pack generation.
+- The reproducible scripts/try-review-pack.py trial imported the bundled synthetic absolute
+  elevation CSV with declared virtual datum and source attribution, then saved 1m excavation,
+  two discharge cases and 2/4 spacing subdivisions. All 13 ZIP entries passed CRC/hash/size
+  checks, six individual exports matched exactly and all three stored snapshots matched.
+  History counts remained one per kind and the saved project was unchanged by export.
+
+Actual synthetic trial results: cut volume 32000.000000000004m³, maximum water level change
+−0.315507366004006m, engine 0.2.0, execution time 2026-10-12T09:01:38.955334205+00:00.
+Evidence is in .local/review-pack-trial-20261012/ (ignored): original CSV, import preview,
+trial-result.json and sample.zip. ZIP SHA-256:
+49a4cfd5c640dde51b2bb084bf7857ffa90b80a97d9aaff37edfa9e80450ad1c.
+Original CSV is kept separately because raw survey files are not stored in history snapshots.
+
+Final production images:
+
+- API: sha256:d4646c812b961237b91021a1773b84937043c9781f4c0adac6ea06b35aa8d4b9
+- Web: sha256:0e5eb59cbe59ef6a12ba35074f038ee55df058f783cd795a9a22ca6ed0d82284
+
+The new zip 6.0.0 dependency uses stored entries with compression disabled; seven lockfile
+packages were added, with existing dependencies unchanged. Numerical engine version and
+database schema are unchanged. Pack assembly timestamps are distinguished from original
+calculation times; non-manifest files remain byte-identical for the same stored selection
+and exporter version. This trial does not establish field accuracy or hosted CI success.
+Adopted field datasets remain zero and the maturity score stays 44.0/100 (approximately 45%).

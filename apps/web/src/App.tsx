@@ -40,6 +40,7 @@ import { SurveyImport } from './SurveyImport';
 import { Sensitivity } from './Sensitivity';
 import { Resolution } from './Resolution';
 import { RiverDiagnostics } from './RiverDiagnostics';
+import { ReviewPack } from './ReviewPack';
 const River3D = lazy(() => import('./River3D'));
 const Infrastructure3D = lazy(() => import('./Infrastructure3D'));
 const DamAnalysis = lazy(() => import('./DamAnalysis'));
@@ -572,6 +573,7 @@ export default function App() {
                       activeId={historyId}
                       onOpen={openHistory}
                     />
+                    <ReviewPack key={`${project.id}:${historyId}`} projectId={project.id} runId={historyId} task={task} />
                   </>
                 )}
 
