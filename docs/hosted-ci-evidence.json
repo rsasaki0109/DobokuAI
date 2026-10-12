@@ -137,6 +137,34 @@
         "The prior check observed Queued; that pending observation is superseded by this Success observation.",
         "Field dataset adoption remains zero."
       ]
+    },
+    {
+      "commit": "805b9bce5334a9d211f224015df05b05cf9589b2",
+      "observed_at_utc": "2026-10-12T13:42:44.548481+00:00",
+      "run_id": 38256815215,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38256815215",
+      "status": "Success",
+      "page_bytes": 198063,
+      "page_sha256": "20e648f6ffac5a8cc8dd61caf1dbc7d2a2f7c76e8f2aac75d1acc6d52abcb68c",
+      "job_id": 114836892470,
+      "job_status": "completed successfully",
+      "node20_deprecation_warning_present": false,
+      "observations": [
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38256815215/job/114836892470",
+          "bytes": 205335,
+          "sha256": "85e471a1ca7d3275f5571ad61a72331b91d6e0a9c3032db6b4e543b386dce704"
+        },
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38256815215/workflow",
+          "bytes": 188799,
+          "sha256": "a70e41ab5e994dd028b6519ce4f7523676fd9c24286383428382b60456d2bf95"
+        }
+      ],
+      "limits": [
+        "Official GitHub web run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded logs.",
+        "No field dataset adopted; this CI result validates the implementation commit, not field applicability."
+      ]
     }
   ]
 }

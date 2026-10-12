@@ -845,3 +845,10 @@ and `.local/boundary-stage-docker-e2e-20261012.log` (final passing runs).
 The inputs are synthetic and do not authenticate observed levels or field applicability.
 Original-data network settings remain unapplied, field adoption remains zero and fixed
 maturity stays 44.0/100 (about 45%), target 50%. [Input semantics](boundary-water-level.md).
+
+The same implementation commit `805b9bce5334a9d211f224015df05b05cf9589b2`
+subsequently completed [MVP checks #23](https://github.com/rsasaki0109/DobokuAI/actions/runs/38256815215)
+with Success. Its `validate` job and associated workflow were matched to that commit;
+the fixed v6 actions and full `scripts/check.sh` were verified. Official run/job/workflow
+page hashes and observation time are retained in [hosted evidence](hosted-ci-evidence.json).
+Hosted test counts are not independently counted from downloaded job logs.

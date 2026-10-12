@@ -8,8 +8,8 @@
 単位指定・合成例の検証は、原測量確認や実河川試行の完了とは数えません。[仕様](survey-import.md)。
 直近の公式DWR 3リポジトリ調査でも、原断面・NCRO測量仕様は確定できていません。
 取得したCSDP位置ラベルはNGVD29表記で、別配布のNAVD88断面と結合していません。
-最新の数値/UI実装コミット`fffb533`の[ホストCI成功](https://github.com/rsasaki0109/DobokuAI/actions/runs/38250915009)を確認しました。
-前回のキュー待ちは解消し、MVP checks #21と`validate`が成功しています。
+最新の数値/UI実装コミット`805b9bc`の[ホストCI成功](https://github.com/rsasaki0109/DobokuAI/actions/runs/38256815215)を確認しました。
+境界水位入力を含むMVP checks #23と`validate`が成功しています。
 リポジトリもGitHub上のPublic表示・`isPrivate=false`で[公開を確認](publication.md)。
 [原資料・固定版・ハッシュを含む追加記録](public-data-dwr-review.md#公式リポジトリのデータ収録状況)。
 ユーザーが独立した技術者のレビューを実施できないことを伝え、目標を50%へ変更しました。
@@ -25,7 +25,7 @@
 | 利用可能な異なる実務相当データ3件の試行 | **採用0件**。候補のファイル/属性は確認したが、原測量・利用条件・共通基準高などが不足。[候補台帳](public-data-candidates.json) |
 | 固定基準での採点 | 現在44.0点。50点以上かつ当面の必須条件を完了して到達判定する。[目標像](maturity-goal.md) |
 | 再現性・復旧・配布 | 保存結果を再計算せず再表示/出力。別Compose volumeへの復旧で12履歴・24成果の完全一致を確認。[復旧手順](recovery.md) |
-| ホストCI | **確認済み**。実装コミット`fffb533c94403e76df8e00d34b95a669244227be`のMVP checks #21と`validate`が成功。APIホストの制限は残るが、GitHub公式Webの実行ページ・当該workflowを直接照合。[記録](hosted-ci-evidence.json) |
+| ホストCI | **確認済み**。実装コミット`805b9bce5334a9d211f224015df05b05cf9589b2`のMVP checks #23と`validate`が成功。APIホストの制限は残るが、GitHub公式Webの実行ページ・当該workflowを直接照合。[記録](hosted-ci-evidence.json) |
 | AI操作の確認・失敗処理 | キー不要の操作提案/確認、失敗時の無変更、外部ProviderのモックHTTP契約を検証。実キー通信は未検証 |
 
 既存の河川実装に、独立した [ダム予備照査](dam-calculations.md) を追加しました。
