@@ -4,6 +4,7 @@ use doboku_geometry::{validate as validate_section, wet};
 use serde::{Deserialize, Serialize};
 
 mod depth_range;
+pub mod diagnostics;
 pub mod resolution;
 pub mod spillway;
 
@@ -94,7 +95,7 @@ fn state(s: &Section, y: f64, q: f64, n: f64) -> Result<(f64, f64)> {
         (q * n / (g.area * g.radius().powf(2.0 / 3.0))).powi(2),
     ))
 }
-pub fn validate(r: &River) -> Result<()> {
+fn validate_inputs(r: &River) -> Result<()> {
     positive("流量 Q (m³/s)", r.discharge)?;
     positive("参照河床勾配", r.normal_slope)?;
     if r.discharge > 1e6 || r.normal_slope > 0.1 {
@@ -119,14 +120,18 @@ pub fn validate(r: &River) -> Result<()> {
         if dx < 0.1 || !dx.is_finite() {
             return Err(Error::Invalid("距離は上流→下流に増加、間隔0.1m以上".into()));
         }
-        if (w[0].bed_elevation - w[1].bed_elevation).abs() / dx > 0.1 {
-            return Err(Error::Unsupported("河床急変（勾配>0.1）".into()));
-        }
-        let d = depth_range::width_reference(&w[0].section, &w[1].section)?;
-        let a = wet(&w[0].section, d)?.top_width;
-        let b = wet(&w[1].section, d)?.top_width;
-        if a.max(b) / a.min(b) > 1.25 {
-            return Err(Error::Unsupported("隣接断面の幅急変（25%以上）".into()));
+    }
+    Ok(())
+}
+pub fn validate(r: &River) -> Result<()> {
+    validate_inputs(r)?;
+    for pair in r.stations.windows(2) {
+        let check = diagnostics::transition(&pair[0], &pair[1]);
+        if let Some(issue) = check.issues.first() {
+            return Err(Error::Unsupported(format!(
+                "測点 {} → {} m: {issue}",
+                pair[0].chainage, pair[1].chainage
+            )));
         }
     }
     Ok(())

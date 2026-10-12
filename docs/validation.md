@@ -451,3 +451,52 @@ older than one hour was pruned; tagged images, running containers, all project d
 and research evidence were retained. Approximately 20GB became available and the
 production browser/compatibility checks completed. No TLS or numerical assertion was disabled.
 Maturity remains 44.0/100 (approximately 45%) pending qualified real-data trials and hosted CI.
+
+## River input diagnostics and new data candidates — 2026-10-12 (JST)
+
+Added a read-only preflight using the solver's critical/normal-depth branch, regime check
+and shared transition guards. It reports every section and transition rather than only
+the first failing reach. Invalid inputs are rejected before evaluation; unavailable depths
+and invalid boundary hydraulic values remain null. The solver now includes the failing
+transition's chainages in its error. No project, river result or history table is changed.
+
+Verification passed:
+
+- cargo fmt --all --check; clippy --workspace --all-targets --locked -D warnings.
+- All 76 Rust tests, including three new numerical/diagnostic tests and one HTTP test
+  covering exact input echo, timestamp/version, multiple abrupt transitions, overflowing
+  boundary, invalid roughness, unchanged project and empty history tables.
+- Frontend typecheck/build and independent irregular/dam reference regeneration checks.
+- Development-browser diagnostics and irregular survey workflows.
+- All 17 browser tests against a separate Docker project, including existing hydraulic,
+  construction, AI, reports/history, spacing, sensitivity, dam and 3D functionality.
+- After adding project ID/name and reference/provenance to the diagnostic JSON export,
+  rebuilt the final Web image and reran the diagnostic browser test successfully. Export
+  equals the API's exact input/checks plus the selected project's reference metadata.
+  Edited conditions hide the previous results and export button without saving a run.
+
+The initial browser fixture assumed a nonexistent project JSON upload and was corrected
+to use saved project selection. Reusing the Docker test DB exposed duplicate display names;
+the test now selects the exact unique project ID and verifies that ID in the export.
+The exported ID before that fixture fix already matched the selected project.
+The first sandboxed full Rust test attempt could not bind the mock LLM TCP server;
+the same assertions passed with local socket permissions enabled. No assertions were skipped.
+
+Final production images:
+
+- API: sha256:a6f486c039438d81f39712885c577d4f5c51a2af60a85119e817900a42dba654
+- Web: sha256:86f61123bb1b404b8ba05f840b52bde31e2c356332fb0d23e5a8895e5c342408
+
+Docker sample diagnostic evidence is kept at .local/diagnostics-validation/docker-sample.json:
+11 sections, 10 transitions, downstream chainage 1000m, stage 12.2m,
+Fr 0.24574405996332127, first critical/normal depths 1.320157884506755 / 2.487285530843849m.
+These are synthetic sample values, not observed river accuracy.
+
+Four additional public repositories were pinned and reviewed. Ngwerere has actual XYZ
+sections (27 and 25 points) and a tutorial stating a shared vertical reference with water
+level; original survey metadata, use terms, flow direction and hydraulic conditions remain
+unconfirmed. NOAA's documented model access requires separate external credentials;
+pyHMT2D's README requires original-owner authorization for reuse; PyRASFile contains no
+field geometry. Details and hashes: [model data review](public-data-model-review.md).
+No third-party data/code is shipped. Adopted field trials remain zero, hosted CI is unconfirmed,
+and the maturity score remains 44.0/100 (approximately 45%), against the current 50% target.

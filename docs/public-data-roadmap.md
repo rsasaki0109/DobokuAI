@@ -61,6 +61,12 @@ APIも403で、取得したrobotsのクエリURL禁止に従い追加のAPIア�
 
 ## その他の探索結果と注意
 
+HEC-RASモデルと観測断面の追加調査では、Ngwerere川の実測XYZ横断2本と
+水位・横断の共通鉛直基準の説明を取得しました。利用条件・原測量の仕様・対象区間の条件は未確定です。
+NOAAのモデル取得には外部認証が必要で、pyHMT2Dの例題は別途許可の注意があり、採用していません。
+[追加調査の一次資料・ハッシュ・保留理由](public-data-model-review.md)。
+数値診断の改善として、入力を変更しない[全断面・遷移・境界の事前診断](river-diagnostics.md)を追加しました。
+
 - [Argyle ADCP](https://github.com/sabacyr/2024-Argyle-Landslide-ADCP/tree/655dc261e578f71aa223805ccabb1fef423de5b6)
   はREADMEと固定コミットのツリーでRaw ADCP/処理ファイルの存在を確認。
   ツリーにライセンス名のファイルは見つからず、データ利用条件・基準高・横断抽出は未確認で採用保留。

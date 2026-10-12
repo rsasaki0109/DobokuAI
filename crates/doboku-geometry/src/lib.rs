@@ -59,7 +59,7 @@ pub fn validate(s: &Section) -> Result<()> {
 
 /// Open depth intervals in which the surface covers one connected channel.
 /// Ground vertices are retained; no smoothing, cropping or monotonic repair.
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize)]
 pub struct DepthRange {
     pub lower: f64,
     pub upper: f64,

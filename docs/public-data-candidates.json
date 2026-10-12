@@ -359,6 +359,165 @@
           "remaining_metadata": "Original survey attribution/date, vertical reference and real reach/hydraulic conditions still unconfirmed"
         }
       }
+    },
+    {
+      "id": "noaa-ras2fim-models",
+      "status": "pending_primary_data_access",
+      "findings": "Pinned README describes geospatial 1D HEC-RAS floodplain models. The model sample 12090301 is external, in the ESIP S3 bucket noaa-nws-owp-fim/ras2fim; the documented access procedure requires separately issued credentials. No model geometry was acquired. Apache-2.0 for the software does not establish the external model dataset terms.",
+      "adoption_blockers": [
+        "Obtain the original model through its documented access procedure",
+        "Confirm dataset terms, units, vertical reference, survey provenance and model-compatible reach/conditions"
+      ],
+      "revision": "bc1f00fdccbd2588e42284f90abcb0afbfa2daef",
+      "source_url": "https://github.com/NOAA-OWP/ras2fim/tree/bc1f00fdccbd2588e42284f90abcb0afbfa2daef",
+      "reviewed_files": [
+        {
+          "repo": "ras2fim",
+          "path": "README.md",
+          "sha256": "507ed56bf337090fd6116d36741a8f232b3f7d993a0ec4e3707e30a57fd9c185"
+        },
+        {
+          "repo": "ras2fim",
+          "path": "LICENSE",
+          "sha256": "3e4b261b253bc22b8f2a02efab710052eb8d69f4d7687cc438f40b57a664ab93"
+        }
+      ],
+      "redistributed_data": false
+    },
+    {
+      "id": "pyrasfile-tools",
+      "status": "excluded_by_content",
+      "findings": "Pinned tree contains Python HEC-RAS input/output helpers but no river geometry or observed cross-section dataset. A tools repository is not a practical river dataset.",
+      "revision": "92923a294cbfd874cfda56d419c8d658fe831c67",
+      "source_url": "https://github.com/larflows/PyRASFile/tree/92923a294cbfd874cfda56d419c8d658fe831c67",
+      "reviewed_files": [
+        {
+          "repo": "PyRASFile",
+          "path": "README.md",
+          "sha256": "531dbcdf8756777081dcc8a6134e18c73a4658e0e6ef7c0457831361d2280cb1"
+        },
+        {
+          "repo": "PyRASFile",
+          "path": "LICENSE",
+          "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+        }
+      ],
+      "redistributed_data": false
+    },
+    {
+      "id": "pyhmt2d-muncie",
+      "status": "pending_data_permission",
+      "findings": "Pinned examples and tests contain Muncie2D geometry/project files. README attributes Muncie to HEC-RAS examples (public domain), Duck Pond to PSU with research/teaching authorization, and includes a separate explicit warning against reuse/repurpose without original-owner authorization. No geometry file was acquired or reused after inspecting those terms. The current examples and supported processing primarily concern 2D; the demo Backwater-1D model is a toy.",
+      "adoption_blockers": [
+        "Confirm permission and scope from the original dataset source; the code licence is insufficient",
+        "Establish survey metadata and a valid 1D steady reach; do not collapse a 2D model into fictitious surveyed sections"
+      ],
+      "revision": "57645ff7af3321a54998f9acb29aa4281380f8e8",
+      "source_url": "https://github.com/psu-efd/pyHMT2D/tree/57645ff7af3321a54998f9acb29aa4281380f8e8",
+      "reviewed_files": [
+        {
+          "repo": "pyHMT2D",
+          "path": "README.md",
+          "sha256": "4bf4b6fab94966bc1527affb92dfe6cf4cbf36a8818943a9db0a4a150b55d0c5"
+        },
+        {
+          "repo": "pyHMT2D",
+          "path": "LICENSE",
+          "sha256": "f313ead44816bab2e1d6d38ba6b52d67b47c73b6d045a678e97dbf7368346498"
+        }
+      ],
+      "redistributed_data": false
+    },
+    {
+      "id": "pyorc-ngwerere",
+      "status": "pending_primary_metadata",
+      "findings": "Pinned README identifies Ngwerere river at Zambezi Road crossing, Lusaka, Zambia. Two XYZ CSVs contain 27 and 25 points. The primary tutorial explicitly states that both sections are measured in the same vertical reference as the measured water level. ngwerere.json declares horizontal EPSG:32735 and gauge parameters h_ref=0, z_0=1182.2; no vertical CRS is encoded there. The software is AGPL-3.0; dataset-specific ownership and use terms are not confirmed.",
+      "horizontal_reference": "WGS 84 / UTM zone 35S (EPSG:32735), horizontal metre in camera config",
+      "vertical_reference": "Shared with measured water level according to original tutorial; native datum and survey realization unconfirmed",
+      "vertical_unit": "XYZ CSV header has no unit; metre-based usage in tutorial is not an original survey specification",
+      "survey_date": "unconfirmed; video filename is not proof of cross-section survey date",
+      "inspected_attribute_files": [
+        {
+          "path": "examples/ngwerere/ngwerere_cross_section.csv",
+          "rows": 27,
+          "z_min": 1181.9,
+          "z_max": 1182.6,
+          "bytes": 826,
+          "sha256": "6b17f9f2bb4c87566c675b9d12c7fa9f4a153864abefb013db69203ae52b9925"
+        },
+        {
+          "path": "examples/ngwerere/ngwerere_cross_section_2.csv",
+          "rows": 25,
+          "z_min": 1181.8,
+          "z_max": 1182.3,
+          "bytes": 750,
+          "sha256": "2eca8d29f8198feb2e25ca07f145e73d38cf33c6b3e3a34408bf58b8570ad8a3"
+        }
+      ],
+      "adoption_blockers": [
+        "Confirm dataset ownership, data-specific use terms and survey date",
+        "Confirm elevation unit, native/common reference and survey method",
+        "Determine flow direction and actual section spacing; document discharge, roughness, boundary and crossing/structure losses"
+      ],
+      "revision": "3fa6bfbc5b61af5e2a881a5796366eaf74cf2f6e",
+      "source_url": "https://github.com/localdevices/pyorc/tree/3fa6bfbc5b61af5e2a881a5796366eaf74cf2f6e",
+      "reviewed_files": [
+        {
+          "repo": "pyorc",
+          "path": "examples/ngwerere/ngwerere_cross_section.csv",
+          "bytes": 826,
+          "sha256": "6b17f9f2bb4c87566c675b9d12c7fa9f4a153864abefb013db69203ae52b9925"
+        },
+        {
+          "repo": "pyorc",
+          "path": "examples/ngwerere/ngwerere_cross_section_2.csv",
+          "bytes": 750,
+          "sha256": "2eca8d29f8198feb2e25ca07f145e73d38cf33c6b3e3a34408bf58b8570ad8a3"
+        },
+        {
+          "repo": "pyorc",
+          "path": "examples/ngwerere/ngwerere.json",
+          "bytes": 3194,
+          "sha256": "f9c04aa382a55587d14860bfc8dad967e812b295f2a202f7b586a282bd034d47"
+        },
+        {
+          "repo": "pyorc",
+          "path": "examples/ngwerere/ngwerere.yml",
+          "bytes": 1427,
+          "sha256": "c1d7cb607eaa4fe447734973dcb5bc2069599a0cb186986bef0dbb4889ce07bf"
+        },
+        {
+          "repo": "pyorc",
+          "path": "docs/user-guide/cross_section/index.rst",
+          "bytes": 28986,
+          "sha256": "33b69399deec889d9943c337e949f63437210305b853c16d3ff094f96ae5f98f"
+        },
+        {
+          "repo": "pyorc",
+          "path": "pyorc/sample_data.py",
+          "bytes": 3171,
+          "sha256": "021420628ce96cc712c6d3728ba59f1d22877924600d0a8584b3b4f95ad02a25"
+        },
+        {
+          "repo": "pyorc",
+          "path": "examples/04_Extracting_crosssection_velocities_and_discharge.ipynb",
+          "bytes": 13225,
+          "sha256": "2c283e25a38a7a6e7226f50e9933e3d82881f6f0cdbc31533c299ec2740b06af"
+        },
+        {
+          "repo": "pyorc",
+          "path": "README.md",
+          "bytes": 9555,
+          "sha256": "aff20de6a816706dc9347765a30dce07b5b5dfd3e698f0ee3dfd9ad8e5336e11"
+        },
+        {
+          "repo": "pyorc",
+          "path": "LICENSE",
+          "bytes": 34523,
+          "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0"
+        }
+      ],
+      "redistributed_data": false
     }
   ],
   "reviewed_timezone": "Asia/Tokyo"

@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::{Arc, Mutex};
 use tokio::sync::Semaphore;
 pub mod dam;
+pub mod diagnostics;
 pub mod history;
 mod provenance;
 pub mod report;
@@ -87,6 +88,7 @@ pub fn app(state: AppState) -> Router {
         .route("/api/projects", get(list_projects).post(save_project))
         .route("/api/projects/{id}", get(load_project))
         .route("/api/simulate", post(simulate))
+        .route("/api/diagnostics/river", post(diagnostics::inspect))
         .route("/api/compare", post(compare))
         .route("/api/imports/survey/preview", post(survey::preview))
         .route("/api/imports/survey/apply", post(survey::apply))

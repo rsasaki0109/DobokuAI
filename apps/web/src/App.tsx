@@ -39,6 +39,7 @@ import { History } from './History';
 import { SurveyImport } from './SurveyImport';
 import { Sensitivity } from './Sensitivity';
 import { Resolution } from './Resolution';
+import { RiverDiagnostics } from './RiverDiagnostics';
 const River3D = lazy(() => import('./River3D'));
 const Infrastructure3D = lazy(() => import('./Infrastructure3D'));
 const DamAnalysis = lazy(() => import('./DamAnalysis'));
@@ -597,6 +598,7 @@ export default function App() {
 
                 {page === 'simulation' && (
                   <>
+                    <RiverDiagnostics project={project} task={task} />
                     <Sensitivity key={`sensitivity:${JSON.stringify(project)}`} project={project} task={task} />
                     <Resolution key={`resolution:${JSON.stringify(project)}`} project={project} task={task} />
                     <section className="panel">

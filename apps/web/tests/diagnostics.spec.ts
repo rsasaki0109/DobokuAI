@@ -1,0 +1,31 @@
+import { test, expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+
+test('river preflight exports exact inputs, invalidates edited conditions and leaves history unchanged', async ({ page, request }) => {
+  const project = await (await request.get('/api/sample')).json();
+  project.id = `diagnostics-${crypto.randomUUID()}`; project.name = '事前診断の合成試行'; project.scenarios = [];
+  expect((await request.post('/api/projects', { data: project })).ok()).toBeTruthy();
+  await page.goto('/');
+  await expect(page.getByRole('button', { name: '計算を実行', exact: true })).toBeEnabled();
+  await page.getByLabel('保存済みプロジェクト').selectOption(project.id);
+  await page.getByRole('button', { name: '水理計算', exact: true }).click();
+  const panel = page.getByRole('region', { name: '基本条件の事前診断' });
+  const response = page.waitForResponse(r => r.url().endsWith('/api/diagnostics/river'));
+  await panel.getByRole('button', { name: '基本条件を診断' }).click();
+  const report = await (await response).json();
+  expect(report.river).toEqual(project.river);
+  await expect(panel).toContainText('事前診断を通過しました');
+  await expect(panel).toContainText('下流端 1,000 m');
+  const download = page.waitForEvent('download');
+  await panel.getByRole('button', { name: '事前診断JSONを保存' }).click();
+  const saved = JSON.parse(await readFile((await (await download).path())!, 'utf8'));
+  expect(saved).toEqual({ ...report, project_id: project.id, project_name: project.name, reference: project.reference });
+  await page.getByLabel('境界水深 (m / 河床から)').fill('99');
+  await expect(panel).toContainText('条件が変わりました');
+  await expect(panel.getByRole('button', { name: '事前診断JSONを保存' })).toHaveCount(0);
+  await panel.getByRole('button', { name: '基本条件を診断' }).click();
+  await expect(panel).toContainText('事前診断で対象外・未成立');
+  await expect(panel).toContainText('越岸');
+  const history = await (await request.get(`/api/projects/${project.id}/runs`)).json();
+  expect(history.items).toHaveLength(0);
+});

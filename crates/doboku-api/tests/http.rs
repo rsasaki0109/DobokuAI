@@ -27,6 +27,95 @@ async fn call(app: Router, method: &str, url: &str, body: Value) -> (StatusCode,
 }
 
 #[tokio::test]
+async fn river_diagnostics_preserve_conditions_and_history_and_localize_rejected_input() {
+    let api = app(state(":memory:").unwrap());
+    let mut project = serde_json::to_value(doboku_core::sample()).unwrap();
+    let (status, _) = call(api.clone(), "POST", "/api/projects", project.clone()).await;
+    assert_eq!(status, StatusCode::OK);
+    let original = project.clone();
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/diagnostics/river",
+        project["river"].clone(),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    let report: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(report["river"], original["river"]);
+    assert_eq!(report["engine_version"], doboku_core::ENGINE_VERSION);
+    chrono::DateTime::parse_from_rfc3339(report["checked_at"].as_str().unwrap()).unwrap();
+    assert_eq!(report["can_attempt_profile"], true);
+    assert_eq!(report["boundary"]["chainage"], 1000.);
+    assert_eq!(report["sections"].as_array().unwrap().len(), 11);
+    // Two bad transitions and an overflowing downstream boundary must all be reported.
+    project["river"]["stations"][1]["section"] =
+        json!({"kind":"rectangle","width":100.,"bank_height":8.});
+    project["river"]["boundary"]["depth"] = json!(99.);
+    let (status, body) = call(
+        api.clone(),
+        "POST",
+        "/api/diagnostics/river",
+        project["river"].clone(),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK);
+    let report: Value = serde_json::from_str(&body).unwrap();
+    assert_eq!(report["can_attempt_profile"], false);
+    assert_eq!(
+        report["transitions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|t| !t["issues"].as_array().unwrap().is_empty())
+            .count(),
+        2
+    );
+    assert!(report["boundary"]["issues"][0]
+        .as_str()
+        .unwrap()
+        .contains("越岸"));
+    assert_eq!(report["boundary"]["froude"], Value::Null);
+    assert_eq!(report["boundary"]["water_surface"], Value::Null);
+    let (_, saved) = call(
+        api.clone(),
+        "GET",
+        &format!("/api/projects/{}", original["id"].as_str().unwrap()),
+        Value::Null,
+    )
+    .await;
+    assert_eq!(serde_json::from_str::<Value>(&saved).unwrap(), original);
+    for suffix in ["runs", "sensitivity-runs", "resolution-runs"] {
+        let (status, history) = call(
+            api.clone(),
+            "GET",
+            &format!(
+                "/api/projects/{}/{suffix}",
+                original["id"].as_str().unwrap()
+            ),
+            Value::Null,
+        )
+        .await;
+        assert_eq!(status, StatusCode::OK);
+        assert!(serde_json::from_str::<Value>(&history).unwrap()["items"]
+            .as_array()
+            .unwrap()
+            .is_empty());
+    }
+    project["river"]["stations"][0]["roughness"] = json!(0.);
+    let (status, body) = call(
+        api,
+        "POST",
+        "/api/diagnostics/river",
+        project["river"].clone(),
+    )
+    .await;
+    assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+    assert!(body.contains("粗度"));
+    assert!(!body.contains("critical_depth"));
+}
+
+#[tokio::test]
 async fn irregular_survey_preserves_vertices_and_saved_results_and_rejects_split_boundary() {
     let api = app(state(":memory:").unwrap());
     let points = [
