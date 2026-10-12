@@ -10,8 +10,8 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(resolve(root, 'apps/web/package.json'));
 const { chromium } = require('playwright');
 const url = process.argv[2], only = process.argv[3];
-const names = ['hero', 'hero-spatial', 'hero-construction-3d', 'hero-section-3d'];
-if (!url || (only && !names.includes(only))) throw new Error('Usage: capture-river-3d.mjs <dedicated-demo-url> [hero|hero-spatial|hero-construction-3d|hero-section-3d]');
+const names = ['hero-river-overview', 'hero-spatial', 'hero-construction-3d', 'hero-section-3d'];
+if (!url || (only && !names.includes(only))) throw new Error('Usage: capture-river-3d.mjs <dedicated-demo-url> [hero-river-overview|hero-spatial|hero-construction-3d|hero-section-3d]');
 const work = resolve(root, '.local/hero3d-capture');
 await mkdir(work, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--no-sandbox', '--enable-unsafe-swiftshader'] });
@@ -99,7 +99,7 @@ async function capture(name, mode) {
   } finally { await context.close(); await presentation.close(); }
 }
 try {
-  await capture('hero', 'overview');
+  await capture('hero-river-overview', 'overview');
   await capture('hero-spatial', 'orbit');
   await capture('hero-construction-3d', 'compare');
   await capture('hero-section-3d', 'section');

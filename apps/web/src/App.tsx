@@ -40,12 +40,14 @@ import { SurveyImport } from './SurveyImport';
 import { Sensitivity } from './Sensitivity';
 import { Resolution } from './Resolution';
 const River3D = lazy(() => import('./River3D'));
+const Infrastructure3D = lazy(() => import('./Infrastructure3D'));
 const navigation = [
   { id: 'dashboard', name: 'プロジェクト', en: 'PROJECT DASHBOARD', icon: LayoutDashboard },
   { id: 'editor', name: '横断面エディタ', en: 'CROSS SECTION EDITOR', icon: SlidersHorizontal },
   { id: 'simulation', name: '水理計算', en: 'HYDRAULIC SIMULATION', icon: Waves },
   { id: 'profile', name: '縦断水面形', en: 'WATER SURFACE PROFILE', icon: Activity },
   { id: 'comparison', name: '施工シナリオ比較', en: 'CONSTRUCTION SCENARIOS', icon: Layers },
+  { id: 'structures', name: '3D施設ギャラリー', en: 'INFRASTRUCTURE STUDIO', icon: Mountain },
   { id: 'assistant', name: 'AI アシスタント', en: 'AI ASSISTANT', icon: MessageSquare },
 ];
 const f = (n: number, digits = 2) =>
@@ -66,7 +68,7 @@ function actionLabel(a: Action, p: Project) {
 export default function App() {
   const [project, setProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [page, setPage] = useState('dashboard');
+  const [page, setPage] = useState(() => new URLSearchParams(window.location.search).get('view') === 'structures' ? 'structures' : 'dashboard');
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [historyId, setHistoryId] = useState<number | null>(null);
   const [historyRevision, setHistoryRevision] = useState(0);
@@ -261,6 +263,8 @@ export default function App() {
               <p>
                 {page === 'dashboard'
                   ? '河川の条件を理解し、改修案を確かな数値で比較する。'
+                  : page === 'structures'
+                    ? 'ダム・橋梁・砂防の架空モデルを、地形とともに立体で見る。'
                   : page === 'editor'
                     ? '測量断面と河床標高を編集し、河川モデルを構築します。'
                     : page === 'assistant'
@@ -268,7 +272,7 @@ export default function App() {
                       : '同じ座標系・基準高で、計算条件と結果を確認します。'}
               </p>
             </div>
-            <div className="heading-actions">
+            {page !== 'structures' && <div className="heading-actions">
               <button
                 className="secondary"
                 disabled={!project || busy}
@@ -280,9 +284,9 @@ export default function App() {
               <button className="primary" disabled={!project || busy} onClick={run}>
                 {busy ? <LoaderCircle size={16} className="spin" /> : <Play size={15} />}計算を実行
               </button>
-            </div>
+            </div>}
           </div>
-          {error && (
+          {error && page !== 'structures' && (
             <div className="alert error" role="alert">
               <CircleHelp size={19} />
               <div>
@@ -297,7 +301,9 @@ export default function App() {
               {notice}
             </div>
           )}
-          {!project ? (
+          {page === 'structures' ? (
+            <Suspense fallback={<p>施設の3Dモデルを準備しています…</p>}><Infrastructure3D /></Suspense>
+          ) : !project ? (
             <section className="panel empty">
               {busy ? (
                 'サンプル河川を読み込み、初期計算しています…'

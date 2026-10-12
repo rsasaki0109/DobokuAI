@@ -1,11 +1,15 @@
 # READMEの実画面GIF
 
-`docs/assets/` の18本は、合成サンプル「青葉川」をChromiumで実際に操作して撮影しています。
-3D Hero 4本（冒頭を含む）、2D中心のHero 5本、折りたたみ内の操作/総集編9本を掲載します。
+`docs/assets/` の23本は、架空の施設モデルと合成サンプル「青葉川」の実画面を撮影しています。
+施設Hero 5本（冒頭を含む）、河川3D Hero 4本、2D中心のHero 5本、操作/総集編9本を掲載します。
 実画面のPNGに紹介用の見出し・フレームを添え、数値や図の描き替えは行っていません。
 撮影日時は実際の実行日時です。数値精度の検証は [validation](validation.md) を参照してください。
 
 ## 3Dの表示仕様
+
+施設Heroはダム2種類・斜張橋・砂防堰堤をプログラムで生成した作例です。
+架空の施設・地形、放流は演出であることを画像内とREADMEに明示しています。
+計算との境界は [施設ギャラリー](infrastructure-studio.md) を参照してください。
 
 河床・堤岸を面で描き、表示用の側面を付けて厚みを見せます。水面の形は1D計算水位と
 断面の水際位置から生成します。表示モデル、カメラ、断面線、回転、全画面を操作できます。
@@ -30,20 +34,32 @@ API_PROXY=http://127.0.0.1:3201 npm run dev --prefix apps/web -- --port 5373 --s
 ```
 
 ```sh
-# 3: 3D Hero 4本。Playwright管理のChromiumならCHROMIUM_PATHを省略する
+# 3: 施設4本と冒頭の総集編。Playwright管理のChromiumならCHROMIUM_PATHを省略する
+CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-facilities.mjs http://127.0.0.1:5373
+
+# 河川3Dの4本を撮り直す場合
 CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-river-3d.mjs http://127.0.0.1:5373
 ```
 
 2D Hero/総集編や詳細操作も撮り直す場合は、次の順序で実行します。
-最後の3D撮影が、滑らかな `hero-spatial.gif` と冒頭の `hero.gif` を生成します。
+最後の施設撮影が冒頭の `hero.gif` を生成します。河川の総集編は `hero-river-overview.gif` です。
 
 ```sh
 CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-readme.mjs http://127.0.0.1:5373
 CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-heroes.mjs http://127.0.0.1:5373
 CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-river-3d.mjs http://127.0.0.1:5373
+CHROMIUM_PATH=/usr/bin/chromium node scripts/capture-facilities.mjs http://127.0.0.1:5373
 ```
 
-3D撮影は実際のマウスドラッグで32/48枚を撮り、1280×720 px・12 fpsの無限ループにします。
+施設撮影は各24枚の実画面を、1120×700 px・10 fpsで出力します。
+全景から詳細/上流側へ移動し、夕景も表示。元PNG・表示条件・元フレームSHA-256・撮影日時・
+基底コミット・撮影時ソースのSHA-256を `.local/facility-capture/` に記録します。
+今回の施設GIFはVite previewの配布用ビルドから撮影しました。
+GIF書き出しに失敗した場合、保存済みの撮影記録から再エンコードできます。
+`node scripts/capture-facilities.mjs <撮影URL> --encode-only` はブラウザを起動しません。
+撮影記録はエンコード前に保存するため、再撮影で元フレームを失うことを避けられます。
+
+河川3D撮影は実際のマウスドラッグで32/48枚を撮り、1280×720 px・12 fpsの無限ループにします。
 施工前後比較では、同じカメラ経路を繰り返してモデルを切り替えます。
 WebGLコンテキストと元フレームの変化も確認します。元PNG、表示元の計算結果JSON、
 フレームSHA-256、撮影日時・基底コミットは `.local/hero3d-capture/` に記録します。
@@ -56,15 +72,25 @@ WebGLコンテキストと元フレームの変化も確認します。元PNG、
 これらの元ファイルはGitには含めません。公開対象はGIF、撮影スクリプトと文書です。
 
 1本だけ更新する場合は対応するスクリプトのURLの次に名前を指定できます。
-3D例: `hero-section-3d`。2D例: `hero-construction`。操作例: `station-spacing`。
+施設例: `gravity`/`arch`/`bridge`/`sabo`。河川3D例: `hero-section-3d`。2D例: `hero-construction`。操作例: `station-spacing`。
 2D Heroの個別更新ではワークフロー総集編は更新しません。全体の生成で `hero-workflows.gif` を更新します。
 撮影後は専用API/WebをCtrl-Cで終了します。
 
-## 3D Hero
+## 施設Hero
 
 | GIF | 実際の操作・表示 |
 |---|---|
-| `hero.gif` | 48フレーム。地形・水面の回転、掘削案への切替、断面視点 |
+| `hero.gif` | 施設4種類の全景・詳細をつないだ総集編 |
+| `hero-dam.gif` | 重力式ダムの堤体・洪水吐・貯水池・取水塔・周辺地形 |
+| `hero-arch-dam.gif` | アーチダムの全景と上流側、夕景 |
+| `hero-bridge.gif` | 斜張橋の全景・主塔・ケーブル・橋桁 |
+| `hero-sabo.gif` | スリット堰堤・副堰堤・水叩き・渓流 |
+
+## 河川3D Hero
+
+| GIF | 実際の操作・表示 |
+|---|---|
+| `hero-river-overview.gif` | 48フレーム。地形・水面の回転、掘削案への切替、断面視点 |
 | `hero-spatial.gif` | 48フレーム。施工前の地形と水面を一周するカメラ |
 | `hero-construction-3d.gif` | 32フレーム。同じ視点経路で施工前→1 m掘削後。実際の水位差・土量 |
 | `hero-section-3d.gif` | 48フレーム。掘削案を正面寄りの視点で回転 |
