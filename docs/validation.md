@@ -1124,3 +1124,11 @@ failures), `focused-20261012.log`, `check-20261012.log`, `docker-build-20261012.
 Existing user services/database remain in place. Field adoption remains zero; fixed
 maturity stays 44.0/100 (about 45%), target 50%.
 
+The implementation commit `5076f83935692594312314b68d951505bdcd9134` was pushed to
+main. Its official [MVP checks run](https://github.com/rsasaki0109/DobokuAI/actions/runs/38316100354)
+remained Queued at 2026-10-12T22:25:24.598880+00:00 after approximately five minutes
+of observation. This commit's hosted success and job/workflow execution are **unverified**;
+the successful local/native/Docker counts above are separate evidence. Only the local
+observer was stopped, leaving the GitHub run active. The official run page's SHA-256 and
+observation time are recorded under `pending_runs` in [hosted evidence](hosted-ci-evidence.json).
+The previous implementation's confirmed CI success remains recorded independently.

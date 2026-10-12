@@ -274,5 +274,21 @@
         "Synthetic station deletion validation; no field dataset adopted."
       ]
     }
+  ],
+  "pending_runs": [
+    {
+      "commit": "5076f83935692594312314b68d951505bdcd9134",
+      "observed_at_utc": "2026-10-12T22:25:24.598880+00:00",
+      "run_id": 38316100354,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38316100354",
+      "status": "Queued",
+      "page_bytes": 191762,
+      "page_sha256": "8f594a6cadf672dd5692a5e46410a4a3f7dc0e7f60cf2796fdb66fa058a2c119",
+      "limits": [
+        "Official run page observed Queued after approximately five minutes; no hosted success or job/workflow execution was verified for this commit.",
+        "Local full checks and Docker checks passed; these results do not establish hosted CI success or field-data adoption.",
+        "Only the local observer was stopped; the GitHub Actions run was not cancelled."
+      ]
+    }
   ]
 }
