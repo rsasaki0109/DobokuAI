@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { api, saveBlob, type Project, type Station, type SpatialReference, type DatasetProvenance } from './types';
 import { SurveyGeometry, type GeometryPreview } from './SurveyGeometry';
 import { DatasetFields, DatasetDetails, emptyDataset } from './DatasetProvenance';
@@ -7,7 +7,7 @@ type Source = {
   csv: string;
   file_name: string;
   elevation_mode: 'absolute' | 'relative';
-  unit: string;
+  unit: 'm' | 'ft' | 'us_survey_ft';
   vertical_datum: string;
   horizontal_reference: string;
   dataset: DatasetProvenance;
@@ -40,11 +40,13 @@ export function SurveyImport({
     elevation_mode: 'absolute',
     unit: 'm',
     vertical_datum: '',
-    horizontal_reference: '流下距離・横断距離（局所座標、m）',
+    horizontal_reference: '流下距離・横断距離（局所座標）',
     dataset: emptyDataset(),
   });
   const [preview, setPreview] = useState<Preview | null>(null);
+  const revision = useRef(0);
   const change = (patch: Partial<Source>) => {
+    revision.current++;
     setSource((s) => ({ ...s, ...patch }));
     setPreview(null);
   };
@@ -52,7 +54,7 @@ export function SurveyImport({
     <section className="panel survey-import">
       <div className="panel-heading">
         <div>
-          <div className="eyebrow">SURVEY DATA / METRES</div>
+          <div className="eyebrow">SURVEY DATA / SI OUTPUT</div>
           <h2>横断測量CSVの取込み</h2>
         </div>
         <span className="badge">プレビュー後に確認</span>
@@ -61,15 +63,23 @@ export function SurveyImport({
         <summary>CSV形式・対応範囲</summary>
         <p>
           UTF-8、64
-          KiB以内、ヘッダーは次の順序で指定。同じ断面の行を連続させ、流下距離と横断xを昇順に配置してください。2〜200断面、断面ごとに3〜200点、全2000行以内。地盤の起伏を保持し、計算水深で連続する1流路が必要です。点の並べ替え・平滑化・補間・座標変換は行いません。
+          KiB以内、ヘッダーは選択単位の次の順序で指定。同じ断面の行を連続させ、流下距離と横断xを昇順に配置してください。2〜200断面、断面ごとに3〜200点、全2000行以内。地盤の起伏を保持し、計算水深で連続する1流路が必要です。点の並べ替え・平滑化・補間・水平CRS/標高基準の変換は行いません。
         </p>
-        <code>station,chainage_m,bed_elevation_m,roughness,x_m,elevation_m</code>
+        <code>{`station,chainage_${source.unit},bed_elevation_${source.unit},roughness,x_${source.unit},elevation_${source.unit}`}</code>
         <p>
-          絶対標高の場合、elevation_mからbed_elevation_mを引きます。相対高さの場合、elevation_mをそのまま使います。各断面の最低点は河床から0
-          mでなければなりません。
+          距離・高さは同じ選択単位を使い、mへ換算します。絶対標高は元単位で河床標高を差し引いてから換算、相対高さは直接換算します。各断面の最低点は河床から0でなければなりません。単位が未確認・混在する原データは先に出典を確認してください。
         </p>
       </details>
       <div className="form-grid">
+        <label className="field">
+          CSVの距離・高さの単位
+          <select aria-label="CSVの距離・高さの単位" value={source.unit}
+            onChange={e => change({ unit: e.target.value as Source['unit'] })}>
+            <option value="m">m（換算なし）</option>
+            <option value="ft">ft（国際フィート = 0.3048 m）</option>
+            <option value="us_survey_ft">US Survey Foot（1200/3937 m）</option>
+          </select>
+        </label>
         <label className="field">
           横断測量CSV
           <input
@@ -123,7 +133,7 @@ export function SurveyImport({
       </div>
       <DatasetFields value={source.dataset} change={dataset => change({ dataset })} />
       <p className="muted">
-        単位: m。現在の全測点を置換し、施工案をクリアします。流量・参照勾配・境界水深は保持します。
+        CSVの距離・高さ: {source.unit} → m。現在の全測点を置換し、施工案をクリアします。流量m³/s・参照勾配・境界水深m・粗度nは保持します。
       </p>
       <button
         className="secondary"
@@ -133,7 +143,9 @@ export function SurveyImport({
         onClick={() =>
           void task(async () => {
             setPreview(null);
-            setPreview(await api<Preview>('/imports/survey/preview', source));
+            const requested = revision.current;
+            const inspected = await api<Preview>('/imports/survey/preview', source);
+            if (revision.current === requested) setPreview(inspected);
           })
         }
       >

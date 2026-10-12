@@ -666,7 +666,85 @@
         "Verify original catalogue and CSDP manual/file units and individual survey attribution",
         "Recover section block identity, location, spacing and flow direction from original network",
         "Identify a supported steady single-reach case with defensible flow, roughness and boundary conditions; do not ignore tidal/network effects"
-      ]
+      ],
+      "primary_software_format_review": {
+        "revision": "3c9882c210c9945ad10c8707017c323afb7d5698",
+        "source_url": "https://github.com/CADWRDeltaModeling/csdp/tree/3c9882c210c9945ad10c8707017c323afb7d5698",
+        "reviewed_files": [
+          {
+            "path": "csdp/src/DWR/CSDP/NetworkAsciiInput.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/NetworkAsciiInput.java",
+            "bytes": 15018,
+            "sha256": "68dfd39d03ea78fe7b18483139e14b7b26466475cae7ee845cdf298ce273ca7b"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/NetworkAsciiOutput.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/NetworkAsciiOutput.java",
+            "bytes": 6682,
+            "sha256": "cf9fc9643ef00d679801677a7ff6fc647a6c69b35425e874e5c3f3b97b72068a"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/NetworkAsciiStationElevationOutput.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/NetworkAsciiStationElevationOutput.java",
+            "bytes": 4517,
+            "sha256": "9c73ca8afe95324c6541da8d44e39fe3f407885bdbb202bb1ef5695a5635eb01"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/XsectAsciiInput.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/XsectAsciiInput.java",
+            "bytes": 2965,
+            "sha256": "4d6028bcfd65e349d939c55ecb7cf0b0e0c3aaec28febe6cff0dc2d915e311b6"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/BathymetryAsciiInput.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/BathymetryAsciiInput.java",
+            "bytes": 8122,
+            "sha256": "52a7201b468d0be4e327b2fd6a3ec4d21160f387b75770696869fc77ac28300e"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/CsdpFileMetadata.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/CsdpFileMetadata.java",
+            "bytes": 3324,
+            "sha256": "606cc89461ff1e5cc468ca3afbf068629553cc7615b4dfcb396d58367178494e"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/CenterlinePoint.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/CenterlinePoint.java",
+            "bytes": 603,
+            "sha256": "551d1d019f13af1e87f6a144415bae9be7ad99004ae509124ba153a823ad4394"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/XsectPoint.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/XsectPoint.java",
+            "bytes": 957,
+            "sha256": "70d4206bef1d9ccbd3af21660866a31913714fdd037c02e739746207c92ef90d"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/NetworkInput.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/NetworkInput.java",
+            "bytes": 7215,
+            "sha256": "cddd0f2a8a2960ad61aa54ccc9bb68df897434d7fb2608f36ff2069d5bbbf436"
+          },
+          {
+            "path": "csdp/src/DWR/CSDP/AsciiFileReader.java",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/csdp/src/DWR/CSDP/AsciiFileReader.java",
+            "bytes": 3431,
+            "sha256": "0714307988059f093ac0457bde5fda1720554e23ffbe4f430ee88dab7aa5c9ce"
+          },
+          {
+            "name": "paper",
+            "url": "https://raw.githubusercontent.com/CADWRDeltaModeling/csdp/3c9882c210c9945ad10c8707017c323afb7d5698/documents/joss/dsm2_csdp.md",
+            "bytes": 5557,
+            "sha256": "55a0ca51f82c5fb521d0f405f8f822dc7fb2868c5d6368fc4402e8661f2d6462"
+          }
+        ],
+        "findings": [
+          "Original network format reads/writes cross-section distance along centerline, line length and metadata after station/elevation vertices. Aggregated CSV omits these fields.",
+          "Format records horizontal datum/zone/units and vertical datum/units. Older missing metadata invokes NAD27 zone 10 horizontal metres and NGVD29 US Survey Feet defaults; defaults do not establish the actual NAVD88 dataset metadata.",
+          "Author paper describes manual/automatic model sections guided by bathymetry/DEM. Model vertices are not necessarily untouched survey observations."
+        ],
+        "limits": "Source-format inspection only; original 2009 network file/header, processing history, reach applicability and hydraulic conditions remain unverified. No real dataset adopted."
+      }
     },
     {
       "revision": "2c34575d109b055a7dd38409a0c74de56dc18bec",

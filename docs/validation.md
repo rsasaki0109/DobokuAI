@@ -671,3 +671,50 @@ baseline objects are compared directly. Hashes do not authenticate the original 
 Running network configuration is still unchanged; original metadata and hosted CI remain
 unconfirmed. Adopted field datasets remain zero and maturity stays 44.0/100 (approximately
 45%), against the 50% target. [Audit scope and usage](offline-audit.md).
+
+## Explicit international/survey foot import — 2026-10-12 (JST)
+
+CSV coordinates/heights now explicitly accept m, international ft (0.3048m) or
+us_survey_ft (1200/3937m). All dimensional headers must use the selected suffix;
+ambiguous aliases and mixed headers are rejected. Original UTF-8 CSV SHA-256 and native
+unit survive provenance, saved projects, calculation snapshots and reports. River data,
+plots and result CSV remain SI. Loading a stored project/result does not convert it again.
+Discharge m³/s, reference slope, boundary depth m and SI-engine Manning n are unchanged.
+Absolute heights are subtracted in their native unit before scaling; order/vertices are
+retained without rounding, sorting, smoothing or datum/CRS conversion.
+
+Four API integration tests pass. They verify the independent known length identities
+3937 US Survey Feet = 1200m and 3937 international ft = 1199.9976m in both absolute/relative
+modes, unchanged original metre inputs, header/unknown-unit refusal, stale confirmation
+tokens, source hash preservation, SI calculation/history/CSV/HTML and independent Python
+audit of the actual resulting ZIP. A focused subnormal test initially exposed that unequal
+native chainages could become equal after scaling; comparison now uses original parsed
+values. Negative native relative height is also rejected before multiplication can turn it
+into negative zero. Final four-case suite passed after that correction.
+
+Final scripts/check.sh exited zero: 86 Rust tests, fmt/clippy, independent reference
+regeneration, five backup tests, five NCRO tests, ten offline-audit tests, frontend type
+check/build and all 20 development-browser E2E cases (1.4 minutes). The new browser test
+checks selection, SI geometry, original CSV export, no mutation before confirmation,
+incompatible headers, explicit apply/save, calculation and unchanged reopened snapshots.
+
+Docker was rebuilt after the final parser correction. Three production-browser cases passed
+(10.0 seconds): existing m import/provenance/sensitivity, rejected geometry inspection and
+new survey-foot import. Direct production API checks also passed for valid input, native
+inconsistency and negative-height refusal without project/history writes. Logs:
+.local/survey-units-final-check-20261012.log, .local/survey-units-docker-final-20261012.log,
+.local/survey-units-docker-e2e-20261012.log and .local/survey-units-docker-edge-20261012.json.
+
+Final production images:
+
+- API: sha256:953fd27c848ac548f9526d6c62e3dad70f47e3a878f2756fe4bdced49efbe50a
+- Web: sha256:5e5d2cae070c67d16c4e1b7b57c4c316a49ea65adb04aaec26c0f10650a5200a
+
+Numerical core version 0.2.0, database schema, dependencies and lockfiles are unchanged.
+The bundled two-section foot CSV is synthetic, not a field dataset. The original CSDP
+developer's paper and ten classes confirm that network format includes centerline distance,
+section length, metadata and datum/unit choices/defaults. They do not establish the actual
+2009/NCRO source-file metadata or hydraulic applicability. Raw originals remain inaccessible
+under the current network configuration; field adoption stays zero, hosted CI remains
+unconfirmed and maturity stays 44.0/100. [Unit specification](survey-import.md) and
+[pinned original-format evidence](public-data-dwr-review.md).

@@ -110,6 +110,33 @@ NCRO原サービスの照合には`gis.data.cnra.ca.gov`等の元サービスホ
 
 ## 記録
 
+### 原開発者のCSDP資料による追加照合
+
+[CADWRDeltaModeling/csdp](https://github.com/CADWRDeltaModeling/csdp/tree/3c9882c210c9945ad10c8707017c323afb7d5698)
+の作者論文原稿と10個の原入出力/座標クラスを固定版で確認しました。
+論文は実測/DEMを参照し、手動/自動でモデル横断を作ると説明します。
+モデル横断の全頂点が原観測そのものだと決めず、抽出・編集履歴の確認が必要です。
+
+`NetworkAsciiInput.java`は横断点列の後で`distAlongCenterline`と`xsectLineLength`を読込み、
+`NetworkAsciiOutput.java`も位置・長さ・横断メタデータを出力します。
+したがって、欠けている縦断位置情報を元ネットワークファイルから照合できる可能性があります。
+集約スクリプトはこの後続情報をCSVへ書いていません。流下方向や実測の間隔はまだ未確認です。
+
+元形式にはHorizontalDatum/Zone/Units、VerticalDatum/Unitsの記録があり、
+`CsdpFileMetadata`はMeters/USSurveyFeet、NGVD29/NAVD88等を区別します。
+一方、未記録の古い形式ではUTM NAD27・zone 10・水平m・鉛直NGVD29/US Survey Feetを既定とする処理があります。
+これを2009年NAVD88データやNCROの実際の座標系の証拠に転用しません。
+読み込んだネットワークを測深側の基準へ変換する処理もあり、元ファイルと変換履歴の保存が必要です。
+原プログラムの内部アクセサ名だけで実データの単位を断定しません。
+
+この照合を受け、DobokuAIには[明示的なCSV単位換算](survey-import.md)を追加しました。
+国際ftとUS Survey Footを区別し、選択単位とCSVヘッダーの一致を要求します。
+原データのメタデータ確認・取込み・採用が完了したとは扱いません。
+
+資料は`.local/research/goal50/dwr-primary-20261012/`に保管。
+作者論文・10クラスの固定URL/bytes/SHA-256は[候補台帳](public-data-candidates.json)へ記録。
+プログラムやデータを製品に同梱しておらず、コードのライセンスを原測量の利用条件に転用しません。
+
 取得説明・カタログ・横断表・部分CSV点検は`.local/research/goal50/`に保管。
 完全な3CSV・取得記録・全量点検JSONは`.local/research/goal50/full-20261012/`に保管。
 全体SHA-256と部分SHA-256を分けて[候補台帳](public-data-candidates.json)へ記録しています。

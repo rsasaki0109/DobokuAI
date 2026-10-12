@@ -18,6 +18,14 @@ const HEADERS: [&str; 6] = [
     "x_m",
     "elevation_m",
 ];
+pub(crate) fn metres_per_unit(unit: &str) -> Option<f64> {
+    match unit {
+        "m" => Some(1.0),
+        "ft" => Some(0.3048),
+        "us_survey_ft" => Some(1200.0 / 3937.0),
+        _ => None,
+    }
+}
 #[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Source {
@@ -111,6 +119,7 @@ fn number(
     record: &csv::StringRecord,
     index: usize,
     line: Option<u64>,
+    field: &str,
     errors: &mut Vec<Diagnostic>,
 ) -> Option<f64> {
     match record.get(index).unwrap_or("").parse::<f64>() {
@@ -119,7 +128,7 @@ fn number(
             errors.push(diagnostic(
                 line,
                 record.get(0),
-                HEADERS[index],
+                field,
                 "有限の数値を指定してください",
             ));
             None
@@ -129,7 +138,7 @@ fn number(
 pub fn inspect(source: &Source) -> Preview {
     let inspected_at = chrono::Utc::now().to_rfc3339();
     let mut errors = Vec::new();
-    let mut warnings = vec!["全測点の置換と施工案のクリアを行います。流量・参照勾配・境界水深は保持します。反映後に条件を確認して再計算してください。".into(), "座標や基準高の変換は行いません。横断xと流下距離は同じ単位m、標高は共通の基準高が必要です。".into()];
+    let mut warnings = vec!["全測点の置換と施工案のクリアを行います。流量m³/s・参照勾配・境界水深m・粗度nは保持します。反映後に条件を確認して再計算してください。".into(), "水平CRSや基準高の変換は行いません。横断x・流下距離・高さは選択した同じ単位、標高は共通の基準高が必要です。".into()];
     for (field, value) in [
         ("file_name", &source.file_name),
         ("vertical_datum", &source.vertical_datum),
@@ -144,12 +153,15 @@ pub fn inspect(source: &Source) -> Preview {
             ));
         }
     }
-    if source.unit != "m" {
+    let scale = metres_per_unit(&source.unit);
+    if let Some(scale) = scale {
+        warnings.push(format!("CSVの距離・高さは {} × {:.17} でmに換算します。ftは国際フィート、us_survey_ftはUS Survey Foot（1200/3937 m）です。単位の選択は原資料で確認してください。", source.unit, scale));
+    } else {
         errors.push(diagnostic(
             None,
             None,
             "unit",
-            "単位はmのみ対応。単位変換は行いません",
+            "単位はm・ft（国際フィート）・us_survey_ftのみ対応。推定や別名の解釈は行いません",
         ));
     }
     if let Some(data) = &source.dataset {
@@ -192,21 +204,28 @@ pub fn inspect(source: &Source) -> Preview {
     let mut stations: Vec<Station> = Vec::new();
     let mut geometry = None;
     if errors.is_empty() {
+        let scale = scale.expect("unit validated");
+        let headers = HEADERS.map(|h| h.replace("_m", &format!("_{}", source.unit)));
         let mut reader = csv::ReaderBuilder::new()
             .trim(csv::Trim::All)
             .from_reader(source.csv.trim_start_matches('\u{feff}').as_bytes());
         match reader.headers() {
-            Ok(h) if h.iter().eq(HEADERS) => {}
+            Ok(h) if h.iter().eq(headers.iter().map(String::as_str)) => {}
             _ => errors.push(diagnostic(
                 Some(1),
                 None,
                 "header",
-                format!("ヘッダーと順序は {}", HEADERS.join(",")),
+                format!(
+                    "選択単位 {} のヘッダーと順序は {}",
+                    source.unit,
+                    headers.join(",")
+                ),
             )),
         }
         if errors.is_empty() {
             let mut seen = HashSet::new();
             let mut current = String::new();
+            let mut native_conditions = None;
             let mut locations = Vec::new();
             for (index, item) in reader.records().enumerate() {
                 if index >= 2000 {
@@ -235,13 +254,39 @@ pub fn inspect(source: &Source) -> Preview {
                     continue;
                 }
                 let values: Vec<_> = (1..6)
-                    .map(|i| number(&record, i, line, &mut errors))
+                    .map(|i| number(&record, i, line, &headers[i], &mut errors))
                     .collect();
                 let [Some(chainage), Some(bed), Some(n), Some(x), Some(elevation)] =
                     values.as_slice()
                 else {
                     continue;
                 };
+                let original_conditions = (*chainage, *bed, *n);
+                // Subtract the original absolute heights before scaling. Never round or repair vertices.
+                let native_z = match source.elevation_mode {
+                    ElevationMode::Absolute => elevation - bed,
+                    ElevationMode::Relative => *elevation,
+                };
+                if native_z < 0.0 {
+                    errors.push(diagnostic(
+                        line,
+                        Some(id),
+                        &headers[5],
+                        "元単位での河床からの相対高さは0以上が必要です",
+                    ));
+                    continue;
+                }
+                let z = native_z * scale;
+                let (chainage, bed, x) = (*chainage * scale, *bed * scale, *x * scale);
+                if [chainage, bed, x, z].iter().any(|v| !v.is_finite()) {
+                    errors.push(diagnostic(
+                        line,
+                        Some(id),
+                        "coordinates",
+                        "相対高さの差またはm換算後の値が非有限です",
+                    ));
+                    continue;
+                }
                 if current != id {
                     if !seen.insert(id.to_owned()) {
                         errors.push(diagnostic(
@@ -253,16 +298,17 @@ pub fn inspect(source: &Source) -> Preview {
                         continue;
                     }
                     current = id.into();
+                    native_conditions = Some(original_conditions);
                     locations.push((line, id.to_owned()));
                     stations.push(Station {
-                        chainage: *chainage,
-                        bed_elevation: *bed,
+                        chainage,
+                        bed_elevation: bed,
                         roughness: *n,
                         section: Section::Survey { points: Vec::new() },
                     });
                 }
                 let st = stations.last_mut().expect("station added");
-                if st.chainage != *chainage || st.bed_elevation != *bed || st.roughness != *n {
+                if native_conditions != Some(original_conditions) {
                     errors.push(diagnostic(
                         line,
                         Some(id),
@@ -270,12 +316,8 @@ pub fn inspect(source: &Source) -> Preview {
                         "同一断面内の流下距離・河床標高・粗度が一致しません",
                     ));
                 }
-                let z = match source.elevation_mode {
-                    ElevationMode::Absolute => elevation - bed,
-                    ElevationMode::Relative => *elevation,
-                };
                 if let Section::Survey { points } = &mut st.section {
-                    points.push(Point { x: *x, z });
+                    points.push(Point { x, z });
                 }
             }
             for (st, (line, id)) in stations.iter().zip(&locations) {

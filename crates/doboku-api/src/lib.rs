@@ -155,7 +155,7 @@ fn validate_project(p: &Project) -> ApiResult<()> {
             || source.sha256.len() != 64
             || !source.sha256.chars().all(|c| c.is_ascii_hexdigit())
             || !matches!(source.elevation_mode.as_str(), "absolute" | "relative")
-            || source.unit != "m"
+            || survey::metres_per_unit(&source.unit).is_none()
             || chrono::DateTime::parse_from_rfc3339(&source.imported_at).is_err()
         {
             return Err(Error::Invalid("測量取込みの出典情報が不正です".into()).into());
