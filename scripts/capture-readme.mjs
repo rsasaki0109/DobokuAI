@@ -11,7 +11,7 @@ const { chromium } = require('playwright');
 const baseURL = process.argv[2];
 const only = process.argv[3];
 if (!baseURL) throw new Error('Pass the URL of a dedicated demo server; see docs/readme-demos.md.');
-if (only && !['hero','cross-section','water-profile','construction','sensitivity','ai-assistant','station-spacing','survey-provenance'].includes(only)) throw new Error(`Unknown clip: ${only}`);
+if (only && !['workflow','cross-section','water-profile','construction','sensitivity','ai-assistant','station-spacing','survey-provenance'].includes(only)) throw new Error(`Unknown clip: ${only}; use capture-heroes.mjs for the hero gallery`);
 const work = resolve(root, '.local/readme-capture');
 const assets = resolve(root, 'docs/assets');
 await mkdir(work, { recursive: true });
@@ -68,7 +68,7 @@ async function clip(name, actions) {
   }
 }
 try {
-  await clip('hero', async (page, shot) => {
+  await clip('workflow', async (page, shot) => {
     await shot(2.5);
     await nav(page, '横断面エディタ');
     await focus(page, page.locator('.editor-layout'));
