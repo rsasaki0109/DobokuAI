@@ -1076,3 +1076,11 @@ Logs retained under `.local/station-deletion-`: `focused-20261012.log`,
 `docker-final-20261012.log`. The dedicated `doboku-delete-20261012` Compose project
 is stopped after testing and its volume is retained. Existing user services/database
 remain in place.
+
+The implementation commit `0b915fcbb62596715187735195f388c5881c40cd` subsequently
+completed [MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38312723452)
+with Success after an initial GitHub queue. Its `validate` job completed successfully
+and the associated workflow contains pinned v6 actions and full `scripts/check.sh`.
+Official page hashes and UTC observation time are retained in [hosted evidence](hosted-ci-evidence.json).
+Counts above are local results, not independently counted hosted job logs. This validates
+the implementation commit, not field applicability or the later documentation-only commit.
