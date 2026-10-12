@@ -4,6 +4,7 @@ import type { Project, Section, Station } from './types';
 import { ground } from './types';
 import { SectionChart } from './Charts';
 import { DownstreamStationDraft } from './DownstreamStationDraft';
+import { StationDeletionReview } from './StationDeletionReview';
 import { NumberField } from './NumberField';
 export { NumberField } from './NumberField';
 
@@ -168,6 +169,7 @@ export function Editor({ project, edit }: { project: Project; edit: (p: Project)
   const [index, setIndex] = useState(0);
   const [all, setAll] = useState(false);
   const [addition, setAddition] = useState<Project | null>(null);
+  const [removal, setRemoval] = useState<{ source: Project; index: number } | null>(null);
   const idx = Math.min(index, project.river.stations.length - 1);
   const station = project.river.stations[idx];
   function update(patch: Partial<Station>) {
@@ -189,7 +191,7 @@ export function Editor({ project, edit }: { project: Project; edit: (p: Project)
             type="button"
             key={i}
             className={`station ${idx === i ? 'selected' : ''}`}
-            onClick={() => setIndex(i)}
+            onClick={() => { setIndex(i); setRemoval(null); }}
           >
             <span>
               No.{String(i + 1).padStart(2, '0')}
@@ -202,13 +204,23 @@ export function Editor({ project, edit }: { project: Project; edit: (p: Project)
           type="button"
           className="secondary full"
           disabled={project.river.stations.length >= 200}
-          onClick={() => setAddition(project)}
+          onClick={() => { setAddition(project); setRemoval(null); }}
         >
           <Plus size={15} />
           下流に断面を追加
         </button>
       </section>
       <div>
+        {removal?.source === project && removal.index === idx && (
+          <StationDeletionReview project={project} index={idx} cancel={() => setRemoval(null)} apply={() => {
+            edit({ ...project, river: {
+              ...project.river, stations: project.river.stations.filter((_, i) => i !== idx),
+            } });
+            setIndex(Math.max(0, idx - 1));
+            setAll(false);
+            setRemoval(null);
+          }} />
+        )}
         {addition === project && (
           <DownstreamStationDraft project={project} cancel={() => setAddition(null)} apply={added => {
             edit({ ...project, river: { ...project.river, stations: [...project.river.stations, added] } });
@@ -229,14 +241,8 @@ export function Editor({ project, edit }: { project: Project; edit: (p: Project)
               aria-label="選択断面を削除"
               disabled={project.river.stations.length <= 2}
               onClick={() => {
-                edit({
-                  ...project,
-                  river: {
-                    ...project.river,
-                    stations: project.river.stations.filter((_, i) => i !== idx),
-                  },
-                });
-                setIndex(Math.max(0, idx - 1));
+                setAddition(null);
+                setRemoval({ source: project, index: idx });
               }}
             >
               <Trash2 size={17} />
@@ -265,7 +271,7 @@ export function Editor({ project, edit }: { project: Project; edit: (p: Project)
           </label>
           <div className="form-grid">
             <SectionFields
-              key={`${project.id}-${idx}-${station.section.kind}`}
+              key={`${project.id}-${project.river.stations.length}-${idx}-${station.section.kind}`}
               section={station.section}
               scope={all ? '全測点の断面形状' : `No.${idx + 1}の断面形状`}
               onChange={(section) => update({ section })}

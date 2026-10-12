@@ -46,6 +46,13 @@ extrapolated from the normal-depth reference slope. Confirmation adds one statio
 retaining depth; subcritical stage moves with the new downstream bed, while supercritical
 upstream boundary remains unchanged. Saving and solving remain separate operations.
 See [station addition](station-addition.md).
+Station deletion also requires explicit application after a preview of target ground,
+remaining count, new boundary bed/stage and joined-neighbour spacing. Remaining original
+stations are kept verbatim and in order; boundary depth stays fixed. Endpoint removal
+may change stage/domain, while middle removal changes station spacing. No solve/persist
+occurs before explicit actions. Switching targets or editing original conditions clears
+the proposal; cardinality changes reset uncommitted section drafts at reused indices.
+See [station deletion](station-deletion.md).
 
 Rectangular/trapezoidal banks have a finite height. Surveyed sections are unsmoothed
 piecewise-linear polylines with strictly increasing x and relative minimum z=0.

@@ -1029,3 +1029,50 @@ contains the pinned v6 actions and full `scripts/check.sh`. Official page hashes
 observation time are retained in [hosted evidence](hosted-ci-evidence.json).
 Counts above are local results, not independently counted hosted job logs. This validates
 the implementation commit, not field applicability or the later documentation-only commit.
+
+## Confirmed station deletion / 2026-10-12 UTC
+
+The editor previously removed the selected station immediately. It now previews target
+ground and reference, remaining count, original/candidate boundary location/stage and
+joined-neighbour spacing. Explicit confirmation removes one station verbatim without
+reindexing coordinates, interpolation or smoothing. Remaining Q/reference slope/regime/
+boundary depth/scenarios/reference are retained; deleting the active boundary endpoint
+moves the prescribed stage with the new endpoint bed. Cancel, target switching or edits
+to original conditions discard the proposal; addition/deletion proposals are exclusive.
+The section-input key includes station count, so an uncommitted survey draft is discarded
+when an upstream deletion reuses the same index for another original station.
+No numerical engine, API/storage contract, schema, dependencies or lockfiles changed.
+
+The initial focused run passed four endpoint cases and the survey/minimum-count case
+(40.7 seconds); a follow-up passed both actual middle-deletion calculations (17.1 seconds).
+Final tests cover subcritical and supercritical first/middle/last station removal, explicit
+save during preview leaving original data unchanged, cancel/reselect/no proposal revival,
+unchanged stored projects before save, exact equality of every retained condition/station,
+actual Rust profiles and regime at all ten stations, inherited scenario comparisons and
+unchanged old snapshots after saving/editing. Subcritical endpoint cut quantity is 28,800m³
+for the new 900m domain; middle deletion keeps 32,000m³ for the synthetic constant-cut-area
+1,000m domain. Supercritical removal of the first station uses 10.35m instead of 10.55m at
+the upstream boundary, without changing depth. The three-survey-section case checks
+original-edit invalidation, stale uncommitted point text discarded at reused index and
+the minimum of two sections. The confirmation screenshot was inspected.
+These synthetic results are not field-data adoption, calibration or design certification.
+
+The complete `scripts/check.sh` exited zero: 91 Rust tests, fmt, clippy with warnings denied,
+independent reference regeneration, five backup tests, five NCRO tests, ten offline-audit
+tests, frontend type check/build and all 37 native-browser E2E cases (2.8 minutes).
+No skipped assertions or relaxed numerical tolerances were used. Engine version remains
+0.2.0; field adoption remains zero and fixed maturity stays 44.0/100 (about 45%), target 50%.
+[Deletion semantics](station-deletion.md).
+
+The final Docker distribution passed eight targeted browser cases (25.8 seconds):
+all seven station-deletion cases and the existing edit/steady-flow/construction/report/
+persistence workflow. Production images:
+
+- API: sha256:8e51c9d1f872edf4545988a4942f05ae9824ebffc101c3228d418810f05a30cb
+- Web: sha256:a1dc77090bfec9f3b6a4c2bf3a786daba3c17522c112d417b9ab7640dac34387
+
+Logs retained under `.local/station-deletion-`: `focused-20261012.log`,
+`middle-20261012.log`, `check-20261012.log`, `docker-build-20261012.log` and
+`docker-final-20261012.log`. The dedicated `doboku-delete-20261012` Compose project
+is stopped after testing and its volume is retained. Existing user services/database
+remain in place.
