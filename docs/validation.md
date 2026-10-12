@@ -1084,3 +1084,43 @@ and the associated workflow contains pinned v6 actions and full `scripts/check.s
 Official page hashes and UTC observation time are retained in [hosted evidence](hosted-ci-evidence.json).
 Counts above are local results, not independently counted hosted job logs. This validates
 the implementation commit, not field applicability or the later documentation-only commit.
+
+## Survey draft invalidation / 2026-10-12 UTC
+
+A same-count, same-kind survey CSV import reused the section editor and left its old
+uncommitted point text and input error visible. Deleting a preceding construction
+scenario similarly reused the old index for a different replacement section. Applying
+that text could overwrite the newly selected geometry. The shared `SectionFields`
+now resets point drafts, errors and conversion proposals when its source section changes,
+before committing children. Edits to the same section's station roughness or bed, and an
+unapplied CSV preview, retain its draft. Saved conditions and the deterministic engine
+are unchanged until the existing explicit apply/save/run operations.
+
+Both new browser cases failed on the old implementation at the expected stale-text
+assertions. After the fix, both passed (11.3 seconds), checking the same-count CSV's exact
+saved SI geometry, unchanged stored project before save, original immutable run, actual
+Rust profile and retained 12.2m downstream boundary, reload, and a remaining construction
+scenario's exact shape without modifying the base river. These are synthetic regression
+cases, not field validation or independent hydraulic accuracy evidence.
+
+The complete `scripts/check.sh` exited zero: 91 Rust tests, fmt, clippy with warnings denied,
+independent reference regeneration, five backup tests, five NCRO tests, ten offline-audit
+tests, frontend type check/build and all 39 native-browser E2E cases (4.1 minutes).
+No assertions or tolerances were relaxed. No numerical engine, API/schema, dependencies
+or lockfiles changed; engine version remains 0.2.0.
+
+The Docker distribution passed three targeted browser cases (9.0 seconds): both new
+regressions and the existing editing/steady-flow/construction/report/persistence workflow.
+Only Web was rebuilt; the unchanged API image from the preceding station-deletion
+validation was explicitly reused to reduce disk use. Image identities:
+
+- API: sha256:8e51c9d1f872edf4545988a4942f05ae9824ebffc101c3228d418810f05a30cb
+- Web: sha256:e4abe6acb23e6eef12cb5c1ae801264c5f9ef55989b3db00285abb24e8bb035d
+
+Logs are retained under `.local/survey-draft-`: `before-20261012.log` (both reproduced
+failures), `focused-20261012.log`, `check-20261012.log`, `docker-build-20261012.log`,
+`docker-start-20261012.log` and `docker-20261012.log`. The dedicated
+`doboku-draft-20261012` Compose project is stopped after testing, with its volume retained.
+Existing user services/database remain in place. Field adoption remains zero; fixed
+maturity stays 44.0/100 (about 45%), target 50%.
+

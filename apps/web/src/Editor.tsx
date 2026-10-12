@@ -17,9 +17,18 @@ export function SectionFields({
   onChange: (s: Section) => void;
   scope?: string;
 }) {
+  const [source, setSource] = useState(section);
   const [text, setText] = useState<string | null>(null);
   const [error, setError] = useState('');
   const [proposal, setProposal] = useState<{ source: Section; section: Section } | null>(null);
+  // CSV replacement and scenario deletion can reuse this component's index/key.
+  // Reset before committing its children so old drafts cannot target new geometry.
+  if (source !== section) {
+    setSource(section);
+    setText(null);
+    setError('');
+    setProposal(null);
+  }
   const pending = proposal?.source === section ? proposal.section : null;
   const update = (v: Partial<Section>) => onChange({ ...section, ...v } as Section);
   const describe = (s: Section) =>
