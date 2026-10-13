@@ -705,6 +705,33 @@
         "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
         "Licensed public city-model display validation; no hydraulic field dataset adopted."
       ]
+    },
+    {
+      "commit": "30b690d5a839e8e87360f487d52fcf8733edd394",
+      "observed_at_utc": "2026-10-13T12:20:28.781572+00:00",
+      "run_id": 38393406433,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38393406433",
+      "status": "Success",
+      "page_bytes": 195139,
+      "page_sha256": "8fd2b91c3197f6002695cdddb564c1ffb171404b2410ce488e33e0886d17db8c",
+      "job_id": 115282509717,
+      "job_status": "completed successfully",
+      "observations": [
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38393406433/job/115282509717",
+          "bytes": 202414,
+          "sha256": "20982d41d360126b70e058565ec3d6168a1c8e53eca1261f151a5d3df2f2a604"
+        },
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38393406433/workflow",
+          "bytes": 185888,
+          "sha256": "2863f0a4cd32a08b8ebf6b43b34c0ef3972803ba5cc6892c47c0b08445f8ddf6"
+        }
+      ],
+      "limits": [
+        "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
+        "Licensed public city-model display validation; no hydraulic field dataset adopted."
+      ]
     }
   ],
   "pending_runs": [

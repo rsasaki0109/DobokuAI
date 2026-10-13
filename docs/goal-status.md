@@ -1,6 +1,8 @@
 # 成熟度50%の達成判定 — 2026-10-13（JST）
 
 現在は固定した評価基準で **44.0/100（表示約45%）**。当面の目標50%は未達です。
+2026-10-13 12:20 UTCに[原配布先を再確認](goal50-primary-check.md)。USACE/DWR/USGSの原資料取得は403で阻害され、
+Ngwerereの公開版は前回と同一。採用条件を満たした実河川データ0/3のため、50%の達成を保留しています。
 任意の2点間の地形断面を確認し、元座標・原標高・欠損・出典付きHTML/CSV/JSONへ保存できます。
 表示地形の確認機能で、河川測量断面としての採用や実河川試行には数えません。[仕様](city-transect.md)。
 任意断面の座標照会・3D重ね表示・近接表示も追加。一意な高さだけ3Dで強調し、欠損・曖昧判定を保持します。
@@ -47,8 +49,8 @@ CSVの[反映前の条件確認](survey-import.md#反映前の条件確認)を�
 単位指定・合成例の検証は、原測量確認や実河川試行の完了とは数えません。[仕様](survey-import.md)。
 直近の公式DWR 3リポジトリ調査でも、原断面・NCRO測量仕様は確定できていません。
 取得したCSDP位置ラベルはNGVD29表記で、別配布のNAVD88断面と結合していません。
-直近に成功を確認したホストCIは、任意断面の空間照会コミット`c1cd00a`の[MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38390634050)です。
-2026-10-13 11:47 UTCにrun・validate job・実行workflowの成功を確認。今回の保存断面JSON復元実装のCIとは区別します。
+直近に成功を確認したホストCIは、保存断面JSON復元コミット`30b690d`の[MVP checks](https://github.com/rsasaki0109/DobokuAI/actions/runs/38393406433)です。
+2026-10-13 12:20 UTCにrun・validate job・実行workflowの成功を確認。今回の原資料調査記録のCIとは区別します。
 リポジトリもGitHub上のPublic表示・`isPrivate=false`で[公開を確認](publication.md)。
 [原資料・固定版・ハッシュを含む追加記録](public-data-dwr-review.md#公式リポジトリのデータ収録状況)。
 ユーザーが独立した技術者のレビューを実施できないことを伝え、目標を50%へ変更しました。
