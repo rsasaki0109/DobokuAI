@@ -77,7 +77,9 @@ test('ground-height candidate requires confirmation, exports only confirmed samp
   await page.getByLabel('施工範囲の東方向 (m)', { exact: true }).fill('1000');
   await expect(region).toContainText('地形がありません・外挿しません');
   await expect(page.getByRole('button', { name: '中心の地形高さを標高候補にする', exact: true })).toBeDisabled();
-  expect(await saved()).toEqual(after);
+  const repeated = await saved();
+  expect(Number.isFinite(Date.parse(repeated.exported_at))).toBe(true);
+  expect({ ...repeated, exported_at: after.exported_at }).toEqual(after);
   await page.getByRole('button', { name: '合成都市デモを表示', exact: true }).click();
   expect((await saved()).terrain_inspection).toBeNull();
 });

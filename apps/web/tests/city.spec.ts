@@ -187,7 +187,9 @@ test('explicit LOD selection and mixed-CRS rejection preserve the last confirmed
   await expect(page.getByRole('alert').filter({ hasText: '異なる座標系' })).toBeVisible();
   const again = page.waitForEvent('download');
   await page.getByRole('button', { name: '都市の表示条件JSONを保存', exact: true }).click();
-  expect(JSON.parse(await readFile((await (await again).path())!, 'utf8'))).toEqual(saved);
+  const repeated = JSON.parse(await readFile((await (await again).path())!, 'utf8'));
+  expect(Number.isFinite(Date.parse(repeated.exported_at))).toBe(true);
+  expect({ ...repeated, exported_at: saved.exported_at }).toEqual(saved);
 });
 
 test('city import and planning overlay preserve saved river conditions and existing calculation history', async ({ page, request }) => {

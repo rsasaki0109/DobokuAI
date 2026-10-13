@@ -48,6 +48,11 @@ point/interval tables and an embedded companion CSV. A shared section snapshot n
 checks centerline axes/lengths/endpoints against the confirmed footprint, and copies the section results.
 The HTML, JSON and companion CSV use that one snapshot; imported text is escaped and scripts/assets are absent.
 The profile state is valid only for the exact confirmed model/footprint objects; staged edits cannot alter its exports.
+`cityDisplay.ts` validates schema 2 display settings against the currently loaded model's metadata,
+source hashes and SHA-256 of its parsed double-precision geometry. A file/revision/model-scoped preview
+must be confirmed before restoring view modes, layers, selection and the footprint. Only those settings
+are whitelisted; imported provenance and terrain/solver results are ignored. Ground points are recomputed,
+section results and staged footprint edits are cleared, and river state/storage remain separate.
 EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display approximation;
 source heights are retained. No datum conversion or solver integration is implied.
 The default scene is a licensed display subset of the original Yokohama 2024 PLATEAU

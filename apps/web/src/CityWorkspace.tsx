@@ -12,6 +12,8 @@ import { terrainSections } from './citySections';
 import type { TerrainSection } from './citySections';
 import { citySectionCSV } from './citySectionCSV';
 import CitySectionsView from './CitySectionsView';
+import { cityDisplayFingerprint, inspectCityDisplay, cityDisplayVersion, cityDisplayFileLimit, validCityFootprint } from './cityDisplay';
+import type { CityDisplayRestore } from './cityDisplay';
 import { NumberField } from './NumberField';
 import { saveBlob } from './types';
 import publicBuildings from './data/yokohama/buildings.gml?raw';
@@ -86,19 +88,39 @@ export default function CityWorkspace() {
   const [picking, setPicking] = useState(false);
   const [pickNotice, setPickNotice] = useState('');
   const [sectionState, setSectionState] = useState<{ model: CityModel; footprint: Footprint; data?: TerrainSection[]; error?: string; inspectedAt: string } | null>(null);
-  const changeSource = () => { revision.current++; setPending(null); setError(''); setPicking(false); setPickNotice(''); };
+  const [displayFile, setDisplayFile] = useState<File | null>(null);
+  const [displayCandidate, setDisplayCandidate] = useState<{ loaded: Loaded; settings: CityDisplayRestore } | null>(null);
+  const [displayError, setDisplayError] = useState('');
+  const [displayBusy, setDisplayBusy] = useState(false);
+  const displayRevision = useRef(0), loadedRef = useRef(loaded);
+  loadedRef.current = loaded;
+  const clearDisplayReview = () => { displayRevision.current++; setDisplayCandidate(null); setDisplayError(''); setDisplayBusy(false); };
+  const changeSource = () => { revision.current++; setPending(null); setError(''); setPicking(false); setPickNotice(''); clearDisplayReview(); };
   const model = loaded.model;
   const counts = Object.keys(layers).map(k => ({ key: k as CityLayer, count: model.features.filter(f => f.layer === k).length }));
   const feature = model.features.find(f => f.id === selected);
-  const validFootprint = (p: Footprint) => Object.values(p).every(Number.isFinite) && p.width > 0 && p.length > 0 && p.width <= 5000 && p.length <= 5000 &&
-    p.east - p.width / 2 >= model.bounds.min[0] && p.east + p.width / 2 <= model.bounds.max[0] &&
-    -p.north - p.length / 2 >= model.bounds.min[2] && -p.north + p.length / 2 <= model.bounds.max[2] &&
-    p.elevation >= model.origin[2] + model.bounds.min[1] && p.elevation <= model.origin[2] + model.bounds.max[1];
+  const validFootprint = (p: Footprint) => validCityFootprint(p, model);
   const plan = draft ?? footprint;
   const groundPreview = useMemo(() => footprintGround(model, plan), [model, plan.east, plan.north, plan.width, plan.length]);
   const confirmedGround = useMemo(() => footprintGround(model, footprint), [model, footprint]);
   const centerGround = groundPreview[0];
   const currentSections = showFootprint && sectionState?.model === model && sectionState.footprint === footprint ? sectionState : null;
+  const currentDisplayCandidate = displayCandidate?.loaded === loaded ? displayCandidate.settings : null;
+  const exportCityDisplay = async () => {
+    const snapshot = { schema_version: 2, display_version: cityDisplayVersion, exported_at: new Date().toISOString(),
+      model_type: 'citygml_display', numerical_solver_linked: false,
+      synthetic: loaded.synthetic ? true : loaded.dataset ? false : null,
+      data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified',
+      dataset: loaded.dataset ?? null, sources: loaded.sources, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms,
+      inspected_at: loaded.inspectedAt, crs: model.crs, origin: model.origin, bounds: model.bounds, lod: model.lod,
+      feature_count: model.features.length, polygon_count: model.polygonCount, visible_layers: visible, selected_feature: selected,
+      footprint: showFootprint ? footprint : null, terrain_inspection: showFootprint ? { method: 'display_triangle_barycentric_5_points', whole_footprint_coverage_verified: false, samples: confirmedGround } : null,
+      top, rotating, sunset };
+    try {
+      const model_fingerprint_sha256 = await cityDisplayFingerprint(model);
+      saveBlob(new Blob([JSON.stringify({ ...snapshot, model_fingerprint_sha256 }, null, 2)], { type: 'application/json' }), 'doboku-city-display.json');
+    } catch (e) { if (loadedRef.current === loaded) setDisplayError(`表示条件を保存できません：${(e as Error).message}`); }
+  };
   const reportInput = (): ReportInput => ({
     title: loaded.dataset?.title ?? (loaded.synthetic ? 'DobokuAI合成都市' : '取り込んだ都市・地形'),
     model, footprint, sources: loaded.sources, inspected_at: loaded.inspectedAt,
@@ -157,7 +179,7 @@ export default function CityWorkspace() {
         <h3>候補：{pending.model.features.length}地物・{pending.model.polygonCount}面 / {pending.model.crs}</h3>
         <p>原点 {pending.model.origin.join(', ')} / LOD {pending.model.lod}。入力した出典・利用条件の正当性は自動確認していません。確認すると表示モデルを置換し、選択地物・施工範囲をクリアします。</p>
         <ul>{pending.sources.map((f, i) => <li key={i}>{f.name} · {f.bytes} bytes · SHA-256 {f.sha256}</li>)}</ul>
-        <button type="button" className="primary" onClick={() => { setLoaded(pending); setPending(null); setSelected(null); setDraft(null); setShowFootprint(false); setFootprint(defaultFootprint(pending.model)); setPicking(false); setPickNotice(''); }}>確認して都市モデルを表示</button>
+        <button type="button" className="primary" onClick={() => { clearDisplayReview(); setLoaded(pending); setPending(null); setSelected(null); setDraft(null); setShowFootprint(false); setFootprint(defaultFootprint(pending.model)); setPicking(false); setPickNotice(''); }}>確認して都市モデルを表示</button>
         <button type="button" className="secondary" onClick={() => setPending(null)}>都市モデルの取込みを取消</button>
       </div>}
     </section>
@@ -169,7 +191,7 @@ export default function CityWorkspace() {
         <button type="button" className="secondary" aria-pressed={rotating} disabled={picking} onClick={() => setRotating(!rotating)}>都市を自動回転</button>
         <button type="button" className="secondary" aria-pressed={sunset} onClick={() => setSunset(!sunset)}>都市を夕景で表示</button>
         <button type="button" className="secondary" aria-pressed={picking} onClick={() => { setPicking(!picking); setPickNotice(''); if (!picking) { setRotating(false); setSelected(null); } }}>地形をクリックして施工位置を選ぶ</button>
-        <button type="button" className="secondary" onClick={() => saveBlob(new Blob([JSON.stringify({ schema_version: 1, model_type: 'citygml_display', numerical_solver_linked: false, synthetic: loaded.synthetic ? true : loaded.dataset ? false : null, data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null, sources: loaded.sources, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms, inspected_at: loaded.inspectedAt, crs: model.crs, origin: model.origin, bounds: model.bounds, lod: model.lod, feature_count: model.features.length, polygon_count: model.polygonCount, visible_layers: visible, selected_feature: selected, footprint: showFootprint ? footprint : null, terrain_inspection: showFootprint ? { method: 'display_triangle_barycentric_5_points', whole_footprint_coverage_verified: false, samples: confirmedGround } : null, top, rotating, sunset }, null, 2)], { type: 'application/json' }), 'doboku-city-display.json')}>都市の表示条件JSONを保存</button>
+        <button type="button" className="secondary" onClick={exportCityDisplay}>都市の表示条件JSONを保存</button>
       </div>
       {picking && <p role="status">施工位置の選択中：地形をクリックすると東・北・高さを入力候補にします。ドラッグは視点操作です。幅・長さを確認してから反映してください。</p>}
       {pickNotice && <p role="status" aria-label="施工位置の選択結果">{pickNotice}</p>}
@@ -190,6 +212,37 @@ export default function CityWorkspace() {
       {feature && <p role="status">選択地物：{feature.id} / {layers[feature.layer].name} / {feature.triangleCount} 三角形</p>}
       <p className="muted city-provenance">{model.crs === localCityCRS ? '局所座標：東・北・高さ（m）。' : 'EPSG:6697：緯度・経度・高さ。GRS80接平面で水平を表示用に近似し、原高さを保持します。測量座標変換・標高基準変換ではありません。'} {loaded.attribution || '出典未入力'} / {loaded.terms || '利用条件未入力'}。元CityGMLは別途保持してください。</p>
       {loaded.dataset && <p className="muted">{loaded.dataset.processing} 建物 {loaded.dataset.building_ids.length} 件 / 地形 {loaded.dataset.terrain_triangles} 三角形。<a href={loaded.dataset.license_url} target="_blank" rel="noreferrer">CC BY 4.0</a></p>}
+    </section>
+    <section className="panel">
+      <div className="panel-heading"><div><div className="eyebrow">SAVED DISPLAY SETTINGS</div><h2>都市の表示条件を復元する</h2></div><span className="badge">同じモデル・確認後に反映</span></div>
+      <p className="muted">保存した表示条件JSON（128KiBまで）を選択してください。まず同じ都市モデルを表示し、読込み候補を確認してから復元します。元CityGMLはJSONに含みません。</p>
+      <label className="field">都市の表示条件JSON<input aria-label="都市の表示条件JSON" type="file" accept=".json,application/json" onChange={e => { clearDisplayReview(); setDisplayFile(e.target.files?.[0] ?? null); }} /></label>
+      <button type="button" className="secondary" disabled={!displayFile || displayBusy || busy} onClick={async () => {
+        if (!displayFile) return;
+        const version = ++displayRevision.current, source = loaded;
+        setDisplayBusy(true); setDisplayError(''); setDisplayCandidate(null); setPending(null);
+        try {
+          if (displayFile.size > cityDisplayFileLimit) throw new Error('表示条件JSONは128KiB以内です');
+          const settings = await inspectCityDisplay(JSON.parse(await displayFile.text()), source.model, source.sources);
+          if (version === displayRevision.current && loadedRef.current === source) setDisplayCandidate({ loaded: source, settings });
+        } catch (e) { if (version === displayRevision.current && loadedRef.current === source) setDisplayError((e as Error).message); }
+        finally { if (version === displayRevision.current) setDisplayBusy(false); }
+      }}>{displayBusy ? '表示条件を点検中…' : '表示条件JSONを点検'}</button>
+      {displayError && <p role="alert">{displayError}。表示中の条件は保持しています。</p>}
+      {currentDisplayCandidate && <div className="city-review" role="region" aria-label="都市の表示条件復元の確認">
+        <h3>復元候補（保存日時 UTC：{currentDisplayCandidate.exported_at}）</h3>
+        <p>同じ座標・LOD・地物形状・原ファイル記録を照合しました。出典・利用条件は表示中のモデルの記録を保持します。</p>
+        <p>現在の範囲：{showFootprint ? `東 ${footprint.east} m・北 ${footprint.north} m / ${footprint.width} × ${footprint.length} m / 標高 ${footprint.elevation} m` : '非表示'} / 未反映の範囲入力：{draft ? 'あり（復元時に破棄）' : 'なし'}</p>
+        <p>施工範囲：{currentDisplayCandidate.footprint ? `東 ${currentDisplayCandidate.footprint.east} m・北 ${currentDisplayCandidate.footprint.north} m / ${currentDisplayCandidate.footprint.width} × ${currentDisplayCandidate.footprint.length} m / 標高 ${currentDisplayCandidate.footprint.elevation} m（原データ基準）` : '非表示'}</p>
+        <p>レイヤー：{currentDisplayCandidate.visible_layers.map(k => layers[k].name).join('・') || 'すべて非表示'} / 視点：{currentDisplayCandidate.top ? '真上' : '斜め'} / 自動回転：{currentDisplayCandidate.rotating ? 'あり' : 'なし'} / 夕景：{currentDisplayCandidate.sunset ? 'あり' : 'なし'} / 選択地物：{currentDisplayCandidate.selected_feature ?? 'なし'}</p>
+        <p className="muted">確認すると現在の表示条件と未反映の施工範囲入力を置換します。地形の5点は再点検し、以前の断面結果は消去します。河川プロジェクト・計算結果は変更しません。</p>
+        <button type="button" className="primary" onClick={() => {
+          const v = currentDisplayCandidate;
+          setVisible(v.visible_layers); setSelected(v.selected_feature); setTop(v.top); setRotating(v.rotating); setSunset(v.sunset);
+          setFootprint(v.footprint ?? defaultFootprint(model)); setShowFootprint(v.footprint !== null); setDraft(null); setPicking(false); setPickNotice(''); setSectionState(null); clearDisplayReview();
+        }}>確認して表示条件を復元</button>
+        <button type="button" className="secondary" onClick={clearDisplayReview}>表示条件の復元を取消</button>
+      </div>}
     </section>
     <section className="panel">
       <div className="panel-heading"><div><div className="eyebrow">PLANNING OVERLAY</div><h2>施工範囲を重ねる</h2></div><span className="badge">計画用マーカー</span></div>
