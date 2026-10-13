@@ -777,5 +777,54 @@
     "observed_records_with_nonzero_distance_field": 22,
     "ineffective_flow_area_headers": 26,
     "spatially_varying_manning": true
+  },
+  "repeatable_trinity_inspection": {
+    "format": "doboku-hec-ras-inspection-1",
+    "inspected_at_utc": "2026-10-13T14:15:35.389520+00:00",
+    "report_sha256": "a90d68dc0c51ea327305edd5c2d2cde58a32c277c3ab0726c138293781b1fd7e",
+    "inspector_sha256": "1210c2dc05d1e4f7b48c7db55f6117192b64df8de91c55002e16633316ea7518",
+    "sources": {
+      "project": {
+        "file_name": "CalibrationWorkshop.prj",
+        "bytes": 871,
+        "sha256": "1af8e2cd7a5ea5e5654c772baab86ac36a927f2539aa5d0483ddf716522a0513"
+      },
+      "geometry": {
+        "file_name": "CalibrationWorkshop.g01",
+        "bytes": 569585,
+        "sha256": "13e53387a3dc94028b01ceca4be2b6a808eeea6cdde4213ac75f020565aee13e"
+      },
+      "flow": {
+        "file_name": "CalibrationWorkshop.f01",
+        "bytes": 4858,
+        "sha256": "dc7a12503419616b6e61821ce4c02bff3ad32218de1a2ed5ffaa7270570f8196"
+      }
+    },
+    "inventory_complete": true,
+    "section_count": 56,
+    "native_point_count": 8054,
+    "observation_location_counts": {
+      "missing_section": 46,
+      "at_section": 15,
+      "downstream_offset_requires_review": 4
+    },
+    "requires_review": [
+      "data_usage_terms_and_original_survey_metadata_require_review",
+      "common_vertical_reference_and_unit_realization_require_review",
+      "full_HEC_RAS_semantics_and_remaining_geometry_options_not_checked",
+      "multiple_flow_locations_require_review",
+      "transverse_coefficient_variation_present",
+      "ineffective_flow_area_headers_present",
+      "observed_locations_require_review"
+    ],
+    "dataset_adopted": false,
+    "solver_input_generated": false,
+    "scope": "Selected ASCII records only. No conversion, correction, sorting, observation interpolation, hydraulic solve, calibration, import or adoption."
+  },
+  "authoritative_observation_distance_reference": {
+    "url": "https://www.hec.usace.army.mil/confluence/rasdocs/rasum/latest/performing-a-steady-flow-analysis",
+    "bytes": 131300,
+    "sha256": "8b4e8e5bac0cecf1c494f7db651132d7cd32e714a4482dcb1245d09c2969eb35",
+    "finding": "Observed WS Dn Dist is distance downstream from the selected cross section."
   }
 }

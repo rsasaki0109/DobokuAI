@@ -759,6 +759,33 @@
         "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
         "Documentation-only source-review commit; no hydraulic field dataset adopted."
       ]
+    },
+    {
+      "commit": "e9839bb8a6f21e69c700caf4f6f9ac7967d80de7",
+      "observed_at_utc": "2026-10-13T14:16:22.065121+00:00",
+      "run_id": 38407648979,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38407648979",
+      "status": "Success",
+      "page_bytes": 195125,
+      "page_sha256": "a7ed6ad6c31e8446ef02c9c96d4a5b6e589fab884a4b9b949026a4360bb31c85",
+      "job_id": 115331355833,
+      "job_status": "completed successfully",
+      "observations": [
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38407648979/job/115331355833",
+          "bytes": 202402,
+          "sha256": "ba1c7752c279230eb8daa54ac5a672bee7766a617bcbd11d83a0a552fb771a98"
+        },
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38407648979/workflow",
+          "bytes": 185867,
+          "sha256": "51b22e482dba82fb209b6b9bd0956dedbe6fb9328ef42a7ebaf919d3a51e2cb7"
+        }
+      ],
+      "limits": [
+        "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
+        "Documentation-only HEC-RAS source review; no hydraulic field dataset adopted."
+      ]
     }
   ],
   "pending_runs": [

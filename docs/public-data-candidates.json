@@ -45,7 +45,19 @@
       ],
       "evidence": "public-data-hec-evidence.json",
       "review": "public-data-hec-review.md",
-      "redistributed_data": false
+      "redistributed_data": false,
+      "repeatable_input_inspection": {
+        "section_count": 56,
+        "native_point_count": 8054,
+        "observations": {
+          "missing_section": 46,
+          "at_section": 15,
+          "downstream_offset_requires_review": 4
+        },
+        "inspector": "../scripts/inspect-hec-ras.py",
+        "specification": "hec-ras-inspection.md",
+        "dataset_adopted": false
+      }
     },
     {
       "id": "bathypix-iowa",
