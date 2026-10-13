@@ -826,5 +826,121 @@
     "bytes": 131300,
     "sha256": "8b4e8e5bac0cecf1c494f7db651132d7cd32e714a4482dcb1245d09c2969eb35",
     "finding": "Observed WS Dn Dist is distance downstream from the selected cross section."
+  },
+  "latest_plan_boundary_inspection": {
+    "format": "doboku-hec-ras-inspection-2",
+    "inspected_at_utc": "2026-10-13T14:54:45.697849+00:00",
+    "report_sha256": "71af8171039fc4af9162c684556ef1834e7a50ca61c47c72431074012b84d4a6",
+    "inspector_sha256": "78497dfc414f37f444eb526085d9e9022843ff53dedd0f3455c6c1206a063721",
+    "sources": {
+      "project": {
+        "file_name": "CalibrationWorkshop.prj",
+        "bytes": 871,
+        "sha256": "1af8e2cd7a5ea5e5654c772baab86ac36a927f2539aa5d0483ddf716522a0513"
+      },
+      "geometry": {
+        "file_name": "CalibrationWorkshop.g01",
+        "bytes": 569585,
+        "sha256": "13e53387a3dc94028b01ceca4be2b6a808eeea6cdde4213ac75f020565aee13e"
+      },
+      "flow": {
+        "file_name": "CalibrationWorkshop.f01",
+        "bytes": 4858,
+        "sha256": "dc7a12503419616b6e61821ce4c02bff3ad32218de1a2ed5ffaa7270570f8196"
+      },
+      "plan": {
+        "file_name": "CalibrationWorkshop.p01",
+        "bytes": 3045,
+        "sha256": "1eca968796926f81406c650d4f2ec92f0f9ce12e7e5585d55df7baeac0929cf7"
+      }
+    },
+    "inventory_complete": true,
+    "section_count": 56,
+    "native_point_count": 8054,
+    "observation_location_counts": {
+      "missing_section": 46,
+      "at_section": 15,
+      "downstream_offset_requires_review": 4
+    },
+    "native_profile_names": [
+      "450 cfs",
+      "4500 cfs",
+      "7000 cfs"
+    ],
+    "native_boundary_records": [
+      {
+        "river": "Trinity",
+        "reach": "Lew_DC",
+        "profile_index": 1,
+        "line": 13,
+        "native_fields": {
+          "Up Type": 3,
+          "Up Slope": 0.0023,
+          "Dn Type": 3,
+          "Dn Slope": 0.0023
+        },
+        "duplicate_native_fields": []
+      },
+      {
+        "river": "Trinity",
+        "reach": "Lew_DC",
+        "profile_index": 2,
+        "line": 18,
+        "native_fields": {
+          "Up Type": 3,
+          "Up Slope": 0.0023,
+          "Dn Type": 3,
+          "Dn Slope": 0.0023
+        },
+        "duplicate_native_fields": []
+      },
+      {
+        "river": "Trinity",
+        "reach": "Lew_DC",
+        "profile_index": 3,
+        "line": 23,
+        "native_fields": {
+          "Up Type": 3,
+          "Up Slope": 0.0023,
+          "Dn Type": 3,
+          "Dn Slope": 0.0023
+        },
+        "duplicate_native_fields": []
+      }
+    ],
+    "plan_inventory": {
+      "native_flow_regime_declarations": [
+        "Subcritical Flow"
+      ],
+      "native_solver_settings": {
+        "Std Step Tol": 0.01,
+        "Critical Tol": 0.01,
+        "Max Error Tol": 0.3,
+        "Num of Std Step Trials": 20.0
+      },
+      "native_geometry_references": [
+        "g01"
+      ],
+      "native_flow_references": [
+        "f01"
+      ],
+      "native_program_versions": [
+        "4.01"
+      ],
+      "is_project_current_plan": true
+    },
+    "requires_review": [
+      "data_usage_terms_and_original_survey_metadata_require_review",
+      "common_vertical_reference_and_unit_realization_require_review",
+      "full_HEC_RAS_semantics_and_remaining_geometry_options_not_checked",
+      "native_boundary_codes_and_fields_require_review",
+      "native_plan_solver_settings_require_review",
+      "multiple_flow_locations_require_review",
+      "transverse_coefficient_variation_present",
+      "ineffective_flow_area_headers_present",
+      "observed_locations_require_review"
+    ],
+    "dataset_adopted": false,
+    "solver_input_generated": false
   }
 }

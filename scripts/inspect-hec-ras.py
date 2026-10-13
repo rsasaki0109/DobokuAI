@@ -35,7 +35,7 @@ def finite(value):
     return number
 
 
-def inspect(project, geometry, flow):
+def inspect(project, geometry, flow, plan=None):
     sources = {}
     issues = []
     issue_count = 0
@@ -204,6 +204,14 @@ def inspect(project, geometry, flow):
     if profile_count is None or not 1 <= profile_count <= 50:
         issue('flow', None, 'invalid_profile_count')
         profile_count = None
+    profile_name_fields = values(flows, 'Profile Names=')
+    profile_names = None
+    if len(profile_name_fields) > 1:
+        issue('flow', profile_name_fields[1][0], 'duplicate_profile_names')
+    elif len(profile_name_fields) == 1:
+        profile_names = [name.strip() for name in profile_name_fields[0][1].split(',')]
+        if profile_count is None or len(profile_names) != profile_count or not all(profile_names):
+            issue('flow', profile_name_fields[0][0], 'profile_name_count_mismatch')
     flow_locations = []
     observations = []
     for index, (line_number, line) in enumerate(flows):
@@ -243,9 +251,102 @@ def inspect(project, geometry, flow):
     if not flow_locations:
         issue('flow', None, 'no_profile_flows')
 
+    boundaries = []
+    current_boundary = None
+    boundary_fields = ('Up Type', 'Dn Type', 'Up Slope', 'Dn Slope', 'Up Known WS', 'Dn Known WS')
+    for line_number, line in flows:
+        if line.startswith('Boundary for River Rch & Prof#='):
+            current_boundary = None
+            parts = [s.strip() for s in line.split('=', 1)[1].split(',')]
+            if (len(parts) != 3 or not all(parts[:2]) or not re.fullmatch(r'[0-9]{1,3}', parts[2]) or
+                    profile_count is None or not 1 <= int(parts[2]) <= profile_count):
+                issue('flow', line_number, 'invalid_boundary_identity')
+                continue
+            current_boundary = {'river': parts[0], 'reach': parts[1], 'profile_index': int(parts[2]),
+                                'line': line_number, 'native_fields': {}, 'duplicate_native_fields': []}
+            boundaries.append(current_boundary)
+        elif line.startswith(('River Rch & RM=', 'Observed WS=', 'Number of Profiles=')):
+            current_boundary = None
+        elif any(line.startswith(key + '=') for key in boundary_fields):
+            if current_boundary is None:
+                issue('flow', line_number, 'boundary_field_without_identity')
+                continue
+            key, raw = line.split('=', 1)
+            try:
+                if key.endswith('Type'):
+                    if not re.fullmatch(r'\d{1,3}', raw.strip()):
+                        raise ValueError('Type must be a nonnegative integer code')
+                    value = int(raw)
+                else:
+                    value = finite(raw.strip())
+            except (ValueError, OverflowError):
+                issue('flow', line_number, 'invalid_or_nonfinite_boundary_field')
+                continue
+            if key in current_boundary['native_fields']:
+                issue('flow', line_number, 'duplicate_boundary_field')
+                current_boundary['duplicate_native_fields'].append({'key': key, 'value': value, 'line': line_number})
+            else:
+                current_boundary['native_fields'][key] = value
+    boundary_identities = collections.Counter((b['river'], b['reach'], b['profile_index']) for b in boundaries)
+    for boundary in boundaries:
+        if boundary_identities[(boundary['river'], boundary['reach'], boundary['profile_index'])] != 1:
+            issue('flow', boundary['line'], 'duplicate_boundary_identity')
+        if not all(key in boundary['native_fields'] for key in ('Up Type', 'Dn Type')):
+            issue('flow', boundary['line'], 'missing_boundary_type')
+
+    plan_inventory = None
+    if plan is not None:
+        plans = structural_lines(plan, 'plan')
+        if (Path(plan).stem.casefold() != Path(project).stem.casefold() or
+                Path(plan).suffix.lstrip('.').casefold() not in [v.casefold() for _, v in values(proj, 'Plan File=')]):
+            issue('project', None, 'supplied_plan_not_listed_in_project')
+        for role, path, key in [('geometry', geometry, 'Geom File='), ('flow', flow, 'Flow File=')]:
+            references = values(plans, key)
+            if len(references) != 1 or references[0][1].casefold() != Path(path).suffix.lstrip('.').casefold():
+                issue('plan', None, 'plan_' + role + '_reference_mismatch')
+        regimes = [line for _, line in plans if line in ('Subcritical Flow', 'Supercritical Flow', 'Mixed Flow')]
+        if len(regimes) != 1:
+            issue('plan', None, 'missing_or_conflicting_plan_regime')
+        settings = {}
+        for key in ('Std Step Tol', 'Critical Tol', 'Max Error Tol', 'Num of Std Step Trials'):
+            declarations = values(plans, key + '=')
+            if len(declarations) > 1:
+                issue('plan', declarations[1][0], 'duplicate_plan_setting')
+            if len(declarations) == 1:
+                try:
+                    value = finite(declarations[0][1])
+                    if value < 0 or (key == 'Num of Std Step Trials' and (value < 1 or not value.is_integer())):
+                        raise ValueError('Invalid numerical setting')
+                    settings[key] = value
+                except (ValueError, OverflowError):
+                    issue('plan', declarations[0][0], 'invalid_or_nonfinite_plan_setting')
+        plan_inventory = {'native_flow_regime_declarations': regimes, 'native_solver_settings': settings,
+                          'native_geometry_references': [v for _, v in values(plans, 'Geom File=')],
+                          'native_flow_references': [v for _, v in values(plans, 'Flow File=')],
+                          'native_program_versions': [v for _, v in values(plans, 'Program Version=')],
+                          'is_project_current_plan': [v.casefold() for _, v in values(proj, 'Current Plan=')] ==
+                                                     [Path(plan).suffix.lstrip('.').casefold()]}
+
     limitations = ['data_usage_terms_and_original_survey_metadata_require_review',
                    'common_vertical_reference_and_unit_realization_require_review',
                    'full_HEC_RAS_semantics_and_remaining_geometry_options_not_checked']
+    if not boundaries:
+        limitations.append('boundary_conditions_not_supplied')
+    else:
+        limitations.append('native_boundary_codes_and_fields_require_review')
+        reaches = {(s['river'], s['reach']) for s in sections}
+        if any((b['river'], b['reach']) not in reaches for b in boundaries):
+            limitations.append('boundary_reach_identity_requires_review')
+        expected_boundaries = {(river, reach, profile) for river, reach in reaches
+                               for profile in range(1, (profile_count or 0) + 1)}
+        if set(boundary_identities) != expected_boundaries:
+            limitations.append('boundary_profile_coverage_requires_review')
+    if plan is None:
+        limitations.append('plan_not_supplied')
+    else:
+        limitations.append('native_plan_solver_settings_require_review')
+        if 'Mixed Flow' in plan_inventory['native_flow_regime_declarations']:
+            limitations.append('mixed_flow_plan_outside_current_solver_scope')
     if junction_count:
         limitations.append('junctions_present')
     if any(k != '1' for k in record_types):
@@ -262,13 +363,15 @@ def inspect(project, geometry, flow):
         limitations.append('repeated_section_stations_require_review')
     if any(o['location_status'] != 'at_section' for o in observations):
         limitations.append('observed_locations_require_review')
-    return {'format': 'doboku-hec-ras-inspection-1',
+    return {'format': 'doboku-hec-ras-inspection-2',
             'inspected_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
             'sources': sources, 'native_unit_declarations': unit_lines,
             'native_datum_fields': [line for _, line in geom if line.startswith(('GIS Datum=', 'GIS Vertical Datum='))],
             'geometry_record_types': dict(record_types), 'junctions': junction_count,
             'sections': sections, 'profile_count': profile_count,
+            'native_profile_names': profile_names,
             'flow_locations': flow_locations, 'observations': observations,
+            'native_boundary_records': boundaries, 'plan_inventory': plan_inventory,
             'observation_location_counts': dict(collections.Counter(o['location_status'] for o in observations)),
             'inventory_complete': issue_count == 0, 'issue_count': issue_count, 'first_issues': issues,
             'requires_review': limitations, 'solver_input_generated': False, 'dataset_adopted': False,
@@ -279,11 +382,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('project', 'geometry', 'flow', 'output'):
         parser.add_argument('--' + name, required=True, type=Path)
+    parser.add_argument('--plan', type=Path, help='Optional explicit plan; never auto-select or execute')
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output already exists; choose a new report file')
     try:
-        report = inspect(args.project, args.geometry, args.flow)
+        report = inspect(args.project, args.geometry, args.flow, args.plan)
         with args.output.open('x', encoding='utf-8') as stream:
             stream.write(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + '\n')
     except (OSError, ValueError) as error:

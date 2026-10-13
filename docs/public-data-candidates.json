@@ -56,7 +56,12 @@
         },
         "inspector": "../scripts/inspect-hec-ras.py",
         "specification": "hec-ras-inspection.md",
-        "dataset_adopted": false
+        "dataset_adopted": false,
+        "format": "doboku-hec-ras-inspection-2",
+        "plan_reference_check": "matches supplied g01/f01; current project plan p01",
+        "flow_regime": "Subcritical Flow",
+        "native_boundary_profile_count": 3,
+        "boundary_semantics": "Native codes/fields preserved for review; no solver input generated"
       }
     },
     {

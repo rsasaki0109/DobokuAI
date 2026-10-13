@@ -157,6 +157,91 @@ class InspectionTests(unittest.TestCase):
         self.assertFalse(report['inventory_complete'])
         self.assertIn('invalid_or_nonfinite_fixed_width_number', [i['code'] for i in report['first_issues']])
 
+    def add_plan(self, text=None):
+        self.project.write_text(self.project.read_text() + 'Plan File=p01\nCurrent Plan=p01\n')
+        plan = self.root / 'demo.p01'
+        plan.write_text(text or 'Geom File=g01\nFlow File=f01\nSubcritical Flow\nProgram Version=4.01\n'
+                        'Std Step Tol=.01\nCritical Tol=.01\nMax Error Tol=.3\nNum of Std Step Trials=20\n')
+        return plan
+
+    def test_explicit_plan_binds_to_supplied_sources_without_executing(self):
+        plan = self.add_plan()
+        before = plan.read_bytes()
+        report = module.inspect(self.project, self.geometry, self.flow, plan)
+        self.assertTrue(report['inventory_complete'], report['first_issues'])
+        self.assertEqual(report['plan_inventory']['native_flow_regime_declarations'], ['Subcritical Flow'])
+        self.assertEqual(report['plan_inventory']['native_solver_settings']['Std Step Tol'], .01)
+        self.assertTrue(report['plan_inventory']['is_project_current_plan'])
+        self.assertEqual(report['sources']['plan']['sha256'], hashlib.sha256(before).hexdigest())
+        self.assertEqual(plan.read_bytes(), before)
+        self.assertFalse(report['solver_input_generated'])
+        self.assertIsNone(self.inspect()['plan_inventory'])
+        self.assertIn('plan_not_supplied', self.inspect()['requires_review'])
+
+    def test_conflicting_plan_references_regime_and_nonfinite_tolerance_fail(self):
+        plan = self.add_plan('Geom File=g02\nFlow File=f02\nSubcritical Flow\nSupercritical Flow\n'
+                             'Std Step Tol=NaN\nNum of Std Step Trials=1.5\n')
+        report = module.inspect(self.project, self.geometry, self.flow, plan)
+        self.assertFalse(report['inventory_complete'])
+        self.assertTrue({'plan_geometry_reference_mismatch', 'plan_flow_reference_mismatch',
+                         'missing_or_conflicting_plan_regime', 'invalid_or_nonfinite_plan_setting'}.issubset(
+                             {i['code'] for i in report['first_issues']}))
+        plan.write_text('Geom File=g01\nFlow File=f01\nMixed Flow\n')
+        report = module.inspect(self.project, self.geometry, self.flow, plan)
+        self.assertTrue(report['inventory_complete'])
+        self.assertIn('mixed_flow_plan_outside_current_solver_scope', report['requires_review'])
+        other = self.root / 'other.p01'
+        other.write_bytes(plan.read_bytes())
+        self.assertFalse(module.inspect(self.project, self.geometry, self.flow, other)['inventory_complete'])
+
+    def test_boundaries_preserve_negative_stage_unknown_type_and_profile_identity(self):
+        self.flow.write_text(self.flow.read_text() +
+                             'Boundary for River Rch & Prof#=R,Up,1\nUp Type=0\nDn Type=1\nDn Known WS=-2\n'
+                             'Boundary for River Rch & Prof#=R,Up,2\nUp Type=0\nDn Type=99\nDn Slope=.0023\n')
+        report = self.inspect()
+        self.assertTrue(report['inventory_complete'], report['first_issues'])
+        self.assertEqual(report['native_boundary_records'][0]['native_fields']['Dn Known WS'], -2)
+        self.assertEqual(report['native_boundary_records'][1]['native_fields'], {
+            'Up Type': 0, 'Dn Type': 99, 'Dn Slope': .0023})
+        self.assertIn('native_boundary_codes_and_fields_require_review', report['requires_review'])
+        self.assertNotIn('boundary_profile_coverage_requires_review', report['requires_review'])
+        self.assertNotIn('interpreted_boundary', report)
+
+    def test_duplicate_or_malformed_boundary_data_cannot_silently_replace_conditions(self):
+        original = self.flow.read_text()
+        self.flow.write_text(original + 'Dn Type=1\nBoundary for River Rch & Prof#=R,Up,1\n'
+                             'Up Type=0\nDn Type=1\nDn Known WS=5\nDn Known WS=6\n'
+                             'Boundary for River Rch & Prof#=R,Up,1\nUp Type=0\nDn Type=3\nDn Slope=Inf\n'
+                             'Boundary for River Rch & Prof#=R,Up,3\nUp Type=0\nDn Type=1\n')
+        report = self.inspect()
+        codes = {i['code'] for i in report['first_issues']}
+        self.assertFalse(report['inventory_complete'])
+        self.assertTrue({'boundary_field_without_identity', 'duplicate_boundary_field',
+                         'duplicate_boundary_identity', 'invalid_or_nonfinite_boundary_field',
+                         'invalid_boundary_identity'}.issubset(codes))
+        self.assertEqual(report['native_boundary_records'][0]['native_fields']['Dn Known WS'], 5)
+        self.assertEqual(report['native_boundary_records'][0]['duplicate_native_fields'][0]['value'], 6)
+        self.assertIn('boundary_profile_coverage_requires_review', report['requires_review'])
+        self.flow.write_text(original + 'Boundary for River Rch & Prof#=R,Other,1\nUp Type=0\n')
+        report = self.inspect()
+        self.assertFalse(report['inventory_complete'])
+        self.assertIn('missing_boundary_type', {i['code'] for i in report['first_issues']})
+        self.assertIn('boundary_reach_identity_requires_review', report['requires_review'])
+
+    def test_profile_names_cannot_replace_the_native_flow_values(self):
+        original = self.flow.read_text()
+        self.flow.write_text(original + 'Profile Names=999 cfs,Low flow\n')
+        report = self.inspect()
+        self.assertTrue(report['inventory_complete'])
+        self.assertEqual(report['native_profile_names'], ['999 cfs', 'Low flow'])
+        self.assertEqual(report['flow_locations'][0]['native_profile_flows'], [10, 20])
+        self.flow.write_text(original + 'Profile Names=Only one\n')
+        self.assertFalse(self.inspect()['inventory_complete'])
+        self.flow.write_text(original + 'Profile Names=One,Two\nProfile Names=Three,Four\n')
+        report = self.inspect()
+        self.assertFalse(report['inventory_complete'])
+        self.assertIsNone(report['native_profile_names'])
+
 
 if __name__ == '__main__':
     unittest.main()
