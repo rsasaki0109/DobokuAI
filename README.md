@@ -40,7 +40,9 @@ CC BY 4.0の出典・加工記録付きで同梱しました。[データ記録]
 出典：国土交通省 Project PLATEAU（横浜市2024年度）。表示用に加工して作成、
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)。水理・構造計算とは未連携です。
 
-反映済み範囲の中心を通る東西・南北の地形断面を、図とCSVで確認できます。[断面の内容](docs/city-workspace.md#中心を通る地形断面東西南北)。
+反映済み範囲の中心を通る東西・南北の地形断面を、図・CSV・単体HTMLで確認できます。
+断面HTMLは画面と共通の図、欠損・複数高さの判定、出典を記録し、同じ条件・作成日時のCSVも内包します。
+[断面の内容](docs/city-workspace.md#中心を通る地形断面東西南北)。
 
 確認済み施工範囲のHTML資料・地形5点CSVも保存できます。[資料の内容](docs/city-workspace.md#確認資料htmlと地形5点csv)。
 

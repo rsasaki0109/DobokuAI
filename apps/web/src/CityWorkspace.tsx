@@ -6,6 +6,8 @@ import { parseCityFiles, syntheticCityXML, localCityCRS } from './cityModel';
 import type { CityFeature, CityLayer, CityModel } from './cityModel';
 import { footprintGround, sampleGround } from './cityTerrain';
 import { buildCityReport } from './cityReport';
+import type { ReportInput } from './cityReport';
+import { buildCitySectionReport } from './citySectionReport';
 import { terrainSections } from './citySections';
 import type { TerrainSection } from './citySections';
 import { citySectionCSV } from './citySectionCSV';
@@ -97,14 +99,15 @@ export default function CityWorkspace() {
   const confirmedGround = useMemo(() => footprintGround(model, footprint), [model, footprint]);
   const centerGround = groundPreview[0];
   const currentSections = showFootprint && sectionState?.model === model && sectionState.footprint === footprint ? sectionState : null;
+  const reportInput = (): ReportInput => ({
+    title: loaded.dataset?.title ?? (loaded.synthetic ? 'DobokuAI合成都市' : '取り込んだ都市・地形'),
+    model, footprint, sources: loaded.sources, inspected_at: loaded.inspectedAt,
+    source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms,
+    data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null,
+  });
   const exportCityReport = (format: 'html' | 'csv') => {
     if (!showFootprint) return;
-    const report = buildCityReport({
-      title: loaded.dataset?.title ?? (loaded.synthetic ? 'DobokuAI合成都市' : '取り込んだ都市・地形'),
-      model, footprint, sources: loaded.sources, inspected_at: loaded.inspectedAt,
-      source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms,
-      data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null,
-    });
+    const report = buildCityReport(reportInput());
     saveBlob(new Blob([report[format]], { type: format === 'html' ? 'text/html;charset=utf-8' : 'text/csv;charset=utf-8' }), `doboku-city-terrain.${format}`);
   };
   const clickFeature = (f: CityFeature, point: THREE.Vector3) => {
@@ -210,12 +213,15 @@ export default function CityWorkspace() {
         catch (e) { setSectionState({ model, footprint, error: (e as Error).message, inspectedAt }); }
       }}>反映済み範囲の地形断面を表示</button><button type="button" className="secondary" disabled={!currentSections?.data} onClick={() => {
         if (!currentSections?.data) return;
-        const csv = citySectionCSV({ title: loaded.dataset?.title ?? (loaded.synthetic ? 'DobokuAI合成都市' : '取り込んだ都市・地形'), model, footprint,
-          sources: loaded.sources, inspected_at: loaded.inspectedAt, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms,
-          data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null }, currentSections.data, currentSections.inspectedAt);
+        const csv = citySectionCSV(reportInput(), currentSections.data, currentSections.inspectedAt);
         saveBlob(new Blob([csv], { type: 'text/csv;charset=utf-8' }), 'doboku-city-sections.csv');
-      }}>施工範囲の地形断面CSVを保存</button></div>
+      }}>施工範囲の地形断面CSVを保存</button><button type="button" className="secondary" disabled={!currentSections?.data} onClick={() => {
+        if (!currentSections?.data) return;
+        const report = buildCitySectionReport(reportInput(), currentSections.data, currentSections.inspectedAt);
+        saveBlob(new Blob([report.html], { type: 'text/html;charset=utf-8' }), 'doboku-city-sections.html');
+      }}>施工範囲の地形断面HTMLを保存</button></div>
       <p className="muted">反映済み範囲の中心を通る東西・南北の2線を、地形三角形との交点から確認します。欠損・重複高さ・鉛直面で線をつなぎません。2線の確認は範囲全体の被覆を保証しません。河川の測量断面・水面形とは区別してください。</p>
+      <p className="muted">断面HTMLは画面と共通の図・判定・出典を記録し、外部通信なしで開けます。資料内から同じ条件・作成日時の断面CSVを保存できます。入力案を変更しても確認前の値は含みません。</p>
       {currentSections?.error && <p role="alert">地形断面を作成できません：{currentSections.error}</p>}
       {currentSections?.data && <><p className="muted">断面点検日時：{currentSections.inspectedAt} / 編集中の値を反映するには施工範囲を確認してから再表示してください。</p><CitySectionsView sections={currentSections.data} /></>}
     </section>

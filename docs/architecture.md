@@ -43,6 +43,10 @@ The HTML includes a companion CSV and a north-up schematic; it never represents 
 `citySections.ts` intersects display terrain triangles with two confirmed centerlines and sweeps their boundaries.
 Missing spans, inconsistent height functions and vertical projections remain explicit.
 `CitySectionsView.tsx` draws separate valid intervals; `citySectionCSV.ts` records points and intervals with provenance.
+`citySectionReport.ts` statically renders that same view into an offline HTML document with expanded
+point/interval tables and an embedded companion CSV. A shared section snapshot normalizes UTC timestamps,
+checks centerline axes/lengths/endpoints against the confirmed footprint, and copies the section results.
+The HTML, JSON and companion CSV use that one snapshot; imported text is escaped and scripts/assets are absent.
 The profile state is valid only for the exact confirmed model/footprint objects; staged edits cannot alter its exports.
 EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display approximation;
 source heights are retained. No datum conversion or solver integration is implied.

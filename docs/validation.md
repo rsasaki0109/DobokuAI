@@ -1443,3 +1443,51 @@ validate jobのcompleted successfully、固定版action・`bash scripts/check.sh
 validate jobのcompleted successfully、固定版action・`bash scripts/check.sh`のworkflowを確認。
 観測時刻・公式ページのbytes/SHA-256を`hosted-ci-evidence.json`へ記録しました。
 これは今回の断面表示実装コミットのホストCI成功を意味しません。
+
+
+## 都市施工範囲の断面HTML資料 — 2026-10-13 UTC
+
+確認済み範囲の中心を通る東西・南北2線を、単体HTMLとして保存する機能を追加しました。
+画面の`CitySectionsView`を静的描画し、同じSVGの軸・曲線・欠損/曖昧区間・タイトルを使用します。
+交点/区間の表は資料内で開いた状態とし、生の数値・高さ候補・参照地物IDを保持。
+出典・利用条件・原ファイルのbytes/SHA-256、加工記録、表示機能版・UTC日時をJSONにも記録します。
+HTMLから保存するCSVは同じスナップショット・作成日時を使用します。
+[操作・出力内容](city-workspace.md#中心を通る地形断面東西南北)。
+
+- 型チェック・Vite本番ビルド：成功、最終ビルド12.05秒。
+- focused最終：新規4ケース・既存9ケースの計13ケース成功、1.1分。
+- 本番配信の新規4ケース：成功、9.5秒。専用出力先のpassedと終了コード0を確認。
+  `.local/city-section-report-production-20261013.log`と
+  `.local/city-section-report-production-results-20261013/.last-run.json`へ記録。検証用previewは停止済み。
+- native全66ケース：成功、4.9分。専用ラッパーの終了コード0と当該出力先のpassedを確認。
+  `.local/city-section-report-native-20261013.{log,exit}`と
+  `.local/city-section-report-native-results-20261013/.last-run.json`へ記録。
+- 合成平面の生の高さ、独立Python CSVパーサーで列・負の座標・条件・UTC日時を照合。
+  点検/作成日時の不正値、断面の本数・起終点/長さと確認範囲の不一致を拒否。
+  小数座標でもエンジンと同じ端点演算順を使用し、丸め誤差による誤拒否を避けました。
+- 0.2mの内部欠損、交差する複数高さ、地形なしをオフラインHTMLで確認。
+  一意でない区間に断面線を引かず、高さがないモデルのSVGを作らないことを検証。
+- 出典・ファイル名・地物ID・JSONにHTML文字列を入れ、script/img/iframeを作らず、
+  文字列・元ハッシュを保持することを確認。CSVの数式先頭保護も検証。
+- ブラウザで画面SVGとHTML内SVGの内容を完全一致で比較。
+  未確認の幅/出典編集を含めず、確認後の幅変更・非表示・モデル置換で旧出力を無効化。
+- 横浜公開モデルのCRS・LOD・原点単位・CC BY 4.0・抜粋ファイルSHA-256を照合。
+  負の元標高を保持し、マーカー標高と地形高さを混同しないことを確認。
+  APIへのPOSTなし。外部通信を遮断してHTMLを開き、資料内CSVの完全一致・実ダウンロードを検証。
+  `.local/city-section-report-yokohama-20261013.png`を目視確認しました。
+
+初回focusedは13中11成功・2失敗。静的描画時に配列状のSVG title子要素が空になる問題を
+単一文字列へ修正しました。CSVの地物IDはJSONセルであり、数式先頭のテストは直接文字列セルで
+検証するよう修正。最終の13ケースは終了コード0・当該`.last-run.json`のpassedを確認しました。
+ログは`.local/city-section-report-focused{-final,}-20261013.log`、
+最終型チェック/ビルドは`.local/city-section-report-build-final-20261013.log`です。
+都市チャンクは6,585.08kB（gzip549.79kB）。都市生データと静的描画処理を含み、
+既存の500kB警告は残っています。数値エンジン・API・SQLite・依存・原データの変更はありません。
+今回のRust全チェック・Docker再ビルドは未実行で、以前の検証と区別します。
+実河川試行0/3、成熟度44.0/100（表示約45%・目標50%）を維持します。
+
+前回の断面表示実装`8e28395`は2026-10-13 02:26:02 UTCに
+[run 38335610357](https://github.com/rsasaki0109/DobokuAI/actions/runs/38335610357)のSuccess、
+validate jobのcompleted successfully、固定版action・`bash scripts/check.sh`のworkflowを確認。
+観測時刻・公式ページのbytes/SHA-256を`hosted-ci-evidence.json`へ記録しました。
+これは今回の断面HTML出力実装コミットのホストCI成功を意味しません。

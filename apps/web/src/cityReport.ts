@@ -10,6 +10,7 @@ export type ReportInput = {
   data_kind: 'synthetic' | 'public_city_model' | 'unspecified'; dataset: unknown;
 };
 const escape = (value: unknown) => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+export { escape as cityHTMLEscape };
 // String cells can contain imported filenames/IDs. Preserve numbers as numbers,
 // and neutralize spreadsheet formulas only in text cells.
 export const cityCSVCell = (value: string | number) => {
