@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { parseCityFiles, syntheticCityXML, localCityCRS } from './cityModel';
 import type { CityFeature, CityLayer, CityModel } from './cityModel';
 import { footprintGround, sampleGround } from './cityTerrain';
+import { buildCityReport } from './cityReport';
 import { NumberField } from './NumberField';
 import { saveBlob } from './types';
 import publicBuildings from './data/yokohama/buildings.gml?raw';
@@ -90,6 +91,16 @@ export default function CityWorkspace() {
   const groundPreview = useMemo(() => footprintGround(model, plan), [model, plan.east, plan.north, plan.width, plan.length]);
   const confirmedGround = useMemo(() => footprintGround(model, footprint), [model, footprint]);
   const centerGround = groundPreview[0];
+  const exportCityReport = (format: 'html' | 'csv') => {
+    if (!showFootprint) return;
+    const report = buildCityReport({
+      title: loaded.dataset?.title ?? (loaded.synthetic ? 'DobokuAI合成都市' : '取り込んだ都市・地形'),
+      model, footprint, sources: loaded.sources, inspected_at: loaded.inspectedAt,
+      source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms,
+      data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null,
+    });
+    saveBlob(new Blob([report[format]], { type: format === 'html' ? 'text/html;charset=utf-8' : 'text/csv;charset=utf-8' }), `doboku-city-terrain.${format}`);
+  };
   const clickFeature = (f: CityFeature, point: THREE.Vector3) => {
     if (!picking) { setSelected(f.id); return; }
     if (f.layer !== 'terrain') { setPickNotice('地形の面をクリックしてください。建物・道路などは施工位置に採用しません。'); return; }
@@ -185,6 +196,8 @@ export default function CityWorkspace() {
       <div className="city-actions"><button type="button" className="primary" disabled={!validFootprint(plan)} onClick={() => { setFootprint(plan); setDraft(null); setShowFootprint(true); setPicking(false); setPickNotice(''); }}>確認して施工範囲を表示</button><button type="button" className="secondary" onClick={() => { setDraft(null); setPickNotice(''); }}>施工範囲の編集を取消</button><button type="button" className="secondary" onClick={() => setShowFootprint(false)}>施工範囲を非表示</button></div>
       {!validFootprint(plan) && <p role="alert">有限値・正の幅/長さと、読込みモデルの水平範囲・標高範囲内を指定してください。</p>}
       {showFootprint && <p role="status">反映済み施工範囲：東 {footprint.east} m・北 {footprint.north} m / {footprint.width} × {footprint.length} m / 標高 {footprint.elevation} m</p>}
+      <div className="city-actions"><button type="button" className="secondary" disabled={!showFootprint} onClick={() => exportCityReport('html')}>施工範囲の確認資料HTMLを保存</button><button type="button" className="secondary" disabled={!showFootprint} onClick={() => exportCityReport('csv')}>施工範囲の地形5点CSVを保存</button></div>
+      <p className="muted">資料は反映済みの施工範囲・出典・地形5点を記録します。編集中の入力は含めません。HTMLは外部通信なしで開け、同じ条件のCSVを保存できます。土量・水理・構造の計算報告書とは区別してください。</p>
     </section>
     <p className="muted">都市モデルと施工範囲は表示専用です。河川プロジェクト・Rust計算条件とは未連携です。公開都市モデルの表示確認は、実河川の水理検証・校正とは別です。</p>
   </div>;

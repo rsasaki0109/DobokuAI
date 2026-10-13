@@ -37,6 +37,9 @@ An explicit picking mode takes horizontal positions from the rendered mesh rayca
 then rechecks source double-precision terrain heights before staging a footprint candidate.
 Orbit drags do not select candidates; footprint confirmation updates the marker and exported footprint.
 This is browser display geometry inspection, separate from Rust engineering solvers.
+`cityReport.ts` exports confirmed footprint inspection as self-contained HTML/CSV,
+with source hashes, display version, UTC creation time and explicit missing/ambiguous points.
+The HTML includes a companion CSV and a north-up schematic; it never represents full terrain coverage.
 EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display approximation;
 source heights are retained. No datum conversion or solver integration is implied.
 The default scene is a licensed display subset of the original Yokohama 2024 PLATEAU

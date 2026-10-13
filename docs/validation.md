@@ -1360,3 +1360,46 @@ validate jobのcompleted successfully、固定版actionと`bash scripts/check.sh
 validate jobのcompleted successfully、固定版actionと`bash scripts/check.sh`のworkflowを確認しました。
 観測時刻・各公式ページのbytes/SHA-256を`hosted-ci-evidence.json`へ記録。
 これは今回のクリック操作実装コミットのホストCI成功を意味しません。
+
+
+## 都市地形・施工範囲の確認資料HTML / CSV — 2026-10-13 UTC
+
+反映済み施工範囲を対象に、地形の中心・四隅、判定・高さ候補・参照地物ID、
+条件・出典・利用条件・元ファイルハッシュをHTML/CSVへ出力します。
+北を上にした共通縮尺の模式図で、地図・全域被覆図・土量の計算結果とは扱いません。
+[操作とデータ仕様](city-workspace.md#確認資料htmlと地形5点csv)。
+
+- 型チェック・Vite本番ビルド：成功。CSVのクレジット・LODを含む最終配信物もビルド。
+- 全体native Playwrightの再実行：57ケース成功、6.0分。終了コード0を
+  `.local/city-report-native-retry-20261013.exit`へ記録し、当該出力先の`.last-run.json`でpassedを確認。
+- 最終版の資料テスト：本番配信物で4ケース成功、7.5秒。
+  全体実行後のCSV列・出典保持の追加検証は、この最終版4ケースで確認。
+- 合成平面の独立式`H=100+0.1E+0.2N`に一致する5点を出力。
+  欠損・複数高さを空欄と候補配列で記録し、勝手に数値を選ばない。
+- 独立したPython標準CSVパーサーで5行・列の対応、負の座標、CRS・LOD・出典を照合。
+  UTF-8 BOM・CRLF・引用符、UTC正規化、原点各軸の単位を確認。
+- 未確認の東方向・幅の編集を資料へ入れず、確認後に出力が変わることを検証。
+  非表示・モデル置換後は出力を無効化。
+- HTMLを外部通信なしで開き、同じ条件・作成日時の内包CSVをダウンロードできることを確認。
+  文字列のHTML挿入・CSV数式化を防ぎ、原文字列・SHA-256を条件JSONへ保持。
+- 公開横浜モデルの資料へ国交省の出典・CC BY 4.0・ライセンスURL・原ファイルハッシュを保持。
+  CSV単体にもクレジットを残す。マーカー標高と実際の表示地形高さは別々に記録。
+- `.local/city-report-yokohama-20261013.png`の資料を目視確認。
+
+最初の全体実行はexec-server接続断でランナーが終了し、56件の通過ログだけが残りました。
+57件の完了記録や終了コードがないため成功扱いしません。残ったAPIの一時E2E DBと
+専用5273番Webの所有を確認して、そのプロセスだけを停止。ユーザーの開発サーバーは対象外です。
+接続から切り離した再実行で、57件の完了と終了コード・ランナー結果を確認しました。
+
+ログは`.local/city-report-{focused,production,native,native-retry,release,build,final-build,release-build}-20261013.log`。
+最終本番版結果は`.local/city-report-release-results-20261013/`。
+Rust/API/DB・依存・原都市データは変更していません。今回Rust全チェック・Docker再ビルドは未実行。
+表示機能版はWebパッケージの0.2.0で、Rustエンジンの実行版・実行日時と混同しません。
+全域の被覆、測量精度、土量、水理、構造、建物干渉、施工可否の照査は未実装。
+実河川試行0/3、成熟度44.0/100（表示約45%・目標50%）を維持します。
+
+前回のクリック操作実装`a3adc1f`は2026-10-13 01:07:13 UTCに
+[run 38328795511](https://github.com/rsasaki0109/DobokuAI/actions/runs/38328795511)のSuccess、
+validate jobのcompleted successfully、固定版action・`bash scripts/check.sh`のworkflowを確認。
+観測時刻・公式ページのbytes/SHA-256を`hosted-ci-evidence.json`へ記録しました。
+これは今回の資料出力実装コミットのホストCI成功を意味しません。
