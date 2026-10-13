@@ -139,7 +139,8 @@ def inspect(project, geometry, flow, plan=None):
                                'point_count': 0, 'point_table_headers': 0, 'vertical_edges': 0,
                                'native_station_bounds': None, 'native_elevation_bounds': None,
                                'coefficient_record_count': 0, 'distinct_native_coefficients': [],
-                               'coefficient_table_headers': 0, 'ineffective_area_headers': 0}
+                               'coefficient_table_headers': 0, 'native_coefficient_headers': [],
+                               'native_coefficient_tables': [], 'ineffective_area_headers': 0}
                     for value in parts[2:]:
                         try:
                             length = finite(value)
@@ -156,6 +157,11 @@ def inspect(project, geometry, flow, plan=None):
             current[key] += 1
             if current[key] > 1:
                 issue('geometry', line_number, 'duplicate_' + key)
+            if not is_points:
+                raw_header = line.split('=', 1)[1]
+                current['native_coefficient_headers'].append({
+                    'line': line_number, 'raw_value': raw_header,
+                    'fields': [value.strip() for value in raw_header.split(',')]})
             try:
                 raw_count = line.split('=', 1)[1].split(',')[0].strip()
                 if not re.fullmatch(r'\d+', raw_count):
@@ -181,6 +187,7 @@ def inspect(project, geometry, flow, plan=None):
             else:
                 current['coefficient_record_count'] = len(rows)
                 current['distinct_native_coefficients'] = sorted({r[1] for r in rows})
+                current['native_coefficient_tables'].append({'header_line': line_number, 'rows': rows})
                 if any(r[1] < 0 for r in rows):
                     issue('geometry', line_number, 'negative_native_coefficient')
             continue
@@ -254,6 +261,7 @@ def inspect(project, geometry, flow, plan=None):
     boundaries = []
     current_boundary = None
     boundary_fields = ('Up Type', 'Dn Type', 'Up Slope', 'Dn Slope', 'Up Known WS', 'Dn Known WS')
+    unassociated_boundary_fields = []
     for line_number, line in flows:
         if line.startswith('Boundary for River Rch & Prof#='):
             current_boundary = None
@@ -263,7 +271,8 @@ def inspect(project, geometry, flow, plan=None):
                 issue('flow', line_number, 'invalid_boundary_identity')
                 continue
             current_boundary = {'river': parts[0], 'reach': parts[1], 'profile_index': int(parts[2]),
-                                'line': line_number, 'native_fields': {}, 'duplicate_native_fields': []}
+                                'line': line_number, 'native_fields': {}, 'duplicate_native_fields': [],
+                                'uninterpreted_fields': []}
             boundaries.append(current_boundary)
         elif line.startswith(('River Rch & RM=', 'Observed WS=', 'Number of Profiles=')):
             current_boundary = None
@@ -287,6 +296,13 @@ def inspect(project, geometry, flow, plan=None):
                 current_boundary['duplicate_native_fields'].append({'key': key, 'value': value, 'line': line_number})
             else:
                 current_boundary['native_fields'][key] = value
+        elif line.startswith(('Up ', 'Dn ')) and '=' in line:
+            key, raw = line.split('=', 1)
+            entry = {'line': line_number, 'key': key, 'raw_value': raw}
+            if current_boundary is None:
+                unassociated_boundary_fields.append(entry)
+            else:
+                current_boundary['uninterpreted_fields'].append(entry)
     boundary_identities = collections.Counter((b['river'], b['reach'], b['profile_index']) for b in boundaries)
     for boundary in boundaries:
         if boundary_identities[(boundary['river'], boundary['reach'], boundary['profile_index'])] != 1:
@@ -341,6 +357,8 @@ def inspect(project, geometry, flow, plan=None):
                                for profile in range(1, (profile_count or 0) + 1)}
         if set(boundary_identities) != expected_boundaries:
             limitations.append('boundary_profile_coverage_requires_review')
+    if unassociated_boundary_fields or any(b['uninterpreted_fields'] for b in boundaries):
+        limitations.append('uninterpreted_boundary_fields_present')
     if plan is None:
         limitations.append('plan_not_supplied')
     else:
@@ -355,15 +373,17 @@ def inspect(project, geometry, flow, plan=None):
         limitations.append('multiple_flow_locations_require_review')
     if any(f['matching_geometry_sections'] != 1 for f in flow_locations):
         limitations.append('flow_location_identity_requires_review')
+    if any(s['native_coefficient_headers'] for s in sections):
+        limitations.append('native_coefficient_mode_requires_review')
     if any(len(s['distinct_native_coefficients']) > 1 for s in sections):
-        limitations.append('transverse_coefficient_variation_present')
+        limitations.append('native_coefficient_variation_present_mode_unconfirmed')
     if any(s['ineffective_area_headers'] for s in sections):
         limitations.append('ineffective_flow_area_headers_present')
     if any(s['vertical_edges'] for s in sections):
         limitations.append('repeated_section_stations_require_review')
     if any(o['location_status'] != 'at_section' for o in observations):
         limitations.append('observed_locations_require_review')
-    return {'format': 'doboku-hec-ras-inspection-2',
+    return {'format': 'doboku-hec-ras-inspection-3',
             'inspected_at_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
             'sources': sources, 'native_unit_declarations': unit_lines,
             'native_datum_fields': [line for _, line in geom if line.startswith(('GIS Datum=', 'GIS Vertical Datum='))],
@@ -372,6 +392,7 @@ def inspect(project, geometry, flow, plan=None):
             'native_profile_names': profile_names,
             'flow_locations': flow_locations, 'observations': observations,
             'native_boundary_records': boundaries, 'plan_inventory': plan_inventory,
+            'unassociated_boundary_fields': unassociated_boundary_fields,
             'observation_location_counts': dict(collections.Counter(o['location_status'] for o in observations)),
             'inventory_complete': issue_count == 0, 'issue_count': issue_count, 'first_issues': issues,
             'requires_review': limitations, 'solver_input_generated': False, 'dataset_adopted': False,

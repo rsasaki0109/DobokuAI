@@ -110,7 +110,7 @@ class InspectionTests(unittest.TestCase):
         self.assertTrue(report['inventory_complete'], report['first_issues'])
         for flag in ['junctions_present', 'non_cross_section_geometry_records_present',
                      'multiple_flow_locations_require_review', 'flow_location_identity_requires_review',
-                     'transverse_coefficient_variation_present', 'ineffective_flow_area_headers_present']:
+                     'native_coefficient_variation_present_mode_unconfirmed', 'ineffective_flow_area_headers_present']:
             self.assertIn(flag, report['requires_review'])
         self.assertEqual(report['flow_locations'][1]['native_profile_flows'], [15, 25])
 
@@ -241,6 +241,42 @@ class InspectionTests(unittest.TestCase):
         report = self.inspect()
         self.assertFalse(report['inventory_complete'])
         self.assertIsNone(report['native_profile_names'])
+
+    def test_coefficient_modes_and_all_three_columns_are_preserved_without_assuming_direction(self):
+        for mode in ('1', '-1', '999'):
+            with self.subTest(mode=mode):
+                self.geometry.write_text(section().replace('#Mann=1,0,0\n' + fixed([0, .03, 0]),
+                    f'#Mann=2,{mode},7\n' + fixed([0, .03, 4, 5, .05, 8])))
+                report = self.inspect()
+                s = report['sections'][0]
+                self.assertTrue(report['inventory_complete'])
+                self.assertEqual(s['native_coefficient_headers'][0]['fields'], ['2', mode, '7'])
+                self.assertEqual(s['native_coefficient_tables'][0]['rows'], [[0, .03, 4], [5, .05, 8]])
+                self.assertIn('native_coefficient_mode_requires_review', report['requires_review'])
+                self.assertIn('native_coefficient_variation_present_mode_unconfirmed', report['requires_review'])
+                self.assertNotIn('transverse_coefficient_variation_present', report['requires_review'])
+        self.geometry.write_text(section().replace('#Mann=1,0,0\n' + fixed([0, .03, 0]),
+            '#Mann=1,1,7\n' + fixed([0, .03, 4]) + '#Mann=1,-1,0\n' + fixed([5, .05, 0])))
+        report = self.inspect()
+        self.assertFalse(report['inventory_complete'])
+        self.assertEqual(len(report['sections'][0]['native_coefficient_headers']), 2)
+        self.assertEqual(len(report['sections'][0]['native_coefficient_tables']), 2)
+
+    def test_unknown_boundary_fields_and_orphans_are_explicitly_uninterpreted(self):
+        self.flow.write_text(self.flow.read_text() +
+            'Up Future Option= NaN\nBoundary for River Rch & Prof#=R,Up,1\n'
+            'Up Type=0\nDn Type=4\nDn Rating Curve= 2,unknown\nDn Rating Curve= 3,other\n'
+            'Observed WS=R,Up,A,0,5,6\nDn Future Option= preserved\n')
+        report = self.inspect()
+        self.assertTrue(report['inventory_complete'])
+        self.assertEqual([entry['key'] for entry in report['unassociated_boundary_fields']],
+                         ['Up Future Option', 'Dn Future Option'])
+        self.assertEqual(report['unassociated_boundary_fields'][0]['raw_value'], ' NaN')
+        boundary = report['native_boundary_records'][0]
+        self.assertEqual([x['raw_value'] for x in boundary['uninterpreted_fields']], [' 2,unknown', ' 3,other'])
+        self.assertNotIn('Dn Rating Curve', boundary['native_fields'])
+        self.assertIn('uninterpreted_boundary_fields_present', report['requires_review'])
+        json.dumps(report, allow_nan=False)
 
 
 if __name__ == '__main__':

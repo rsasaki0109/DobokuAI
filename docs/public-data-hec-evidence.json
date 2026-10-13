@@ -942,5 +942,57 @@
     ],
     "dataset_adopted": false,
     "solver_input_generated": false
-  }
+  },
+  "latest_coefficient_mode_inspection": {
+    "format": "doboku-hec-ras-inspection-3",
+    "inspected_at_utc": "2026-10-13T15:10:23.984001+00:00",
+    "report_sha256": "dbabeac2969a2af75ee4c7bcfefb2f27e09996138c650d114efa1a93f662b165",
+    "inspector_sha256": "9e88f81e845406255a1fc495523b1ba94571614fb2f8e5965d23f3ed8f730a9f",
+    "sources": {
+      "project": {
+        "file_name": "CalibrationWorkshop.prj",
+        "bytes": 871,
+        "sha256": "1af8e2cd7a5ea5e5654c772baab86ac36a927f2539aa5d0483ddf716522a0513"
+      },
+      "geometry": {
+        "file_name": "CalibrationWorkshop.g01",
+        "bytes": 569585,
+        "sha256": "13e53387a3dc94028b01ceca4be2b6a808eeea6cdde4213ac75f020565aee13e"
+      },
+      "flow": {
+        "file_name": "CalibrationWorkshop.f01",
+        "bytes": 4858,
+        "sha256": "dc7a12503419616b6e61821ce4c02bff3ad32218de1a2ed5ffaa7270570f8196"
+      },
+      "plan": {
+        "file_name": "CalibrationWorkshop.p01",
+        "bytes": 3045,
+        "sha256": "1eca968796926f81406c650d4f2ec92f0f9ce12e7e5585d55df7baeac0929cf7"
+      }
+    },
+    "section_count": 56,
+    "native_point_count": 8054,
+    "coefficient_header_count": 56,
+    "coefficient_row_count": 423,
+    "native_coefficient_header_tail_counts": {
+      "-1,0": 56
+    },
+    "uninterpreted_boundary_field_count": 0,
+    "inventory_complete": true,
+    "requires_review": [
+      "data_usage_terms_and_original_survey_metadata_require_review",
+      "common_vertical_reference_and_unit_realization_require_review",
+      "full_HEC_RAS_semantics_and_remaining_geometry_options_not_checked",
+      "native_boundary_codes_and_fields_require_review",
+      "native_plan_solver_settings_require_review",
+      "multiple_flow_locations_require_review",
+      "native_coefficient_mode_requires_review",
+      "native_coefficient_variation_present_mode_unconfirmed",
+      "ineffective_flow_area_headers_present",
+      "observed_locations_require_review"
+    ],
+    "dataset_adopted": false,
+    "solver_input_generated": false
+  },
+  "classification_correction": "Historical format 1/2 transverse_coefficient_variation_present assumed a direction without confirming native coefficient mode. Format 3 retains the original headers/three columns and marks mode unconfirmed; historic evidence is retained without rewriting report hashes."
 }

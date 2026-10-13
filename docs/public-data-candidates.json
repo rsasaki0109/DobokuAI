@@ -40,7 +40,7 @@
         "Confirm instruction scope and authorized intended use",
         "Confirm original units and common vertical reference of geometry and observed water levels",
         "Resolve observation station/offset correspondence: 46 of 65 labels outside packaged geometry label range",
-        "Account for four flow change locations, transverse roughness and ineffective flow areas; current DobokuAI model cannot faithfully import the full reach",
+        "Account for four flow change locations, coefficient variation with unconfirmed native mode and ineffective flow areas; current DobokuAI model cannot faithfully import the full reach",
         "Complete permitted compatible workflow and independent validation; three profiles count as one site, not three river trials"
       ],
       "evidence": "public-data-hec-evidence.json",
@@ -57,11 +57,14 @@
         "inspector": "../scripts/inspect-hec-ras.py",
         "specification": "hec-ras-inspection.md",
         "dataset_adopted": false,
-        "format": "doboku-hec-ras-inspection-2",
+        "format": "doboku-hec-ras-inspection-3",
         "plan_reference_check": "matches supplied g01/f01; current project plan p01",
         "flow_regime": "Subcritical Flow",
         "native_boundary_profile_count": 3,
-        "boundary_semantics": "Native codes/fields preserved for review; no solver input generated"
+        "boundary_semantics": "Native codes/fields preserved for review; no solver input generated",
+        "coefficient_header_count": 56,
+        "coefficient_row_count": 423,
+        "coefficient_mode": "unconfirmed; native header fields and all three coefficient columns preserved"
       }
     },
     {
