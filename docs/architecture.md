@@ -40,6 +40,10 @@ This is browser display geometry inspection, separate from Rust engineering solv
 `cityReport.ts` exports confirmed footprint inspection as self-contained HTML/CSV,
 with source hashes, display version, UTC creation time and explicit missing/ambiguous points.
 The HTML includes a companion CSV and a north-up schematic; it never represents full terrain coverage.
+`citySections.ts` intersects display terrain triangles with two confirmed centerlines and sweeps their boundaries.
+Missing spans, inconsistent height functions and vertical projections remain explicit.
+`CitySectionsView.tsx` draws separate valid intervals; `citySectionCSV.ts` records points and intervals with provenance.
+The profile state is valid only for the exact confirmed model/footprint objects; staged edits cannot alter its exports.
 EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display approximation;
 source heights are retained. No datum conversion or solver integration is implied.
 The default scene is a licensed display subset of the original Yokohama 2024 PLATEAU

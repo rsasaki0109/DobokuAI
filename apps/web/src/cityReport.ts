@@ -3,7 +3,7 @@ import { footprintGround } from './cityTerrain';
 import webPackage from '../package.json' with { type: 'json' };
 
 export type CityFootprint = { east: number; north: number; width: number; length: number; elevation: number };
-type ReportInput = {
+export type ReportInput = {
   title: string; model: CityModel; footprint: CityFootprint;
   sources: { name: string; bytes: number; sha256: string }[];
   inspected_at: string; source_url: string; attribution: string; usage_terms: string;
@@ -12,13 +12,13 @@ type ReportInput = {
 const escape = (value: unknown) => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 // String cells can contain imported filenames/IDs. Preserve numbers as numbers,
 // and neutralize spreadsheet formulas only in text cells.
-const cell = (value: string | number) => {
+export const cityCSVCell = (value: string | number) => {
   const text = typeof value === 'number' ? String(value) : /^[\s]*[=+@-]|^[\t\r\n]/.test(value) ? "'" + value : value;
   return '"' + text.replaceAll('"', '""') + '"';
 };
 const status = { unique: '高さが一意', uncovered: '地形なし', ambiguous: '高さが一意でない', invalid: '無効な位置' };
 
-export function buildCityReport(input: ReportInput, generatedAt = new Date().toISOString()) {
+export function cityReportSnapshot(input: ReportInput, generatedAt = new Date().toISOString()) {
   const p = input.footprint, m = input.model;
   if (!Object.values(p).every(Number.isFinite) || p.width <= 0 || p.length <= 0 || p.width > 5000 || p.length > 5000 ||
       p.east - p.width / 2 < m.bounds.min[0] || p.east + p.width / 2 > m.bounds.max[0] ||
@@ -28,7 +28,7 @@ export function buildCityReport(input: ReportInput, generatedAt = new Date().toI
   generatedAt = new Date(generatedAt).toISOString();
   const samples = footprintGround(m, p);
   const originUnits = m.crs === 'EPSG:6697' ? ['degree', 'degree', 'm'] : ['m', 'm', 'm'];
-  const snapshot = {
+  return {
     schema_version: 1, report_type: 'city_terrain_inspection', display_version: webPackage.version,
     generated_at: generatedAt, inspected_at: input.inspected_at,
     numerical_solver_linked: false, whole_footprint_coverage_verified: false,
@@ -38,6 +38,12 @@ export function buildCityReport(input: ReportInput, generatedAt = new Date().toI
     feature_count: m.features.length, polygon_count: m.polygonCount, footprint: p,
     terrain_inspection: { method: 'display_triangle_barycentric_5_points', shared_height_tolerance_m: 1e-6, samples },
   };
+}
+
+export function buildCityReport(input: ReportInput, generatedAt = new Date().toISOString()) {
+  const snapshot = cityReportSnapshot(input, generatedAt);
+  const p = snapshot.footprint, m = input.model, samples = snapshot.terrain_inspection.samples, originUnits = snapshot.origin_axis_units;
+  generatedAt = snapshot.generated_at;
   const headers = ['point', 'east_m', 'north_m', 'status', 'elevation_m', 'height_candidates_m', 'feature_ids',
     'footprint_east_m', 'footprint_north_m', 'footprint_width_m', 'footprint_length_m', 'marker_elevation_m',
     'crs', 'lod', 'origin_a', 'origin_b', 'origin_height_m', 'origin_axis_units', 'data_kind', 'attribution', 'usage_terms', 'source_url', 'dataset_json', 'source_files_json', 'generated_at_utc', 'display_version',
@@ -46,7 +52,7 @@ export function buildCityReport(input: ReportInput, generatedAt = new Date().toI
     s.status === 'unique' ? s.elevations[0] : '', JSON.stringify(s.elevations), s.features.join('; '),
     p.east, p.north, p.width, p.length, p.elevation, m.crs, m.lod, ...m.origin, JSON.stringify(originUnits), input.data_kind,
     input.attribution, input.usage_terms, input.source_url, JSON.stringify(input.dataset ?? null),
-    JSON.stringify(input.sources), generatedAt, webPackage.version, 'false', 'false'])].map(row => row.map(cell).join(',')).join('\r\n') + '\r\n';
+    JSON.stringify(input.sources), generatedAt, webPackage.version, 'false', 'false'])].map(row => row.map(cityCSVCell).join(',')).join('\r\n') + '\r\n';
   // A schematic of five inspection locations, not a map, terrain surface or
   // whole-area coverage overlay. Same horizontal scale in both directions.
   const scale = Math.min(420 / p.width, 260 / p.length, 1e6);

@@ -1403,3 +1403,43 @@ Rust/API/DB・依存・原都市データは変更していません。今回Rus
 validate jobのcompleted successfully、固定版action・`bash scripts/check.sh`のworkflowを確認。
 観測時刻・公式ページのbytes/SHA-256を`hosted-ci-evidence.json`へ記録しました。
 これは今回の資料出力実装コミットのホストCI成功を意味しません。
+
+
+## 都市施工範囲の中心断面（東西・南北） — 2026-10-13 UTC
+
+反映済みの矩形中心を通る2線について、表示地形三角形の辺との交点を求め、
+境界を走査して一意な区間・欠損・複数高さ・鉛直面を区別します。
+欠損の自動補完、区間の端同士を飛び越える結線、重なる高さからの選択を行いません。
+[仕様・制限・CSV定義](city-workspace.md#中心を通る地形断面東西南北)。
+
+- 型チェック・Vite本番ビルド：成功。Rust/API/SQLite・依存・原データの変更なし。
+- focused：新規5ケースと既存資料4ケース、計9ケース成功、49.5秒。
+- native全62ケース：成功、5.0分。`.local/city-sections-native-20261013.exit`の0と
+  当該出力先の`.last-run.json`のpassedを確認。接続から切り離した専用ラッパーで終了コードを記録。
+- 本番配信の新規5ケース：成功、11.9秒。検証用previewは停止済み。
+- 独立平面`H=100+0.1E+0.2N`の交点・区間両端を9桁で照合。
+  共有辺・反転頂点順でも欠損を作らず、区間長の合計を各断面長と12桁で比較。
+- 等間隔の点の間に隠れ得る0.2mの穴を、距離20.1〜20.3mの欠損区間として確認。
+  中央で高さが一致しても両端が異なる2曲線、鉛直の点/区間投影、地形なし、NaN、65面の重なりを検証。
+- 独立Python標準CSVパーサーで列の対応・欠損時の空欄、出典・SHA-256・falseフラグを照合。
+  点と区間、高さ候補・参照IDは明示し、CSVの数値を丸めない。
+- 入力中の幅変更で図・出力を変えず、確認後には旧結果を無効化。再表示とモデル置換時の解除を確認。
+- 公開横浜モデルの2断面図とCSV出典・CC BY 4.0・ライセンスURLを確認。APIへのPOSTなし。
+  `.local/city-sections-yokohama-20261013.png`を目視確認。
+
+ログは`.local/city-sections-{focused,native,production,build}-20261013.log`。
+`.local/city-sections-native-results-20261013/`、`.local/city-sections-production-results-20261013/`は別出力先。
+資料の出典・日時・版の組立てを共有するため、`cityReportSnapshot`とCSVセル処理を抽出。
+以前の5点HTML/CSVの内容・確認動作も9ケースと全体テストで検証しました。
+
+描画三角形に対する断面であり、元の河川測量・水面形・土量計算の検証ではありません。
+各線の交差面4096件、同じ位置/区間の面64件、断面長1µm〜5000mの制限を明示して拒否。
+縦横の図の縮尺は独立で、数値軸はm。線が2本通っても範囲全体の被覆や施工可否は認証しません。
+今回Rust全チェック・Docker再ビルドは未実行。以前の結果とfrontend検証を区別します。
+実河川試行0/3、成熟度44.0/100（表示約45%・目標50%）を維持します。
+
+前回の資料出力実装`6d63857`は2026-10-13 01:43:14 UTCに
+[run 38331550617](https://github.com/rsasaki0109/DobokuAI/actions/runs/38331550617)のSuccess、
+validate jobのcompleted successfully、固定版action・`bash scripts/check.sh`のworkflowを確認。
+観測時刻・公式ページのbytes/SHA-256を`hosted-ci-evidence.json`へ記録しました。
+これは今回の断面表示実装コミットのホストCI成功を意味しません。

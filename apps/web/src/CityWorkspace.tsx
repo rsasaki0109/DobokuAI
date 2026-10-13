@@ -6,6 +6,10 @@ import { parseCityFiles, syntheticCityXML, localCityCRS } from './cityModel';
 import type { CityFeature, CityLayer, CityModel } from './cityModel';
 import { footprintGround, sampleGround } from './cityTerrain';
 import { buildCityReport } from './cityReport';
+import { terrainSections } from './citySections';
+import type { TerrainSection } from './citySections';
+import { citySectionCSV } from './citySectionCSV';
+import CitySectionsView from './CitySectionsView';
 import { NumberField } from './NumberField';
 import { saveBlob } from './types';
 import publicBuildings from './data/yokohama/buildings.gml?raw';
@@ -79,6 +83,7 @@ export default function CityWorkspace() {
   const [showFootprint, setShowFootprint] = useState(false);
   const [picking, setPicking] = useState(false);
   const [pickNotice, setPickNotice] = useState('');
+  const [sectionState, setSectionState] = useState<{ model: CityModel; footprint: Footprint; data?: TerrainSection[]; error?: string; inspectedAt: string } | null>(null);
   const changeSource = () => { revision.current++; setPending(null); setError(''); setPicking(false); setPickNotice(''); };
   const model = loaded.model;
   const counts = Object.keys(layers).map(k => ({ key: k as CityLayer, count: model.features.filter(f => f.layer === k).length }));
@@ -91,6 +96,7 @@ export default function CityWorkspace() {
   const groundPreview = useMemo(() => footprintGround(model, plan), [model, plan.east, plan.north, plan.width, plan.length]);
   const confirmedGround = useMemo(() => footprintGround(model, footprint), [model, footprint]);
   const centerGround = groundPreview[0];
+  const currentSections = showFootprint && sectionState?.model === model && sectionState.footprint === footprint ? sectionState : null;
   const exportCityReport = (format: 'html' | 'csv') => {
     if (!showFootprint) return;
     const report = buildCityReport({
@@ -193,11 +199,25 @@ export default function CityWorkspace() {
         <button type="button" className="secondary" disabled={centerGround?.status !== 'unique'} onClick={() => { if (centerGround?.status === 'unique') setDraft({ ...plan, elevation: centerGround.elevations[0] }); }}>中心の地形高さを標高候補にする</button>
         <p className="muted">候補を選んでも、確認するまで表示中のマーカーは変わりません。建物の屋根・道路は高さの参照対象に含めません。レイヤー非表示でも取り込んだ地形を確認します。</p>
       </div>
-      <div className="city-actions"><button type="button" className="primary" disabled={!validFootprint(plan)} onClick={() => { setFootprint(plan); setDraft(null); setShowFootprint(true); setPicking(false); setPickNotice(''); }}>確認して施工範囲を表示</button><button type="button" className="secondary" onClick={() => { setDraft(null); setPickNotice(''); }}>施工範囲の編集を取消</button><button type="button" className="secondary" onClick={() => setShowFootprint(false)}>施工範囲を非表示</button></div>
+      <div className="city-actions"><button type="button" className="primary" disabled={!validFootprint(plan)} onClick={() => { setFootprint(plan); setDraft(null); setShowFootprint(true); setPicking(false); setPickNotice(''); }}>確認して施工範囲を表示</button><button type="button" className="secondary" onClick={() => { setDraft(null); setPickNotice(''); }}>施工範囲の編集を取消</button><button type="button" className="secondary" onClick={() => { setShowFootprint(false); setSectionState(null); }}>施工範囲を非表示</button></div>
       {!validFootprint(plan) && <p role="alert">有限値・正の幅/長さと、読込みモデルの水平範囲・標高範囲内を指定してください。</p>}
       {showFootprint && <p role="status">反映済み施工範囲：東 {footprint.east} m・北 {footprint.north} m / {footprint.width} × {footprint.length} m / 標高 {footprint.elevation} m</p>}
       <div className="city-actions"><button type="button" className="secondary" disabled={!showFootprint} onClick={() => exportCityReport('html')}>施工範囲の確認資料HTMLを保存</button><button type="button" className="secondary" disabled={!showFootprint} onClick={() => exportCityReport('csv')}>施工範囲の地形5点CSVを保存</button></div>
       <p className="muted">資料は反映済みの施工範囲・出典・地形5点を記録します。編集中の入力は含めません。HTMLは外部通信なしで開け、同じ条件のCSVを保存できます。土量・水理・構造の計算報告書とは区別してください。</p>
+      <div className="city-actions"><button type="button" className="secondary" disabled={!showFootprint} onClick={() => {
+        const inspectedAt = new Date().toISOString();
+        try { setSectionState({ model, footprint, data: terrainSections(model, footprint), inspectedAt }); }
+        catch (e) { setSectionState({ model, footprint, error: (e as Error).message, inspectedAt }); }
+      }}>反映済み範囲の地形断面を表示</button><button type="button" className="secondary" disabled={!currentSections?.data} onClick={() => {
+        if (!currentSections?.data) return;
+        const csv = citySectionCSV({ title: loaded.dataset?.title ?? (loaded.synthetic ? 'DobokuAI合成都市' : '取り込んだ都市・地形'), model, footprint,
+          sources: loaded.sources, inspected_at: loaded.inspectedAt, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms,
+          data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null }, currentSections.data, currentSections.inspectedAt);
+        saveBlob(new Blob([csv], { type: 'text/csv;charset=utf-8' }), 'doboku-city-sections.csv');
+      }}>施工範囲の地形断面CSVを保存</button></div>
+      <p className="muted">反映済み範囲の中心を通る東西・南北の2線を、地形三角形との交点から確認します。欠損・重複高さ・鉛直面で線をつなぎません。2線の確認は範囲全体の被覆を保証しません。河川の測量断面・水面形とは区別してください。</p>
+      {currentSections?.error && <p role="alert">地形断面を作成できません：{currentSections.error}</p>}
+      {currentSections?.data && <><p className="muted">断面点検日時：{currentSections.inspectedAt} / 編集中の値を反映するには施工範囲を確認してから再表示してください。</p><CitySectionsView sections={currentSections.data} /></>}
     </section>
     <p className="muted">都市モデルと施工範囲は表示専用です。河川プロジェクト・Rust計算条件とは未連携です。公開都市モデルの表示確認は、実河川の水理検証・校正とは別です。</p>
   </div>;

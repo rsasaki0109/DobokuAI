@@ -1247,6 +1247,7 @@ footer {
 .city-actions a { color: #3b687d; font-size: 12px; }
 .city-review { margin-top: 18px; padding: 18px; background: #eff6f7; border: 1px solid #c5dce2; border-radius: 10px; font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
 .city-review button { margin: 6px 8px 0 0; }
+.city-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
 .city-stage { position: relative; height: 600px; border-radius: 12px; overflow: hidden; background: #bed3de; }
 .city-hud { position: absolute; top: 22px; left: 22px; z-index: 1; padding: 14px 18px; border-radius: 9px; background: #f3f7f0df; color: #344d46; pointer-events: none; }
 .city-hud span, .city-hud small { display: block; font-size: 10px; }
