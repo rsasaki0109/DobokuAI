@@ -5,6 +5,7 @@ bash scripts/run-cargo.sh fmt --all --check
 python3 tests/reference_cases.py --check
 python3 tests/irregular_reference.py --check
 python3 tests/dam_reference.py --check
+python3 tests/grading_reference.py --check
 python3 tests/backups.py
 python3 tests/test_ncro_inspection.py
 python3 tests/test_review_audit.py

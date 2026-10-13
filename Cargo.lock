@@ -316,6 +316,7 @@ dependencies = [
  "csv",
  "doboku-agent",
  "doboku-core",
+ "doboku-earthwork",
  "doboku-geometry",
  "doboku-hydraulics",
  "doboku-planning",
@@ -344,6 +345,8 @@ version = "0.2.0"
 dependencies = [
  "doboku-core",
  "doboku-geometry",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

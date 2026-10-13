@@ -9,14 +9,14 @@ SI units (m, m², m³, m³/s, s); dam statics use kN/m³, kN/m, kN·m/m and kPa.
 | doboku-geometry | Section validation, wet geometry, bank elevations, survey coordinates |
 | doboku-hydraulics | Deterministic Manning, critical/normal depth, standard-step energy solver |
 | doboku-structures | Gravity-dam rigid-body statics, full linear uplift, foundation contact diagnostics |
-| doboku-earthwork | Survey-ground differences and trapezoidal reach-volume integration |
+| doboku-earthwork | Survey-ground differences, trapezoidal reach volumes and separate horizontal-plane grading areas for linear profiles |
 | doboku-planning | Explicit construction transformations and same-datum hydraulic comparison |
 | doboku-agent | Proposed typed actions; offline Japanese parser; optional HTTP LLM adapter |
 | doboku-api | Axum, SQLite projects/run snapshots, bounded blocking calculations, exports and HTTP validation |
 | apps/web | React/TypeScript, 2D Recharts editors, comparison, confirmation and printable reports |
 
 Dependency direction: core ← geometry ← hydraulics; geometry ← earthwork;
-planning composes hydraulics + earthwork; API composes planning + agent. No LLM is used inside a numerical function.
+planning composes hydraulics + earthwork; API composes planning + agent and the independent grading module. No LLM is used inside a numerical function.
 
 `doboku-structures` depends only on core and serialization. The separate dam API composes
 `hydraulics::spillway` and structures without coupling them to the river solver or illustrative
@@ -68,7 +68,19 @@ buildings and terrain; the synthetic demo remains explicitly labelled. Known bun
 public data and unclassified uploaded files have separate export metadata. Original
 coordinates are retained, with source/derived hashes, extraction bounds and CC BY 4.0
 attribution. City display trials do not establish hydraulic field-data adoption.
-No API/storage/schema or numerical-engine dependencies changed. [Scope](city-workspace.md).
+The display/inspection path remains independent of HTTP and numerical solvers. [Scope](city-workspace.md).
+
+`doboku-earthwork::grading` separately integrates the positive and negative differences
+between a piecewise-linear profile and a horizontal proposed elevation. It validates
+finite SI inputs and exact interval partitions; missing/ambiguous spans are explicit,
+and any unresolved span/point prevents complete-profile area totals. Known-span subtotals
+remain separate. This module has no HTTP, SQLite or LLM dependency and never estimates a volume.
+The confirmed `POST /api/earthwork/linear-grading` uses the shared blocking computation
+limit, returns echoed conditions/version/UTC time, and performs no project/history writes.
+`CityGrading.tsx` uses only the confirmed display profiles, aborts obsolete requests,
+checks response contracts, and draws/exports source geometry plus the proposed plane.
+Its separate HTML/CSV/JSON retain the calculation and source snapshot; display-only
+reports/settings keep their existing contracts. [Method and limits](city-grading.md).
 
 ## Hydraulic contract
 

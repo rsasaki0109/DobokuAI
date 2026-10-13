@@ -1,0 +1,248 @@
+{
+  "method": "Composite midpoint quadrature, 131072 samples per span; comparison with 65536 samples differs by less than 1e-7 m²",
+  "cases": [
+    {
+      "name": "flat cut",
+      "profile": {
+        "length_m": 10,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 10,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 102,
+              "end_elevation_m": 102
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 100,
+      "expected": {
+        "cut_area_m2": 20.0,
+        "fill_area_m2": 0.0
+      }
+    },
+    {
+      "name": "flat fill",
+      "profile": {
+        "length_m": 10,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 10,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 98,
+              "end_elevation_m": 98
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 100,
+      "expected": {
+        "cut_area_m2": 0.0,
+        "fill_area_m2": 20.0
+      }
+    },
+    {
+      "name": "asymmetric crossing",
+      "profile": {
+        "length_m": 10,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 10,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 99,
+              "end_elevation_m": 103
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 100,
+      "expected": {
+        "cut_area_m2": 11.25,
+        "fill_area_m2": 1.25
+      }
+    },
+    {
+      "name": "non-dyadic crossing",
+      "profile": {
+        "length_m": 13.7,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 13.7,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 99.3,
+              "end_elevation_m": 103.1
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 100.2,
+      "expected": {
+        "cut_area_m2": 15.16013157874163,
+        "fill_area_m2": 1.460131578741731
+      }
+    },
+    {
+      "name": "negative datum",
+      "profile": {
+        "length_m": 24.2,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 24.2,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": -3.7,
+              "end_elevation_m": -0.6
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": -2.3,
+      "expected": {
+        "cut_area_m2": 11.280322580563366,
+        "fill_area_m2": 7.650322580563373
+      }
+    },
+    {
+      "name": "multiple ridges and troughs",
+      "profile": {
+        "length_m": 31,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 4.1,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 3,
+              "end_elevation_m": -2
+            }
+          },
+          {
+            "start_m": 4.1,
+            "end_m": 12.3,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": -2,
+              "end_elevation_m": 4
+            }
+          },
+          {
+            "start_m": 12.3,
+            "end_m": 25.7,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 4,
+              "end_elevation_m": 1
+            }
+          },
+          {
+            "start_m": 25.7,
+            "end_m": 31,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 1,
+              "end_elevation_m": -3
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 0.7,
+      "expected": {
+        "cut_area_m2": 33.79002499966358,
+        "fill_area_m2": 17.040024999663586
+      }
+    },
+    {
+      "name": "reversed asymmetric crossing",
+      "profile": {
+        "length_m": 10,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 10,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 103,
+              "end_elevation_m": 99
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 100,
+      "expected": {
+        "cut_area_m2": 11.25,
+        "fill_area_m2": 1.25
+      }
+    },
+    {
+      "name": "subdivision at zero difference",
+      "profile": {
+        "length_m": 10,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 2.5,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 99,
+              "end_elevation_m": 100
+            }
+          },
+          {
+            "start_m": 2.5,
+            "end_m": 10,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 100,
+              "end_elevation_m": 103
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 100,
+      "expected": {
+        "cut_area_m2": 11.25,
+        "fill_area_m2": 1.25
+      }
+    },
+    {
+      "name": "no difference",
+      "profile": {
+        "length_m": 10,
+        "spans": [
+          {
+            "start_m": 0,
+            "end_m": 10,
+            "ground": {
+              "status": "unique",
+              "start_elevation_m": 1.2,
+              "end_elevation_m": 1.2
+            }
+          }
+        ],
+        "unresolved_points_m": []
+      },
+      "target_elevation_m": 1.2,
+      "expected": {
+        "cut_area_m2": 0.0,
+        "fill_area_m2": 0.0
+      }
+    }
+  ]
+}

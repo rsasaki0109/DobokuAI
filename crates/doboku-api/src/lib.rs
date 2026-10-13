@@ -15,6 +15,7 @@ use std::sync::{Arc, Mutex};
 use tokio::sync::Semaphore;
 pub mod dam;
 pub mod diagnostics;
+pub mod grading;
 pub mod history;
 mod provenance;
 pub mod report;
@@ -90,6 +91,7 @@ pub fn app(state: AppState) -> Router {
         .route("/api/projects/{id}", get(load_project))
         .route("/api/simulate", post(simulate))
         .route("/api/diagnostics/river", post(diagnostics::inspect))
+        .route("/api/earthwork/linear-grading", post(grading::inspect))
         .route("/api/compare", post(compare))
         .route("/api/review-packs/preview", post(review_pack::preview))
         .route("/api/review-packs/zip", post(review_pack::archive))

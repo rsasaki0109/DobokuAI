@@ -1,31 +1,36 @@
 import type { TerrainSection } from './citySections';
 import { citySectionColors } from './citySectionOverlay';
 import { probeCitySection } from './citySectionProbe';
+import type { GradingOverlay } from './cityGrading';
 
 const name = { east_west: '東西', south_north: '南北' };
 const labels = { unique: '高さが一意', uncovered: '地形なし', ambiguous: '高さが一意でない・鉛直面' };
-export default function CitySectionsView({ sections, expanded = false, selection, onSelect }: {
+export default function CitySectionsView({ sections, expanded = false, selection, onSelect, grading }: {
   sections: TerrainSection[]; expanded?: boolean;
   selection?: { axis: TerrainSection['axis']; distance: number } | null;
   onSelect?: (selection: { axis: TerrainSection['axis']; distance: number } | null) => void;
+  grading?: GradingOverlay;
 }) {
   const number = (value: number) => expanded ? String(value) : value.toFixed(6);
   return <div className="city-sections">{sections.map(s => {
     const color = citySectionColors[s.axis];
+    const figureName = `${name[s.axis]}の${grading ? '切土・盛土断面' : '地形断面'}`;
     const distance = selection?.axis === s.axis ? selection.distance : undefined;
     const probe = distance === undefined ? null : probeCitySection(s, distance);
     const select = (distance: number) => onSelect?.({ axis: s.axis, distance });
     const elevations = [...s.points.flatMap(p => p.elevations), ...s.intervals.flatMap(v => v.curves.flatMap(c => [c.from, c.to]))];
+    if (grading) elevations.push(grading.target_elevation_m);
     let lo = Infinity, hi = -Infinity;
     for (const h of elevations) { lo = Math.min(lo, h); hi = Math.max(hi, h); }
     const padding = Math.max(.1, (hi - lo) * .05);
     const bottom = lo - padding, top = hi + padding;
     const x = (t: number) => 65 + 510 * t / s.length, y = (h: number) => 245 - 220 * (h - bottom) / (top - bottom);
-    return <div key={s.axis} className="city-review" role="region" aria-label={`${name[s.axis]}の断面結果`}>
-      <h3>{name[s.axis]}の地形断面（反映済み範囲）</h3>
+    return <div key={s.axis} className="city-review" role="region" aria-label={`${name[s.axis]}の${grading ? '切土・盛土結果' : '断面結果'}`}>
+      <h3>{name[s.axis]}の{grading ? '地形と計画標高' : '地形断面'}（反映済み範囲）</h3>
       <p>起点 東 {s.start.east.toFixed(3)}・北 {s.start.north.toFixed(3)} m → 終点 東 {s.end.east.toFixed(3)}・北 {s.end.north.toFixed(3)} m</p>
       <p>長さ {s.length} m / 地形なし {s.intervals.filter(v => v.status === 'uncovered').length} 区間 / 高さが一意でない {s.intervals.filter(v => v.status === 'ambiguous').length} 区間・{s.points.filter(p => p.status === 'ambiguous').length} 点</p>
       <p className="muted">{s.axis === 'east_west' ? '緑' : '青'}：一意な断面線 / 灰：欠損 / 橙：高さ候補を選べない区間 / 点線：判定点。縦横の縮尺は別です。</p>
+      {grading && <p className="muted">赤の着色：切土 / 青の着色：盛土 / 紫の水平線：計画標高。断面積はRustの区分線形積分結果です。</p>}
       {onSelect && <>
         <div className="form-grid">
           <label className="field">{name[s.axis]}の照会距離 (m)<input aria-label={`${name[s.axis]}の照会距離 (m)`} type="number" min="0" max={s.length} step="any" value={distance ?? ''} onChange={e => e.target.value === '' ? onSelect(null) : select(Number(e.target.value))} /></label>
@@ -40,14 +45,26 @@ export default function CitySectionsView({ sections, expanded = false, selection
           <button type="button" className="secondary" onClick={() => onSelect(null)}>断面の位置照会を解除</button>
         </div>}
       </>}
-      {elevations.length ? <svg viewBox="0 0 610 310" role="img" aria-label={`${name[s.axis]}の地形断面`} style={{ width: '100%', display: 'block' }} onClick={onSelect ? e => {
+      {elevations.length ? <svg viewBox="0 0 610 310" role="img" aria-label={figureName} style={{ width: '100%', display: 'block' }} onClick={onSelect ? e => {
         const matrix = e.currentTarget.getScreenCTM(); if (!matrix) return;
         const p = e.currentTarget.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
         const local = p.matrixTransform(matrix.inverse());
         if (local.x >= 65 && local.x <= 575 && local.y >= 25 && local.y <= 245) select((local.x - 65) / 510 * s.length);
       } : undefined}>
-        <title>{`${name[s.axis]}の地形断面`}</title>
+        <title>{figureName}</title>
         {[0, .25, .5, .75, 1].map(f => <g key={f}><path d={`M65 ${25 + 220 * f}H575`} stroke="#cbd7d0" /><text x="60" y={29 + 220 * f} textAnchor="end" fontSize="11">{(top - (top - bottom) * f).toFixed(3)}</text></g>)}
+        {grading && s.intervals.flatMap((v, i) => {
+          if (v.status !== 'unique') return [];
+          const row = grading[s.axis].spans[i], target = grading.target_elevation_m, c = v.curves[0];
+          const vertices: [number, number][] = [[v.from, c.from]];
+          if (row.crossing_distance_m !== null) vertices.push([row.crossing_distance_m, target]);
+          vertices.push([v.to, c.to]);
+          return vertices.slice(1).map((end, j) => {
+            const start = vertices[j], cut = (start[1] + end[1]) / 2 > target;
+            if (start[1] === target && end[1] === target) return null;
+            return <path key={`${i}:${j}`} data-grading-area={cut ? 'cut' : 'fill'} d={`M${x(start[0])} ${y(target)}L${x(start[0])} ${y(start[1])}L${x(end[0])} ${y(end[1])}L${x(end[0])} ${y(target)}Z`} fill={cut ? '#d47b5f' : '#6aa7cd'} opacity=".5" />;
+          });
+        })}
         {s.intervals.map((v, i) => v.status === 'unique'
           ? <path key={i} data-terrain-line="true" d={`M${x(v.from)} ${y(v.curves[0].from)}L${x(v.to)} ${y(v.curves[0].to)}`} fill="none" stroke={color} strokeWidth="2" />
           : <rect key={i} data-section-status={v.status} x={x(v.from)} y="25" width={x(v.to) - x(v.from)} height="220" fill={v.status === 'uncovered' ? '#e0e5e1' : '#f1c8a0'} opacity=".7"><title>{`${labels[v.status]} / ${v.from}〜${v.to} m`}</title></rect>)}
@@ -57,6 +74,7 @@ export default function CitySectionsView({ sections, expanded = false, selection
         {[0, .5, 1].map(f => <text key={f} x={x(s.length * f)} y="265" textAnchor="middle" fontSize="11">{(s.length * f).toFixed(3)}</text>)}
         <text x="320" y="291" textAnchor="middle" fontSize="12">起点からの距離 (m) · {s.axis === 'east_west' ? '西 → 東' : '南 → 北'}</text>
         <text x="65" y="15" fontSize="11">標高 (m / 原データ基準)</text>
+        {grading && <path data-grading-target="true" d={`M65 ${y(grading.target_elevation_m)}H575`} stroke="#713e9c" strokeWidth="2" strokeDasharray="7 3"><title>{`計画標高 ${grading.target_elevation_m} m / 原データ基準`}</title></path>}
         {probe && <g data-section-probe={probe.status} pointerEvents="none">
           <path d={`M${x(probe.distance)} 25V245`} stroke="#713e9c" strokeWidth="2" strokeDasharray="5 3" />
           {probe.status === 'unique' && <circle cx={x(probe.distance)} cy={y(probe.elevations[0])} r="6" fill="#713e9c" stroke="white" strokeWidth="2" />}
