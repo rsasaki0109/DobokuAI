@@ -1,0 +1,231 @@
+{
+  "format": "doboku-trinity-policy-survey-review-1",
+  "reviewed_at_utc": "2026-10-13T23:49:51.438310+00:00",
+  "source_observations": [
+    {
+      "label": "doi-disclaimer",
+      "url": "https://www.doi.gov/disclaimer.cfm",
+      "observed_at_utc": "2026-10-13T23:45:24.386825+00:00",
+      "status": 200,
+      "final_url": "https://www.doi.gov/disclaimer",
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 50763,
+      "sha256": "ae124b3a530c36916a5de692a8d58aa5798302359bcc581019dc55a2ff2203bd"
+    },
+    {
+      "label": "infrastructure",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=Flood+Plain+Infrastructure",
+      "observed_at_utc": "2026-10-13T23:45:24.387821+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=Flood+Plain+Infrastructure",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 714,
+      "sha256": "c81e2a1fe89c0d6772fefdedacdbad7a29884226000a4b597851341c46ffd4e6"
+    },
+    {
+      "label": "lidar",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=Airborne+LiDAR",
+      "observed_at_utc": "2026-10-13T23:45:24.388420+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=Airborne+LiDAR",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 3525,
+      "sha256": "b9027c2435a68dfa414f7e2a320a58659f3c0ebdaae5ebdce31e6a5da68c0904"
+    },
+    {
+      "label": "low-flow",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=450",
+      "observed_at_utc": "2026-10-13T23:45:24.391598+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=450",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 7404,
+      "sha256": "789654fc670e92b3428300c61785a8c6810c167a5cbccf6f365d53ec0f02f149"
+    },
+    {
+      "label": "doi-copyright",
+      "url": "https://www.doi.gov/copyright",
+      "observed_at_utc": "2026-10-13T23:46:23.700177+00:00",
+      "status": 200,
+      "final_url": "https://www.doi.gov/copyright",
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 54775,
+      "sha256": "b05904413e4ef7dafb5d4daf12b0b21991ae65cbec83995e703933dbc6f79023"
+    },
+    {
+      "label": "doi-robots",
+      "url": "https://www.doi.gov/robots.txt",
+      "observed_at_utc": "2026-10-13T23:46:23.701181+00:00",
+      "status": 200,
+      "final_url": "https://www.doi.gov/robots.txt",
+      "content_type": "text/plain",
+      "bytes": 2403,
+      "sha256": "85954b11b76ad59e710a302ee8cb834529dde976c8f297a07a7cef258483c2fc"
+    },
+    {
+      "label": "lidar-assessment-2006-metadata",
+      "url": "https://www.trrp.net/library/document?id=397",
+      "observed_at_utc": "2026-10-13T23:46:23.702039+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/library/document/?id=397",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 49802,
+      "sha256": "7a769edeee1fedb24e7b9b7f0e59c8eff239be7e9f0a916ef4bd37b69df26b27"
+    },
+    {
+      "label": "lidar-assessment-2006",
+      "url": "https://www.trrp.net/DataPort/doc.php?id=397",
+      "observed_at_utc": "2026-10-13T23:46:23.702843+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/doc.php?id=397",
+      "content_type": "application/force-download",
+      "bytes": 1000924,
+      "sha256": "a8c13a7cbfba9bb3e4ec52680f803e4dbf2c77de0b6666fe9422c09cf168ce59"
+    },
+    {
+      "label": "lidar-evaluation-2005-metadata",
+      "url": "https://www.trrp.net/library/document?id=395",
+      "observed_at_utc": "2026-10-13T23:46:24.114753+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/library/document/?id=395",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 50151,
+      "sha256": "869cc5cffe4c221aeedec41beecf0022537b5e1033f5fa2aa63c5bad68f1e841"
+    },
+    {
+      "label": "lidar-evaluation-2005",
+      "url": "https://www.trrp.net/DataPort/doc.php?id=395",
+      "observed_at_utc": "2026-10-13T23:46:24.610503+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/doc.php?id=395",
+      "content_type": "application/force-download",
+      "bytes": 2692529,
+      "sha256": "73f772691eeb0ddba1c59058f169ce68d5f9d904b3a0128906aeda72a12c9694"
+    },
+    {
+      "label": "spring-events",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=Spring+Flow+Events",
+      "observed_at_utc": "2026-10-13T23:46:24.784717+00:00",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=Spring+Flow+Events",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 5029,
+      "sha256": "227f1a3fe6df6b90f111c8e92a984967fbd4afada2e5ea42b264e82c6ed5fd74"
+    }
+  ],
+  "visual_page_checks": [
+    {
+      "label": "survey-reference-page4",
+      "pdf_page": 4,
+      "source_label": "lidar-evaluation-2005",
+      "bytes": 282815,
+      "sha256": "6dec78e9ffc2e82534c5518b306d964ae06f27555694712459c7c12519abb394",
+      "redistributed": false
+    },
+    {
+      "label": "survey-limit-page18",
+      "pdf_page": 18,
+      "source_label": "lidar-evaluation-2005",
+      "bytes": 100911,
+      "sha256": "1719a1cbd9367f8c346e960f5330bb8816c9b5fd38f4154a3534de501d6e54f8",
+      "redistributed": false
+    },
+    {
+      "label": "assessment-survey-date-page6",
+      "pdf_page": 6,
+      "source_label": "lidar-assessment-2006",
+      "bytes": 348409,
+      "sha256": "29cac3d380b685949c34ebda6d2ae3569ef6f188b3ea21e5bac01c10e839e8a3",
+      "redistributed": false
+    }
+  ],
+  "doi_policy": {
+    "disclaimer": "Liability and endorsement disclaimer; not a dataset-specific licence",
+    "copyright_principle": "Materials produced by federal agencies generally public domain",
+    "copyright_exception": "Materials donated or obtained from individuals/organizations may be restricted; individual copyright status not guaranteed",
+    "linking_request": "Link to the source rather than placing downloaded portions on another web server",
+    "applied_as_permission_for_workshop_or_original_survey": false
+  },
+  "survey_reference": {
+    "source_label": "lidar-evaluation-2005",
+    "library_id": 395,
+    "bibliographic_year": 2005,
+    "survey_month_as_reported": "December 2004",
+    "printed_page": 4,
+    "pdf_page": 4,
+    "vertical_datum": "NAVD88",
+    "vertical_unit": "US Survey Foot",
+    "geoid_model": "Geoid99",
+    "horizontal_reference": "NAD83 / California State Plane Zone 1 / US Survey Foot",
+    "referenced_vendor_report": "FP6254.002",
+    "control_points_as_reported": [
+      "HPGN 02 JD (NGS PID AC8625)",
+      "LEW1 (LEWIS1)"
+    ],
+    "design_data_limitation": {
+      "printed_page": 18,
+      "pdf_page": 18,
+      "statement": "Bathymetric Data should not be confused with Design Level Data. Ground surveys would still be required to fulfill any design requirement within the project area."
+    },
+    "applied_to_workshop_geometry": false,
+    "applied_to_450_cfs_observations": false,
+    "datum_conversion_performed": false
+  },
+  "survey_date_discrepancy": {
+    "resolved": false,
+    "records": [
+      {
+        "source_label": "lidar-evaluation-2005",
+        "printed_pages": [
+          3,
+          7
+        ],
+        "pdf_pages": [
+          3,
+          7
+        ],
+        "reported_year": 2004
+      },
+      {
+        "source": "DWR 2007 Trinity River hydraulic flow study",
+        "source_evidence": "trinity-primary-evidence.json",
+        "sha256": "f2b698e6db9b72350d09e305262ff002aa90d01d2385975f76025fd352680863",
+        "printed_page": 3,
+        "pdf_page": 10,
+        "reported_year": 2004
+      },
+      {
+        "source_label": "lidar-assessment-2006",
+        "printed_page": 6,
+        "pdf_page": 6,
+        "reported_year": 2005
+      }
+    ],
+    "interpretation": "Unresolved whether separate acquisition/version or error; no correction or source identity assumed",
+    "trinity_ground_survey_datum_in_assessment": {
+      "printed_page": 7,
+      "pdf_page": 7,
+      "horizontal": "NAD83",
+      "vertical": "NAVD88"
+    }
+  },
+  "assessment": {
+    "450_cfs_original_observation_identity": "unconfirmed",
+    "workshop_common_vertical_reference": "unconfirmed for all geometry and 450-cfs observations",
+    "usage_scope": "instruction only remains explicit in original workshop",
+    "commercial_and_redistribution_permission": "unconfirmed",
+    "dataset_adopted": false,
+    "redistributed_data": false,
+    "solver_input_generated": false,
+    "hydraulic_calculation_performed": false,
+    "adopted_practical_datasets": 0,
+    "maturity_score": 44.0
+  },
+  "limits": [
+    "Library counts refer only to selected queries and document category; not proof no other records exist",
+    "Source hashes identify downloaded versions; not checked against independently published producer checksums",
+    "PDF extraction/rendering completed with nonfatal PDF settings and Fontconfig cache warnings",
+    "HTTP 200 verifies actual access; not proof draft publication or enforcement state",
+    "No new numerical, application or field validation claimed"
+  ]
+}

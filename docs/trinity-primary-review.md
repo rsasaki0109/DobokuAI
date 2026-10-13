@@ -5,6 +5,10 @@
 教育用`CalibrationWorkshop`の高水位記録との対応も一部確認。
 ただし、断面形状全体・450 cfs観測の基準高や商用/再配布許諾は未確定で、データ採用0/3・成熟度44.0点を維持します。
 
+**23:45 UTCの追加確認：DOI方針に接続できました。**
+[個別資料の例外を含む利用方針、旧測深のGeoid99・基準点、測量年の不一致](trinity-policy-survey-review.md)を記録しました。
+以下のDOIの403と設定案は復旧前の履歴です。接続復旧を個別データの利用許諾とは扱いません。
+
 ## 原報告の明示事項
 
 [California Department of Water Resources (2007), Trinity River hydraulic flow study: North Fork Trinity to Lewiston Dam](https://www.trrp.net/library/document?id=1407)
@@ -58,9 +62,10 @@ Geodetic Control節・Table 1は水平NAD83 / California Zone 1とNAVD88の基�
 ## 利用条件
 
 TRRPページは「The TRRP website follows the intent of the DOI disclaimer」と明記し、DOIの原方針へリンクします。
-そのリンク`https://www.doi.gov/disclaimer.cfm`はプロキシのトンネル403で、本文を取得できていません。
+初回確認では、そのリンク`https://www.doi.gov/disclaimer.cfm`はプロキシのトンネル403で、本文を取得できませんでした。
 既存16ドメインを保持し、`www.doi.gov`を追加する設定案を保存しました。
-保存は適用・公開と別です。環境設定で確認・保存し、環境を公開した後に再接続します。
+保存は適用・公開と別です。23:45 UTCの再接続では正規の`/disclaimer`へリダイレクトしHTTP200。
+そこからリンクされたCopyright方針も取得しました。今回、追加設定案の再保存はしていません。
 
 米国開拓局の[Disclaimer](https://www.usbr.gov/main/disclaimer.html)と
 [Notices](https://www.usbr.gov/main/notices.html)は正規リンクから取得しました。

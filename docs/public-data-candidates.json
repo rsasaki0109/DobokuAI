@@ -72,7 +72,7 @@
         "usage_scope": "instruction only explicitly confirmed on current original page and project file",
         "vertical_datum": "unconfirmed",
         "commercial_and_redistribution_permissions": "unconfirmed",
-        "primary_candidates_access": "TRRP/USBR proxy tunnel 403; additive network draft saved, not applied"
+        "primary_candidates_access": "Initial TRRP/USBR tunnel 403 resolved 2026-10-13 23:23 UTC; see primary_report_review and policy_and_survey_review"
       },
       "primary_report_review": {
         "review": "trinity-primary-review.md",
@@ -81,6 +81,19 @@
         "workshop_association": "25 of 38 (4500 cfs) and 42 of 65 (7000 cfs) same numeric labels, levels within 0.05 of printed 0.1-ft steps",
         "entire_workshop_vertical_datum": "unconfirmed; no datum assigned to geometry or 450-cfs observations",
         "usage_permission": "instruction-only workshop retained; commercial/redistribution unconfirmed"
+      },
+      "policy_and_survey_review": {
+        "review": "trinity-policy-survey-review.md",
+        "evidence": "trinity-policy-survey-evidence.json",
+        "doi_access": "HTTP200 at 2026-10-13 23:45 UTC; linked copyright policy also obtained",
+        "doi_permission_scope": "Federal-agency works generally public domain; externally supplied materials can be restricted; not applied as individual survey licence",
+        "survey_reference": "USBR 2005 report p4: NAVD88, US Survey Foot, Geoid99, HPGN 02 JD and LEW1",
+        "survey_date_discrepancy": "USBR 2005 and DWR 2007 report December 2004; Hilldale/Raff 2006 p6 reports December 2005; unresolved",
+        "entire_workshop_vertical_datum": "unconfirmed",
+        "450_cfs_original_observation_identity": "unconfirmed",
+        "commercial_and_redistribution_permissions": "unconfirmed",
+        "design_data_limitation": "USBR 2005 p18 requires ground survey for design requirements",
+        "dataset_adopted": false
       }
     },
     {
