@@ -14,6 +14,7 @@ import { citySectionCSV } from './citySectionCSV';
 import CitySectionsView from './CitySectionsView';
 import CitySectionOverlayView from './CitySectionOverlayView';
 import { citySectionOverlayData } from './citySectionOverlay';
+import { probeCitySection, cityProbePosition } from './citySectionProbe';
 import { cityDisplayFingerprint, inspectCityDisplay, cityDisplayVersion, cityDisplayFileLimit, validCityFootprint } from './cityDisplay';
 import type { CityDisplayRestore } from './cityDisplay';
 import { NumberField } from './NumberField';
@@ -96,6 +97,7 @@ export default function CityWorkspace() {
   const [sectionState, setSectionState] = useState<{ model: CityModel; footprint: Footprint; data?: TerrainSection[]; error?: string; inspectedAt: string } | null>(null);
   const [showSectionOverlay, setShowSectionOverlay] = useState(true);
   const [sectionFocus, setSectionFocus] = useState(false);
+  const [sectionSelection, setSectionSelection] = useState<{ sections: TerrainSection[]; axis: TerrainSection['axis']; distance: number } | null>(null);
   const [displayFile, setDisplayFile] = useState<File | null>(null);
   const [displayCandidate, setDisplayCandidate] = useState<{ loaded: Loaded; settings: CityDisplayRestore } | null>(null);
   const [displayError, setDisplayError] = useState('');
@@ -114,6 +116,12 @@ export default function CityWorkspace() {
   const centerGround = groundPreview[0];
   const currentSections = showFootprint && sectionState?.model === model && sectionState.footprint === footprint ? sectionState : null;
   const overlayData = useMemo(() => citySectionOverlayData(currentSections?.data ?? [], model.origin[2]), [currentSections?.data, model.origin[2]]);
+  const currentSelection = currentSections?.data === sectionSelection?.sections ? sectionSelection : null;
+  const probe = useMemo(() => {
+    const section = currentSelection?.sections.find(s => s.axis === currentSelection.axis);
+    return section ? probeCitySection(section, currentSelection!.distance) : null;
+  }, [currentSelection]);
+  const probePosition = useMemo(() => cityProbePosition(probe, model.origin[2]), [probe, model.origin[2]]);
   const focusBounds = sectionFocus ? overlayData.bounds : null;
   const currentDisplayCandidate = displayCandidate?.loaded === loaded ? displayCandidate.settings : null;
   const exportCityDisplay = async () => {
@@ -217,13 +225,14 @@ export default function CityWorkspace() {
           <Controls model={model} top={top} rotating={rotating} focusBounds={focusBounds} />
           {model.features.filter(f => visible.includes(f.layer)).map((f, i) => <Feature key={`${loaded.inspectedAt}:${i}`} feature={f} selected={f.id === selected} click={point => clickFeature(f, point)} />)}
           {showFootprint && <mesh position={[footprint.east, footprint.elevation - model.origin[2], -footprint.north]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={5}><planeGeometry args={[footprint.width, footprint.length]} /><meshBasicMaterial color="#f6a841" transparent opacity={.62} side={THREE.DoubleSide} depthTest={false} depthWrite={false} /></mesh>}
-          {!!currentSections?.data && showSectionOverlay && <CitySectionOverlayView data={overlayData} />}
+          {!!currentSections?.data && showSectionOverlay && <CitySectionOverlayView data={overlayData} probePosition={probePosition} />}
           <gridHelper args={[extent * 1.15, 16, '#70858b', '#8fa4a8']} position={[0, model.bounds.min[1] - 1, 0]} />
         </Canvas>
         <div className="city-caption">北は画面の−Z方向 · {picking ? '地形クリックで施工位置の入力候補を選択' : '地物をクリックして選択'} · 施工範囲は表示用マーカー</div>
       </div>
       {!!currentSections?.data && showSectionOverlay && <p role="status" aria-label="地形断面の3D表示">反映済み地形断面：{overlayData.axes.map(a => `${a.axis === 'east_west' ? '東西（緑）' : '南北（青）'} ${a.length} m / 一意な線${a.segments.length / 6}区間・${a.points.length / 3}点 / 一意でない点${a.ambiguousPoints}`).join(' / ')}。元の地形高さを保持し、建物の背後も表示します。欠損・高さが一意でない区間に線を引きません。細かな判定は2D図と表で確認してください。</p>}
       {!!focusBounds && <p role="status" aria-label="地形断面の近接表示">地形断面を近接表示中。カメラは一意な高さの線・点を囲む範囲を見ています。マーカーは表示用の水平面です。</p>}
+      {probePosition && showSectionOverlay && <p role="status" aria-label="断面照会位置の3D表示">紫の点：{probe!.axis === 'east_west' ? '東西' : '南北'}の起点から {probe!.distance} m / 東 {probe!.east} m・北 {probe!.north} m・標高 {probe!.elevations[0]} m（原データ基準）。位置の点は視認用の13pxです。</p>}
       <div className="city-layers">{counts.filter(c => c.count).map(c => <label key={c.key}><input type="checkbox" checked={visible.includes(c.key)} onChange={e => setVisible(e.target.checked ? [...visible, c.key] : visible.filter(k => k !== c.key))} />{layers[c.key].name} ({c.count})</label>)}</div>
       {feature && <p role="status">選択地物：{feature.id} / {layers[feature.layer].name} / {feature.triangleCount} 三角形</p>}
       <p className="muted city-provenance">{model.crs === localCityCRS ? '局所座標：東・北・高さ（m）。' : 'EPSG:6697：緯度・経度・高さ。GRS80接平面で水平を表示用に近似し、原高さを保持します。測量座標変換・標高基準変換ではありません。'} {loaded.attribution || '出典未入力'} / {loaded.terms || '利用条件未入力'}。元CityGMLは別途保持してください。</p>
@@ -292,7 +301,7 @@ export default function CityWorkspace() {
       <p className="muted">反映済み範囲の中心を通る東西・南北の2線を、地形三角形との交点から確認します。欠損・重複高さ・鉛直面で線をつなぎません。2線の確認は範囲全体の被覆を保証しません。河川の測量断面・水面形とは区別してください。</p>
       <p className="muted">断面HTMLは画面と共通の図・判定・出典を記録し、外部通信なしで開けます。資料内から同じ条件・作成日時の断面CSVを保存できます。入力案を変更しても確認前の値は含みません。</p>
       {currentSections?.error && <p role="alert">地形断面を作成できません：{currentSections.error}</p>}
-      {currentSections?.data && <><p className="muted">断面点検日時：{currentSections.inspectedAt} / 編集中の値を反映するには施工範囲を確認してから再表示してください。</p><CitySectionsView sections={currentSections.data} /></>}
+      {currentSections?.data && <><p className="muted">断面点検日時：{currentSections.inspectedAt} / 編集中の値を反映するには施工範囲を確認してから再表示してください。</p><CitySectionsView sections={currentSections.data} selection={currentSelection} onSelect={selection => setSectionSelection(selection ? { ...selection, sections: currentSections.data! } : null)} /></>}
     </section>
     <p className="muted">都市モデルと施工範囲は表示専用です。河川プロジェクト・Rust計算条件とは未連携です。公開都市モデルの表示確認は、実河川の水理検証・校正とは別です。</p>
   </div>;
