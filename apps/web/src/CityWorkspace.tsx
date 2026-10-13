@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { parseCityFiles, syntheticCityXML, localCityCRS } from './cityModel';
 import type { CityFeature, CityLayer, CityModel } from './cityModel';
+import { footprintGround } from './cityTerrain';
 import { NumberField } from './NumberField';
 import { saveBlob } from './types';
 import publicBuildings from './data/yokohama/buildings.gml?raw';
@@ -84,6 +85,9 @@ export default function CityWorkspace() {
     -p.north - p.length / 2 >= model.bounds.min[2] && -p.north + p.length / 2 <= model.bounds.max[2] &&
     p.elevation >= model.origin[2] + model.bounds.min[1] && p.elevation <= model.origin[2] + model.bounds.max[1];
   const plan = draft ?? footprint;
+  const groundPreview = useMemo(() => footprintGround(model, plan), [model, plan.east, plan.north, plan.width, plan.length]);
+  const confirmedGround = useMemo(() => footprintGround(model, footprint), [model, footprint]);
+  const centerGround = groundPreview[0];
   const extent = Math.max(model.bounds.max[0] - model.bounds.min[0], model.bounds.max[2] - model.bounds.min[2], 10);
   return <div className="city-workspace">
     <section className="panel city-import">
@@ -131,7 +135,7 @@ export default function CityWorkspace() {
         <button type="button" className="secondary" aria-pressed={top} onClick={() => setTop(true)}>都市を真上から</button>
         <button type="button" className="secondary" aria-pressed={rotating} onClick={() => setRotating(!rotating)}>都市を自動回転</button>
         <button type="button" className="secondary" aria-pressed={sunset} onClick={() => setSunset(!sunset)}>都市を夕景で表示</button>
-        <button type="button" className="secondary" onClick={() => saveBlob(new Blob([JSON.stringify({ schema_version: 1, model_type: 'citygml_display', numerical_solver_linked: false, synthetic: loaded.synthetic ? true : loaded.dataset ? false : null, data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null, sources: loaded.sources, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms, inspected_at: loaded.inspectedAt, crs: model.crs, origin: model.origin, bounds: model.bounds, lod: model.lod, feature_count: model.features.length, polygon_count: model.polygonCount, visible_layers: visible, selected_feature: selected, footprint: showFootprint ? footprint : null, top, rotating, sunset }, null, 2)], { type: 'application/json' }), 'doboku-city-display.json')}>都市の表示条件JSONを保存</button>
+        <button type="button" className="secondary" onClick={() => saveBlob(new Blob([JSON.stringify({ schema_version: 1, model_type: 'citygml_display', numerical_solver_linked: false, synthetic: loaded.synthetic ? true : loaded.dataset ? false : null, data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null, sources: loaded.sources, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms, inspected_at: loaded.inspectedAt, crs: model.crs, origin: model.origin, bounds: model.bounds, lod: model.lod, feature_count: model.features.length, polygon_count: model.polygonCount, visible_layers: visible, selected_feature: selected, footprint: showFootprint ? footprint : null, terrain_inspection: showFootprint ? { method: 'display_triangle_barycentric_5_points', whole_footprint_coverage_verified: false, samples: confirmedGround } : null, top, rotating, sunset }, null, 2)], { type: 'application/json' }), 'doboku-city-display.json')}>都市の表示条件JSONを保存</button>
       </div>
       <div className="city-stage" aria-label="都市と地形の3Dビュー">
         <div className="city-hud"><span>{loaded.dataset ? 'PLATEAU / YOKOHAMA 2024 · 公開モデル抜粋' : loaded.synthetic ? 'SYNTHETIC CITY · 実在都市ではありません' : 'CITYGML · 読込みモデル'}</span><strong>{model.features.length} 地物 / {model.polygonCount} 面</strong><small>鉛直・水平とも1倍 · m</small></div>
@@ -153,8 +157,15 @@ export default function CityWorkspace() {
     </section>
     <section className="panel">
       <div className="panel-heading"><div><div className="eyebrow">PLANNING OVERLAY</div><h2>施工範囲を重ねる</h2></div><span className="badge">計画用マーカー</span></div>
-      <p className="muted">表示原点から東・北の距離と原データ基準の高さを指定します。地盤への投影・掘削・土量・浸水計算は行いません。</p>
+      <p className="muted">表示原点から東・北の距離と原データ基準の高さを指定します。中心・四隅の5点で、地形の三角形から高さを補間して確認できます。5点の確認は範囲全体の地形被覆を保証しません。マーカーは水平面で、地盤への投影・掘削・土量・浸水計算は行いません。</p>
       <div className="form-grid">{([['east', '施工範囲の東方向 (m)'], ['north', '施工範囲の北方向 (m)'], ['width', '施工範囲の幅 (m)'], ['length', '施工範囲の長さ (m)'], ['elevation', '施工範囲の標高 (m / 原データ基準)']] as const).map(([key, label]) => <NumberField key={key} label={label} value={plan[key]} onChange={v => setDraft({ ...plan, [key]: v })} />)}</div>
+      <div role="region" aria-label="施工範囲の地形5点確認" className="city-review">
+        <h3>編集中の範囲：地形の5点確認</h3>
+        <ul>{groundPreview.map(s => <li key={s.label}>{s.label}：{s.status === 'unique' ? `${s.elevations[0].toFixed(3)} m / 原データ基準` : s.status === 'ambiguous' ? '高さが重なる・鉛直面を含むため一意に決められません' : '地形がありません・外挿しません'}（東 {s.east.toFixed(2)}・北 {s.north.toFixed(2)} m）</li>)}</ul>
+        {!groundPreview.length && <p>有限値と正の幅・長さを指定してください。</p>}
+        <button type="button" className="secondary" disabled={centerGround?.status !== 'unique'} onClick={() => { if (centerGround?.status === 'unique') setDraft({ ...plan, elevation: centerGround.elevations[0] }); }}>中心の地形高さを標高候補にする</button>
+        <p className="muted">候補を選んでも、確認するまで表示中のマーカーは変わりません。建物の屋根・道路は高さの参照対象に含めません。レイヤー非表示でも取り込んだ地形を確認します。</p>
+      </div>
       <div className="city-actions"><button type="button" className="primary" disabled={!validFootprint(plan)} onClick={() => { setFootprint(plan); setDraft(null); setShowFootprint(true); }}>確認して施工範囲を表示</button><button type="button" className="secondary" onClick={() => setDraft(null)}>施工範囲の編集を取消</button><button type="button" className="secondary" onClick={() => setShowFootprint(false)}>施工範囲を非表示</button></div>
       {!validFootprint(plan) && <p role="alert">有限値・正の幅/長さと、読込みモデルの水平範囲・標高範囲内を指定してください。</p>}
       {showFootprint && <p role="status">反映済み施工範囲：東 {footprint.east} m・北 {footprint.north} m / {footprint.width} × {footprint.length} m / 標高 {footprint.elevation} m</p>}

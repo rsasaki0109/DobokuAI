@@ -1295,3 +1295,33 @@ was observed Queued; hosted success is unverified. The run-page hash and observa
 time are recorded separately under `pending_runs` in [hosted evidence](hosted-ci-evidence.json).
 The GitHub run remains active. The local/native/Docker outcomes above do not imply
 hosted success for this commit or its subsequent documentation-only commit.
+
+
+## 都市の施工範囲：地形5点確認 — 2026-10-13 UTC
+
+中心・四隅の表示モデル上の地形高さを補間し、欠損・複数高さ・鉛直面を明示します。
+中心高さの採用は入力案であり、確認するまで3DマーカーとJSONを変えません。
+出力には参照地物ID・高さ候補・判定と`whole_footprint_coverage_verified:false`を記録します。
+[仕様と制約](city-workspace.md#施工範囲の地形5点確認)。
+
+- 型チェック・Vite本番ビルド：成功。追加依存・Rust/API/SQLiteの変更なし。
+- 全体のnative Playwright：48ケース成功、3.5分。地形確認の初期3ケースと既存45ケースを含む。
+- 最終版の地形テスト：本番ビルド配信に対し4ケース成功、7.0秒。うち解析値2件・ブラウザ2件。
+  追加した重複高さのブラウザケースを含む。49の異なるケースを確認したが、49件の全体一括実行とは記載しない。
+- 独立した傾斜平面`H=100+0.1E+0.2N`の内部・共有辺・頂点・逆向き三角形と9桁で比較。
+  原点高さ復元、屋根の除外、外挿拒否、高さ重複、鉛直面、非有限入力を確認。
+- 中心・四隅がすべて被覆されても内部に穴がある合成例を確認。5点から全域被覆を宣言しない。
+- 確認前のJSON保持、取消、確認後の更新、元モデル置換時のクリア、レイヤー非表示時の参照保持を確認。
+- 本番の確認画面を`.local/terrain-inspection-20261013.png`へ保存し、目視確認。
+
+ログは`.local/terrain-{build,final-build,native,production}-20261013.log`。
+Rust数値エンジンは変更しておらず、今回Rust全チェック・Docker再ビルドは実行していません。
+直前のRust91件・Docker7件の検証とは区別します。UIの幾何確認を土量・水理の計算精度検証と数えません。
+実地の測量精度確認、TIN掘削体積、範囲全体の被覆照査、水理連携は未実装。
+実河川試行は0/3件、成熟度44.0/100（表示約45%・目標50%）を維持します。
+
+前回の公開横浜モデル実装`dfb556d`のホストCIは、2026-10-13 00:06:42 UTCに
+[run 38324061907](https://github.com/rsasaki0109/DobokuAI/actions/runs/38324061907)のSuccess、
+validate jobのcompleted successfully、固定版actionと`bash scripts/check.sh`のworkflowを確認しました。
+以前のQueued観測を保持し、その後の成功観測・SHA-256を`hosted-ci-evidence.json`へ追記しました。
+これは今回の地形確認実装コミットのホストCI成功を意味しません。
