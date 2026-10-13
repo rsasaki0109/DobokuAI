@@ -6,13 +6,22 @@ import type { ReportInput } from './cityReport';
 import { traceTerrainTransect, transectCoordinate } from './cityTransect';
 import type { TransectLine } from './cityTransect';
 
-export function buildCityTransectReport(input: ReportInput, line: TransectLine, generatedAt = new Date().toISOString()) {
+export function cityTransectSnapshot(input: ReportInput, line: TransectLine, generatedAt = new Date().toISOString()) {
   const { terrain_inspection: _inspection, ...source } = cityReportSnapshot(input, generatedAt);
   const transect = traceTerrainTransect(input.model, line);
-  const snapshot = structuredClone({ ...source, report_type: 'city_terrain_transect_inspection',
+  return structuredClone({ ...source, report_type: 'city_terrain_transect_inspection',
     hydraulic_solver_linked: false, volume_calculated: false,
     transect_inspected_at: source.generated_at,
     terrain_transect: { method: 'display_triangle_intersections_rigid_horizontal_line_frame', shared_height_tolerance_m: 1e-6, ...transect } });
+}
+export type TransectSnapshot = ReturnType<typeof cityTransectSnapshot>;
+export function buildCityTransectReport(input: ReportInput, line: TransectLine, generatedAt = new Date().toISOString()) {
+  return buildCityTransectReportFromSnapshot(cityTransectSnapshot(input, line, generatedAt));
+}
+// Accept only a trusted, freshly computed or verified snapshot. Rendering must
+// not create a new historical timestamp when reopening an archived result.
+export function buildCityTransectReportFromSnapshot(trusted: TransectSnapshot) {
+  const snapshot = structuredClone(trusted), transect = snapshot.terrain_transect;
   const rows: (string | number)[][] = [[
     'kind', 'distance_from_m', 'distance_to_m', 'east_from_m', 'north_from_m', 'east_to_m', 'north_to_m', 'status', 'height_candidates_m', 'feature_ids',
     'generated_at_utc', 'crs', 'origin', 'origin_axis_units', 'source_files', 'source_url', 'attribution', 'usage_terms', 'data_kind', 'numerical_solver_linked',
