@@ -12,6 +12,8 @@ import { terrainSections } from './citySections';
 import type { TerrainSection } from './citySections';
 import { citySectionCSV } from './citySectionCSV';
 import CitySectionsView from './CitySectionsView';
+import CitySectionOverlayView from './CitySectionOverlayView';
+import { citySectionOverlayData } from './citySectionOverlay';
 import { cityDisplayFingerprint, inspectCityDisplay, cityDisplayVersion, cityDisplayFileLimit, validCityFootprint } from './cityDisplay';
 import type { CityDisplayRestore } from './cityDisplay';
 import { NumberField } from './NumberField';
@@ -37,22 +39,26 @@ const syntheticCity = (): Loaded => ({
   inspectedAt: new Date().toISOString(), synthetic: true, sourceURL: '', attribution: 'DobokuAI合成例', terms: '実在都市・測量データではありません',
 });
 type Footprint = { east: number; north: number; width: number; length: number; elevation: number };
-function Controls({ model, top, rotating }: { model: CityModel; top: boolean; rotating: boolean }) {
+function Controls({ model, top, rotating, focusBounds }: { model: CityModel; top: boolean; rotating: boolean; focusBounds: CityModel['bounds'] | null }) {
   const { camera, gl, invalidate } = useThree();
   const control = useRef<OrbitControls | null>(null);
-  const radius = Math.max(Math.hypot(...model.bounds.max.map((v, i) => v - model.bounds.min[i])) / 2, 10);
+  const bounds = focusBounds ?? model.bounds;
+  const radius = Math.max(Math.hypot(...bounds.max.map((v, i) => v - bounds.min[i])) / 2, 10);
+  const cx = focusBounds ? (bounds.min[0] + bounds.max[0]) / 2 : 0;
+  const cy = (bounds.min[1] + bounds.max[1]) / 2;
+  const cz = focusBounds ? (bounds.min[2] + bounds.max[2]) / 2 : 0;
   useEffect(() => {
     const orbit = new OrbitControls(camera, gl.domElement);
-    orbit.target.set(0, (model.bounds.max[1] + model.bounds.min[1]) / 2, 0);
+    orbit.target.set(cx, cy, cz);
     orbit.minDistance = radius * .15; orbit.maxDistance = radius * 5; orbit.maxPolarAngle = Math.PI * .49;
     orbit.autoRotateSpeed = .7; orbit.addEventListener('change', () => invalidate()); control.current = orbit;
     return () => { orbit.dispose(); control.current = null; };
-  }, [camera, gl, invalidate, model, radius]);
+  }, [camera, gl, invalidate, model, radius, focusBounds, cx, cy, cz]);
   useEffect(() => {
-    camera.position.set(radius * (top ? 0 : 1.3), radius * (top ? 2.6 : 1.6), radius * (top ? .001 : 1.3));
+    camera.position.set(cx + radius * (top ? 0 : 1.3), (focusBounds ? cy : 0) + radius * (top ? 2.6 : 1.6), cz + radius * (top ? .001 : 1.3));
     camera.near = .05; camera.far = radius * 15; camera.updateProjectionMatrix();
     control.current?.update(); invalidate();
-  }, [camera, invalidate, model, radius, top]);
+  }, [camera, invalidate, model, radius, top, focusBounds, cx, cy, cz]);
   useFrame((_, delta) => { if (control.current) { control.current.autoRotate = rotating; if (rotating) control.current.update(delta); } });
   return null;
 }
@@ -88,6 +94,8 @@ export default function CityWorkspace() {
   const [picking, setPicking] = useState(false);
   const [pickNotice, setPickNotice] = useState('');
   const [sectionState, setSectionState] = useState<{ model: CityModel; footprint: Footprint; data?: TerrainSection[]; error?: string; inspectedAt: string } | null>(null);
+  const [showSectionOverlay, setShowSectionOverlay] = useState(true);
+  const [sectionFocus, setSectionFocus] = useState(false);
   const [displayFile, setDisplayFile] = useState<File | null>(null);
   const [displayCandidate, setDisplayCandidate] = useState<{ loaded: Loaded; settings: CityDisplayRestore } | null>(null);
   const [displayError, setDisplayError] = useState('');
@@ -105,6 +113,8 @@ export default function CityWorkspace() {
   const confirmedGround = useMemo(() => footprintGround(model, footprint), [model, footprint]);
   const centerGround = groundPreview[0];
   const currentSections = showFootprint && sectionState?.model === model && sectionState.footprint === footprint ? sectionState : null;
+  const overlayData = useMemo(() => citySectionOverlayData(currentSections?.data ?? [], model.origin[2]), [currentSections?.data, model.origin[2]]);
+  const focusBounds = sectionFocus ? overlayData.bounds : null;
   const currentDisplayCandidate = displayCandidate?.loaded === loaded ? displayCandidate.settings : null;
   const exportCityDisplay = async () => {
     const snapshot = { schema_version: 2, display_version: cityDisplayVersion, exported_at: new Date().toISOString(),
@@ -192,6 +202,9 @@ export default function CityWorkspace() {
         <button type="button" className="secondary" aria-pressed={sunset} onClick={() => setSunset(!sunset)}>都市を夕景で表示</button>
         <button type="button" className="secondary" aria-pressed={picking} onClick={() => { setPicking(!picking); setPickNotice(''); if (!picking) { setRotating(false); setSelected(null); } }}>地形をクリックして施工位置を選ぶ</button>
         <button type="button" className="secondary" onClick={exportCityDisplay}>都市の表示条件JSONを保存</button>
+        <button type="button" className="secondary" disabled={!currentSections?.data} aria-pressed={!!currentSections?.data && showSectionOverlay} onClick={() => setShowSectionOverlay(!showSectionOverlay)}>地形断面を3Dに重ねる</button>
+        <button type="button" className="secondary" disabled={!overlayData.bounds} aria-pressed={!!focusBounds} onClick={() => setSectionFocus(true)}>地形断面を近くから見る</button>
+        <button type="button" className="secondary" disabled={!focusBounds} onClick={() => setSectionFocus(false)}>都市全体を表示</button>
       </div>
       {picking && <p role="status">施工位置の選択中：地形をクリックすると東・北・高さを入力候補にします。ドラッグは視点操作です。幅・長さを確認してから反映してください。</p>}
       {pickNotice && <p role="status" aria-label="施工位置の選択結果">{pickNotice}</p>}
@@ -201,13 +214,16 @@ export default function CityWorkspace() {
           <color attach="background" args={[sunset ? '#e4c4ac' : '#bed3de']} />
           <hemisphereLight args={['#e3f0fa', '#71654a', 2]} />
           <directionalLight position={[extent, extent * 2, extent * .6]} intensity={sunset ? 2.8 : 2.2} color={sunset ? '#ffd1a3' : '#fff4de'} />
-          <Controls model={model} top={top} rotating={rotating} />
+          <Controls model={model} top={top} rotating={rotating} focusBounds={focusBounds} />
           {model.features.filter(f => visible.includes(f.layer)).map((f, i) => <Feature key={`${loaded.inspectedAt}:${i}`} feature={f} selected={f.id === selected} click={point => clickFeature(f, point)} />)}
           {showFootprint && <mesh position={[footprint.east, footprint.elevation - model.origin[2], -footprint.north]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={5}><planeGeometry args={[footprint.width, footprint.length]} /><meshBasicMaterial color="#f6a841" transparent opacity={.62} side={THREE.DoubleSide} depthTest={false} depthWrite={false} /></mesh>}
+          {!!currentSections?.data && showSectionOverlay && <CitySectionOverlayView data={overlayData} />}
           <gridHelper args={[extent * 1.15, 16, '#70858b', '#8fa4a8']} position={[0, model.bounds.min[1] - 1, 0]} />
         </Canvas>
         <div className="city-caption">北は画面の−Z方向 · {picking ? '地形クリックで施工位置の入力候補を選択' : '地物をクリックして選択'} · 施工範囲は表示用マーカー</div>
       </div>
+      {!!currentSections?.data && showSectionOverlay && <p role="status" aria-label="地形断面の3D表示">反映済み地形断面：{overlayData.axes.map(a => `${a.axis === 'east_west' ? '東西（緑）' : '南北（青）'} ${a.length} m / 一意な線${a.segments.length / 6}区間・${a.points.length / 3}点 / 一意でない点${a.ambiguousPoints}`).join(' / ')}。元の地形高さを保持し、建物の背後も表示します。欠損・高さが一意でない区間に線を引きません。細かな判定は2D図と表で確認してください。</p>}
+      {!!focusBounds && <p role="status" aria-label="地形断面の近接表示">地形断面を近接表示中。カメラは一意な高さの線・点を囲む範囲を見ています。マーカーは表示用の水平面です。</p>}
       <div className="city-layers">{counts.filter(c => c.count).map(c => <label key={c.key}><input type="checkbox" checked={visible.includes(c.key)} onChange={e => setVisible(e.target.checked ? [...visible, c.key] : visible.filter(k => k !== c.key))} />{layers[c.key].name} ({c.count})</label>)}</div>
       {feature && <p role="status">選択地物：{feature.id} / {layers[feature.layer].name} / {feature.triangleCount} 三角形</p>}
       <p className="muted city-provenance">{model.crs === localCityCRS ? '局所座標：東・北・高さ（m）。' : 'EPSG:6697：緯度・経度・高さ。GRS80接平面で水平を表示用に近似し、原高さを保持します。測量座標変換・標高基準変換ではありません。'} {loaded.attribution || '出典未入力'} / {loaded.terms || '利用条件未入力'}。元CityGMLは別途保持してください。</p>
@@ -262,7 +278,7 @@ export default function CityWorkspace() {
       <p className="muted">資料は反映済みの施工範囲・出典・地形5点を記録します。編集中の入力は含めません。HTMLは外部通信なしで開け、同じ条件のCSVを保存できます。土量・水理・構造の計算報告書とは区別してください。</p>
       <div className="city-actions"><button type="button" className="secondary" disabled={!showFootprint} onClick={() => {
         const inspectedAt = new Date().toISOString();
-        try { setSectionState({ model, footprint, data: terrainSections(model, footprint), inspectedAt }); }
+        try { setSectionState({ model, footprint, data: terrainSections(model, footprint), inspectedAt }); setShowSectionOverlay(true); setSectionFocus(false); }
         catch (e) { setSectionState({ model, footprint, error: (e as Error).message, inspectedAt }); }
       }}>反映済み範囲の地形断面を表示</button><button type="button" className="secondary" disabled={!currentSections?.data} onClick={() => {
         if (!currentSections?.data) return;

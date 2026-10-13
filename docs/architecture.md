@@ -48,6 +48,14 @@ point/interval tables and an embedded companion CSV. A shared section snapshot n
 checks centerline axes/lengths/endpoints against the confirmed footprint, and copies the section results.
 The HTML, JSON and companion CSV use that one snapshot; imported text is escaped and scripts/assets are absent.
 The profile state is valid only for the exact confirmed model/footprint objects; staged edits cannot alter its exports.
+`citySectionOverlay.ts` maps valid chart intervals/points to east, source-height minus origin-height,
+and minus-north for the 3D frame. Independent segments prevent gap/discontinuity bridges;
+ambiguous points are omitted. Shared axis colors identify the same two profiles in charts and 3D.
+`CitySectionOverlayView.tsx` uses owned Three.js line/point resources, disables their picking,
+and disposes them on replacement/unmount. Opaque overlays use the transparent render queue
+after the translucent planning marker, without height offsets or building occlusion.
+Camera focus uses only valid profile geometry bounds. Invalidated profiles also invalidate the focus;
+camera/overlay controls do not change the confirmed project or numerical results.
 `cityDisplay.ts` validates schema 2 display settings against the currently loaded model's metadata,
 source hashes and SHA-256 of its parsed double-precision geometry. A file/revision/model-scoped preview
 must be confirmed before restoring view modes, layers, selection and the footprint. Only those settings
