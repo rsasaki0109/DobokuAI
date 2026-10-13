@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import CitySectionsView from './CitySectionsView';
 import CityGradingComparison from './CityGradingComparison';
 import CityGradingComparisonRestore from './CityGradingComparisonRestore';
+import CityGradingSweep from './CityGradingSweep';
 import { cityGradingConditions, requestCityGrading } from './cityGrading';
 import { cityGradingFileLimit, inspectCityGradingArchive, verifyCityGradingArchive } from './cityGradingRestore';
 import { buildCityGradingReport } from './cityGradingReport';
@@ -113,6 +114,7 @@ export default function CityGrading({ input, sections, inspectedAt }: { input: R
       <CitySectionsView sections={sections} grading={{ target_elevation_m: current.run.conditions.target_elevation_m, east_west: current.run.east_west, south_north: current.run.south_north }} />
       <p className="muted">区分線形の高さ差を交点で分割して積分した断面積です。計画面の標高と原地形を同じ基準で比較しています。体積は未算定。地形・マーカー・河川条件は変更せず、結果はダウンロードで保存できます。DB保存・自動復元は未対応です。</p>
       <CityGradingComparison source={current.source} baseline={current.run} />
+      <CityGradingSweep source={current.source} baseline={current.run} />
     </div>}
     <p className="muted">計画標高の編集・断面再表示・範囲変更の確認・モデル置換では以前の結果を出力しません。計算にはRust APIが必要です。断面の表示・照会・表示用資料はAPIなしでも動作します。</p>
   </section>;

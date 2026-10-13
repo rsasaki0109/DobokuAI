@@ -107,6 +107,14 @@ archived comparison; it never replaces the current target, baseline or geometry.
 Both requests share cancellation and revision guards. Historical UTC timestamps
 remain in exports, while verification timestamps are shown only in the UI.
 
+`CityGradingSweep` runs at most nine reviewed elevations sequentially using the
+same confirmed sections and baseline. Each target produces a validated Rust run
+or an explicit failure record, including cases rejected for a different engine
+version. Successful cases retain known-span and total-area differences separately.
+Scatter plots show calculated points without interpolation, and selected cases
+reuse their captured run for section views and existing two-plan report exports.
+Revision and abort guards stop remaining cases after cancellation or scope changes.
+
 ## Hydraulic contract
 
 Stations increase **upstream to downstream**. Bed elevation is in a single project datum.
