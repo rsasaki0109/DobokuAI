@@ -100,6 +100,13 @@ The shared section renderer uses both targets to match each axis's vertical rang
 HTML/CSV/JSON retain source provenance, conditions and both original run timestamps.
 The comparison does not construct excavated terrain or estimate volumes or costs.
 
+`cityGradingComparisonRestore.ts` validates the complete source and both archived
+runs, reconstructs and checks the stored differences, and verifies both runs
+against fresh Rust results. The UI reviews the candidate before opening a separate
+archived comparison; it never replaces the current target, baseline or geometry.
+Both requests share cancellation and revision guards. Historical UTC timestamps
+remain in exports, while verification timestamps are shown only in the UI.
+
 ## Hydraulic contract
 
 Stations increase **upstream to downstream**. Bed elevation is in a single project datum.

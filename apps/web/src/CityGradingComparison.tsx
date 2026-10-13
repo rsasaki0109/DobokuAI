@@ -40,6 +40,6 @@ export default function CityGradingComparison({ source, baseline }: { source: Re
     <div className="city-actions">{(['html', 'csv', 'json'] as const).map(format => <button key={format} type="button" className="secondary" disabled={!current} onClick={() => download(format)}>断面積の比較{format.toUpperCase()}を保存</button>)}</div>
     {current && <div role="region" aria-label="計画標高2案の比較結果"><CityGradingComparisonView sections={source.terrain_sections.sections} comparison={current.snapshot.comparison} />
       <p>比較案の計算日時 {current.snapshot.comparison.scenario.executed_at} / 比較資料の作成日時 {current.snapshot.generated_at}</p></div>}
-    <p className="muted">元地形・施工範囲・基準案・河川条件は変更しません。欠損は補完せず、未知の全長差は未算定です。土量・施工可否・工期・費用は未算定。比較資料のDB保存・読込み復元は未対応です。</p>
+    <p className="muted">元地形・施工範囲・基準案・河川条件は変更しません。欠損は補完せず、未知の全長差は未算定です。土量・施工可否・工期・費用は未算定。保存した比較は「保存した2案比較を開く」で照合して復元できます。DB保存・自動復元は未対応です。</p>
   </section>;
 }

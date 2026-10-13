@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import CitySectionsView from './CitySectionsView';
 import CityGradingComparison from './CityGradingComparison';
+import CityGradingComparisonRestore from './CityGradingComparisonRestore';
 import { cityGradingConditions, requestCityGrading } from './cityGrading';
 import { cityGradingFileLimit, inspectCityGradingArchive, verifyCityGradingArchive } from './cityGradingRestore';
 import { buildCityGradingReport } from './cityGradingReport';
@@ -102,6 +103,7 @@ export default function CityGrading({ input, sections, inspectedAt }: { input: R
         <button type="button" className="secondary" onClick={clearRestore}>保存結果の復元を取消</button>
       </div>}
     </div>
+    <CityGradingComparisonRestore input={input} sections={sections} inspectedAt={inspectedAt} />
     {current && <div role="region" aria-label="切土・盛土の計算結果">
       {current.verifiedAt && <p role="status" aria-label="切土・盛土結果の復元状況">保存結果を表示中。保存資料の計算日時を保持し、{current.verifiedAt}にRust再計算との一致を確認しました。</p>}
       <p>Rust doboku-earthwork {current.run.engine_version} / {current.run.model_version} / 計算日時 {current.run.executed_at}</p>
