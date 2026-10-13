@@ -867,6 +867,33 @@
         "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
         "Native coefficient modes and uninterpreted boundary fields inspection; no hydraulic field dataset adopted."
       ]
+    },
+    {
+      "commit": "f4271db23cbaf7554c52f340af5b53745250670c",
+      "observed_at_utc": "2026-10-13T23:23:59.130876+00:00",
+      "run_id": 38422915389,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38422915389",
+      "status": "Success",
+      "page_bytes": 195335,
+      "page_sha256": "ef8b4cc233c30e278c5cad670c427c7bbfa580b156586841f86a011f997d7d37",
+      "job_id": 115384669020,
+      "job_status": "completed successfully",
+      "observations": [
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38422915389/job/115384669020",
+          "bytes": 202605,
+          "sha256": "652983f5684206e83deff07c0fc6413d6fb10cccd167ef33ae6cb3588fa8c153"
+        },
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38422915389/workflow",
+          "bytes": 186090,
+          "sha256": "fec3dbc2a119e0d29bb1a14b337ab14cd7be3901c1fede15ef172af064c20715"
+        }
+      ],
+      "limits": [
+        "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
+        "Documentation-only datum and usage review; no hydraulic field dataset adopted."
+      ]
     }
   ],
   "pending_runs": [

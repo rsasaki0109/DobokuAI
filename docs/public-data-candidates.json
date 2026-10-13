@@ -73,6 +73,14 @@
         "vertical_datum": "unconfirmed",
         "commercial_and_redistribution_permissions": "unconfirmed",
         "primary_candidates_access": "TRRP/USBR proxy tunnel 403; additive network draft saved, not applied"
+      },
+      "primary_report_review": {
+        "review": "trinity-primary-review.md",
+        "evidence": "trinity-primary-evidence.json",
+        "report_reference": "DWR 2007: NAVD88, US Survey Foot; printed p4 / PDF p11",
+        "workshop_association": "25 of 38 (4500 cfs) and 42 of 65 (7000 cfs) same numeric labels, levels within 0.05 of printed 0.1-ft steps",
+        "entire_workshop_vertical_datum": "unconfirmed; no datum assigned to geometry or 450-cfs observations",
+        "usage_permission": "instruction-only workshop retained; commercial/redistribution unconfirmed"
       }
     },
     {

@@ -1,0 +1,251 @@
+{
+  "format": "doboku-trinity-primary-review-1",
+  "reviewed_at_utc": "2026-10-13T23:36:32.143756+00:00",
+  "source_observations": [
+    {
+      "label": "trrp-home",
+      "url": "https://www.trrp.net/",
+      "status": 200,
+      "final_url": "https://www.trrp.net/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 185964,
+      "sha256": "e6e7b2fba56abe665884e24bcdbeef07a2f2a6f482c3dc2aa658b82e8d284a14",
+      "preview": "<!DOCTYPE html>\n<html lang=\"en-US\">\n<head>\n\t<meta charset=\"UTF-8\" />\n\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge,chrome=1\" />\n\t<link rel=\"profile\" href=\"http://gmpg.org/xfn/11\" />\n\t<link rel=\"pingback\" href=\"https://www.trrp.net/wordterrain/xmlrpc.php\" />\n\t<meta name=\"description\" content=\"\" />\n    <meta property=\"og:url\" content=\"http://www.trrp.net/\" />\n    <meta property=\"og:type\" cont"
+    },
+    {
+      "label": "trrp-robots",
+      "url": "https://www.trrp.net/robots.txt",
+      "status": 200,
+      "final_url": "https://www.trrp.net/robots.txt",
+      "content_type": "text/plain",
+      "bytes": 185,
+      "sha256": "c04e378f64d04b579665dd2addec64637e7f4b9d16ea15bc38bc7f2334f34f69",
+      "preview": "User-agent: *\nDisallow: /wp-admin/\nDisallow: /trackback/\nDisallow: /feed/\nDisallow: /xmlrpc.php\nDisallow: /calendar/event/\nDisallow: /dataport/map\nSitemap: https://trrp.net/sitemap.xml\n"
+    },
+    {
+      "label": "usbr-trinity",
+      "url": "https://www.usbr.gov/mp/trinity/",
+      "status": 404,
+      "preview": "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL was not found on this server.</p>\n</body></html>\n"
+    },
+    {
+      "label": "usbr-robots",
+      "url": "https://www.usbr.gov/robots.txt",
+      "status": 200,
+      "final_url": "https://www.usbr.gov/robots.txt",
+      "content_type": "text/plain; charset=UTF-8",
+      "bytes": 50,
+      "sha256": "efc9e7554697184d1ade99f932d6f39d97ddfb55d7a4605e441e55babd85368c",
+      "preview": "User-agent: *\nDisallow: /pn-bin\nDisallow: /gp-bin\n"
+    }
+  ],
+  "portal_observations": [
+    {
+      "label": "library",
+      "url": "https://www.trrp.net/library/",
+      "status": 200,
+      "final_url": "https://www.trrp.net/library/",
+      "bytes": 49536,
+      "sha256": "d666224ff11315f1949fcf8ea80b594314255cd7a97144c40fa401e6faf3ab56"
+    },
+    {
+      "label": "dataport",
+      "url": "https://www.trrp.net/dataport/",
+      "status": 200,
+      "final_url": "https://www.trrp.net/dataport/",
+      "bytes": 58664,
+      "sha256": "5f54389177695f01493ae9f71016fcf1a122901b92602d6a3dd615a3e68d2c1f"
+    },
+    {
+      "label": "rad",
+      "url": "https://www.trrp.net/dataport/rad/",
+      "status": 200,
+      "final_url": "https://www.trrp.net/dataport/rad/",
+      "bytes": 50170,
+      "sha256": "33f38114dc7f264199e9d26e4bccc2527a46344cc70ff7e76b68205999d7bbed"
+    }
+  ],
+  "library_search_script": {
+    "url": "https://www.trrp.net/DataPort/widgets/library/searchpage.js",
+    "bytes": 4188,
+    "sha256": "e136f58a9d8504f46e32bc0852e3af3874fbcdad62394df813e18c58d11c961d"
+  },
+  "library_search_observations": [
+    {
+      "label": "hec-docs",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=HEC-RAS",
+      "status": 200,
+      "bytes": 2203,
+      "sha256": "a237d26635e11c0cff4327d93d65f6d45d3bc4743f15460f2fcb809911c767cd"
+    },
+    {
+      "label": "hec-data",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&data=HEC-RAS",
+      "status": 200,
+      "bytes": 70,
+      "sha256": "3209530b1f69f3bf649b7d7b986d9f914447b9f7f92cd122fe0fb47ceee4246e"
+    },
+    {
+      "label": "datum-docs",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=datum",
+      "status": 200,
+      "bytes": 66,
+      "sha256": "a2f3c01ef8621e8a9a2a4e03084a98dd44c4f8a19d8317bed63771f7f1ff3fb5"
+    },
+    {
+      "label": "hydraulic-docs",
+      "url": "https://www.trrp.net/DataPort/library.php?a=1&s=citation&docs=hydraulic",
+      "status": 200,
+      "bytes": 23176,
+      "sha256": "d6148954b17c6a1dd49a8f92647a08597fe56e57b6435d405f31a7bce5150977"
+    }
+  ],
+  "model_page_observations": [
+    {
+      "label": "model-2025",
+      "url": "https://www.trrp.net/library/document?id=2707",
+      "status": 200,
+      "final_url": "https://www.trrp.net/library/document/?id=2707",
+      "bytes": 51552,
+      "sha256": "cf3a2760bd3f92e0d0b46da3455571f25165ea5fbb2030516672998eff0f5c1e"
+    },
+    {
+      "label": "temperature-2023",
+      "url": "https://www.trrp.net/library/document?id=2628",
+      "status": 200,
+      "final_url": "https://www.trrp.net/library/document/?id=2628",
+      "bytes": 49735,
+      "sha256": "c095da9b0490867f0c1eeb384f0cfc2e630148101a3f8c221f2e4b29895ca18d"
+    }
+  ],
+  "survey_page_observations": [
+    {
+      "label": "flow-study-2007",
+      "url": "https://www.trrp.net/library/document?id=1407",
+      "status": 200,
+      "final_url": "https://www.trrp.net/library/document/?id=1407",
+      "bytes": 49829,
+      "sha256": "f3f82dabc6225e3bbc36796687f00308e308bd929f37afa4e0c93d567a61efd8"
+    },
+    {
+      "label": "bathy-2012",
+      "url": "https://www.trrp.net/library/document?id=1812",
+      "status": 200,
+      "final_url": "https://www.trrp.net/library/document/?id=1812",
+      "bytes": 50691,
+      "sha256": "eea08de3b94ad608dda8c1aacbf8a2ba2acb1fdb4ae00a25a7256750fe0718d6"
+    }
+  ],
+  "pdf_observations": [
+    {
+      "label": "flow-study-2007",
+      "url": "https://www.trrp.net/DataPort/doc.php?id=1407",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/doc.php?id=1407",
+      "content_type": "application/force-download",
+      "bytes": 65180962,
+      "sha256": "f2b698e6db9b72350d09e305262ff002aa90d01d2385975f76025fd352680863"
+    },
+    {
+      "label": "bathy-2012",
+      "url": "https://www.trrp.net/DataPort/doc.php?id=1812",
+      "status": 200,
+      "final_url": "https://www.trrp.net/DataPort/doc.php?id=1812",
+      "content_type": "application/force-download",
+      "bytes": 10852107,
+      "sha256": "cddcb8f0fc7ecf7992ce7098defe2eb0af9d544fe9e64116a8d1daffd635111a"
+    },
+    {
+      "label": "model-2025",
+      "url": "https://www.trrp.net/DataPort/doc.php?id=2707",
+      "error": "HTTP Error 500: Internal Server Error"
+    }
+  ],
+  "doi_observation": {
+    "url": "https://www.doi.gov/disclaimer.cfm",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  "usbr_policy_observations": [
+    {
+      "label": "usbr-disclaimer",
+      "url": "https://www.usbr.gov/main/disclaimer.html",
+      "status": 200,
+      "final_url": "https://www.usbr.gov/main/disclaimer.html",
+      "bytes": 17937,
+      "sha256": "b59e03a44a0d7f3500b5e1b61534656dbc2692e17cfb8f3989b971d098c55223"
+    },
+    {
+      "label": "usbr-notices",
+      "url": "https://www.usbr.gov/main/notices.html",
+      "status": 200,
+      "final_url": "https://www.usbr.gov/main/notices.html",
+      "bytes": 28610,
+      "sha256": "9b1524265c4a961397419d4d5e45bb2029bc6117e990a78e7549d30b1341bb0a"
+    }
+  ],
+  "reported_reference": {
+    "report": "DWR 2007 Trinity River Hydraulic Flow Study",
+    "vertical_datum": "NAVD88",
+    "vertical_unit": "US Survey Foot",
+    "horizontal_reference": "NAD83 / California State Plane Zone 1 / US Survey Foot",
+    "printed_page": 4,
+    "pdf_page": 11,
+    "applied_to_workshop_geometry": false,
+    "applied_to_450_cfs_observations": false
+  },
+  "observed_record_correspondence": {
+    "report_sha256": "f2b698e6db9b72350d09e305262ff002aa90d01d2385975f76025fd352680863",
+    "source_sha256": "dc7a12503419616b6e61821ce4c02bff3ad32218de1a2ed5ffaa7270570f8196",
+    "comparison_threshold_numeric_ft": "0.05",
+    "threshold_basis": "Half of the published 0.1-ft display step; record correspondence only, not an engineering error tolerance",
+    "table_record_counts": {
+      "4500": 38,
+      "7000": 100,
+      "10000": 99
+    },
+    "method": "PDF page 23 A-3/A-4 columns visually verified. Match identical numeric station labels only; preserve source downstream distances. No relabeling, offset interpolation, datum conversion, observation correction or solver calculation.",
+    "comparison_unit_note": "Raw numbers compared without conversion. Report declares US Survey Foot; this comparison alone does not establish native workshop unit realization.",
+    "cases": [
+      {
+        "profile": "4500",
+        "source_nonempty_observations": 38,
+        "exact_numeric_label_matches": 25,
+        "within_rounding_half_step": 25,
+        "largest_difference_native_ft": "0.05"
+      },
+      {
+        "profile": "7000",
+        "source_nonempty_observations": 65,
+        "exact_numeric_label_matches": 42,
+        "within_rounding_half_step": 42,
+        "largest_difference_native_ft": "0.05"
+      }
+    ],
+    "limits": [
+      "Exact labels plus similar elevations do not prove identical positions, dataset version, 450-cfs datum, all geometry datum or rights.",
+      "No unmatched label is shifted or snapped; nonzero downstream distances remain unresolved."
+    ]
+  },
+  "reference_image": {
+    "pdf_page": 23,
+    "sha256": "3c36da364e49912850cf90b3e158d81f23dabf8b41b043c164c43ea708b658c5",
+    "purpose": "Visually verify A-3/A-4/A-5 column groups; original image not redistributed"
+  },
+  "network_draft": {
+    "preserved_custom_domains": 16,
+    "added_custom_domains": [
+      "www.doi.gov"
+    ],
+    "status": "saved",
+    "requires_publish": true,
+    "runtime_application_confirmed": false
+  },
+  "assessment": {
+    "workshop_common_vertical_reference": "partially_supported_by_related_report_and_high_water_correspondence; full geometry and 450 cfs unconfirmed",
+    "usage_scope": "instruction only remains explicit in original workshop",
+    "commercial_and_redistribution_permission": "unconfirmed",
+    "dataset_adopted": false,
+    "adopted_practical_datasets": 0,
+    "maturity_score": 44.0
+  }
+}
