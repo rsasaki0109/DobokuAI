@@ -840,6 +840,33 @@
         "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
         "Offline HEC-RAS plan/boundary inspection; no hydraulic field dataset adopted."
       ]
+    },
+    {
+      "commit": "0a2f4756b2aeabb4153729cb053757243e7d29e1",
+      "observed_at_utc": "2026-10-13T15:28:13.287637+00:00",
+      "run_id": 38420227360,
+      "run_url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38420227360",
+      "status": "Success",
+      "page_bytes": 195124,
+      "page_sha256": "569869f3228ae428e2360e0e8302355b35bade665edcb6c8813b4128e4878ec1",
+      "job_id": 115375290854,
+      "job_status": "completed successfully",
+      "observations": [
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38420227360/job/115375290854",
+          "bytes": 202399,
+          "sha256": "732e7e70f4c041251dadfad727d0d60de73f916f313e5cc8933e2d445c9a5b0e"
+        },
+        {
+          "url": "https://github.com/rsasaki0109/DobokuAI/actions/runs/38420227360/workflow",
+          "bytes": 185862,
+          "sha256": "a7554edff08eaac950f12d7d431a3ce4c4364aa1c0a72279231523a33c565a4c"
+        }
+      ],
+      "limits": [
+        "Official run/job/workflow inspection; hosted numeric test counts not independently counted from downloaded job logs.",
+        "Native coefficient modes and uninterpreted boundary fields inspection; no hydraulic field dataset adopted."
+      ]
     }
   ],
   "pending_runs": [

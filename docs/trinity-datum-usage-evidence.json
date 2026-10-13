@@ -1,0 +1,260 @@
+{
+  "format": "doboku-trinity-datum-usage-review-1",
+  "reviewed_at_utc": "2026-10-13T15:30:59.846894+00:00",
+  "dataset_id": "hec-trinity-instruction",
+  "archive": {
+    "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/files/latest/233145084/233800105/1/1732742970839/Calibration+of+a+Steady+Flow+Model.zip",
+    "bytes": 340691,
+    "sha256": "7ed3f314635037fb9d4725f774e2d9ed8c7a900bdef8baeb952120206e560cc5"
+  },
+  "assessment": {
+    "vertical_datum": "unconfirmed",
+    "geometry_observation_common_vertical_reference": "unconfirmed",
+    "original_survey_unit_realization": "unconfirmed",
+    "distribution_instruction": "teaching example for purposes of instruction only; not current or future river conditions",
+    "commercial_usage": "unconfirmed",
+    "redistribution_permission": "unconfirmed",
+    "original_survey_owner": "unconfirmed",
+    "dataset_adopted": false,
+    "adopted_practical_datasets": 0
+  },
+  "official_page_observations": [
+    {
+      "label": "hec-current-workshop",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest/tutorials/1d-steady-flow/calibration-of-a-steady-flow-hydraulics-model-workshop-solution",
+      "status": 200,
+      "bytes": 112491,
+      "sha256": "6e579080284f8b970e49912c7fdd58e4c071fd04acd0e88697388f0e5ea1c49d"
+    },
+    {
+      "label": "hec-distribution",
+      "url": "https://www.hec.usace.army.mil/software/distribution_policy.aspx",
+      "status": 200,
+      "bytes": 25098,
+      "sha256": "d3855fd55f2c50cfecdf680ca15011ec7bc931229669a2d685daa6a758722a54"
+    }
+  ],
+  "blocked_primary_candidates": [
+    {
+      "label": "trrp-home",
+      "url": "https://www.trrp.net/",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "label": "trrp-robots",
+      "url": "https://www.trrp.net/robots.txt",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "label": "usbr-trinity",
+      "url": "https://www.usbr.gov/mp/trinity/",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "github_api_search": [
+    {
+      "label": "trrp-repositories",
+      "url": "https://api.github.com/search/repositories?q=Trinity+River+Restoration&per_page=5",
+      "error": "HTTP Error 502: Bad Gateway"
+    },
+    {
+      "label": "trinity-hec-repositories",
+      "url": "https://api.github.com/search/repositories?q=Trinity+HEC+RAS&per_page=5",
+      "error": "HTTP Error 502: Bad Gateway"
+    },
+    {
+      "label": "trinity-survey-repositories",
+      "url": "https://api.github.com/search/repositories?q=Trinity+River+survey&per_page=5",
+      "error": "HTTP Error 502: Bad Gateway"
+    }
+  ],
+  "github_web_search": {
+    "url": "https://github.com/search?q=%22Trinity%20River%22&type=repositories",
+    "status": 200,
+    "bytes": 254963,
+    "sha256": "5739b73f518c7dc00f5d369cbf00459325631054c5c619543d6b2b95a638eaee",
+    "repository_links": [
+      "ChenliangWuGeo/TrinityRiverMeander",
+      "Dariosaur/TrinityRiverChampions",
+      "FreshwaterNetwork/trinity-river-basin-floodplain",
+      "Maxtimes1000000/Physics_Calculator_Maximillian_Senisch",
+      "bmasch/TrinityRiverRedds",
+      "cmspeed/trinity-riverbanks",
+      "connor709/trinity-river-recovery-recovery-quiz",
+      "hahabibi88/hydro-ml-forecasting",
+      "mdscheuerell/TRRP-2026",
+      "search/advanced",
+      "trinity-river/site"
+    ]
+  },
+  "alternative_readme_observations": [
+    {
+      "label": "trinity-meander-readme",
+      "url": "https://raw.githubusercontent.com/ChenliangWuGeo/TrinityRiverMeander/HEAD/README.md",
+      "status": 200,
+      "bytes": 972,
+      "sha256": "4ee1cbe1354692931eb51d07dc5ee5c36315e70f9aac12b432d45c5adfd70ab1"
+    },
+    {
+      "label": "trrp-2026-readme",
+      "url": "https://raw.githubusercontent.com/mdscheuerell/TRRP-2026/HEAD/README.md",
+      "status": 200,
+      "bytes": 149,
+      "sha256": "616d3d745c640ea909626121a3968eb2e069f6ade32300a2d997779b1ff7216f"
+    }
+  ],
+  "archive_members": [
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.color_scales",
+      "bytes": 80,
+      "sha256": "52af7a0d1a7acb8c58813603d0bf436c711b45edbe0fa4c15da4b5e52b312f47",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 0,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 0,
+        "survey date": 0,
+        "survey report": 0
+      }
+    },
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.f01",
+      "bytes": 4858,
+      "sha256": "dc7a12503419616b6e61821ce4c02bff3ad32218de1a2ed5ffaa7270570f8196",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 0,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 0,
+        "survey date": 0,
+        "survey report": 0
+      }
+    },
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.g01",
+      "bytes": 569585,
+      "sha256": "13e53387a3dc94028b01ceca4be2b6a808eeea6cdde4213ac75f020565aee13e",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 1,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 0,
+        "survey date": 0,
+        "survey report": 0
+      }
+    },
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.O01",
+      "bytes": 140800,
+      "sha256": "314518267052274f5b73ffd175fb04d8dbadc132c70410131f94209379af968d",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 0,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 0,
+        "survey date": 0,
+        "survey report": 0
+      }
+    },
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.p01",
+      "bytes": 3045,
+      "sha256": "1eca968796926f81406c650d4f2ec92f0f9ce12e7e5585d55df7baeac0929cf7",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 0,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 0,
+        "survey date": 0,
+        "survey report": 0
+      }
+    },
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.p01.comp_msgs.txt",
+      "bytes": 122,
+      "sha256": "3a008e864731adb7ddcbb160e9ddee65bea48c59c8084665ee900684e61cc0c7",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 0,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 0,
+        "survey date": 0,
+        "survey report": 0
+      }
+    },
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.prj",
+      "bytes": 871,
+      "sha256": "1af8e2cd7a5ea5e5654c772baab86ac36a927f2539aa5d0483ddf716522a0513",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 0,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 1,
+        "survey date": 0,
+        "survey report": 0
+      }
+    },
+    {
+      "path": "Calibration of a Steady Flow Model/CalibrationWorkshop.r01",
+      "bytes": 161949,
+      "sha256": "0823d56ac5c54a448798cb5e8dee7465662b84dd16d6e1e01ea74f2fabee9fdf",
+      "term_counts": {
+        "NAVD": 0,
+        "NGVD": 0,
+        "Vertical Datum": 0,
+        "horizontal datum": 0,
+        "copyright": 0,
+        "license": 0,
+        "licence": 0,
+        "instruction": 0,
+        "survey date": 0,
+        "survey report": 0
+      }
+    }
+  ],
+  "network_draft": {
+    "preserved_custom_domains": 14,
+    "added_custom_domains": [
+      "www.trrp.net",
+      "www.usbr.gov"
+    ],
+    "status": "saved",
+    "requires_publish": true,
+    "runtime_application_confirmed": false
+  },
+  "limits": [
+    "Byte-string inspection is not complete binary-format interpretation or proof that no external survey metadata exists.",
+    "HEC software distribution terms are not applied as a licence for original survey data.",
+    "TRRP and USBR pages were not retrieved; neither agency is asserted to own this workshop survey.",
+    "Alternative README pages are excluded as evidence for this original model; no survey data adopted or redistributed."
+  ]
+}

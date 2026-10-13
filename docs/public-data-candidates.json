@@ -65,6 +65,14 @@
         "coefficient_header_count": 56,
         "coefficient_row_count": 423,
         "coefficient_mode": "unconfirmed; native header fields and all three coefficient columns preserved"
+      },
+      "datum_usage_review": {
+        "review": "trinity-datum-usage-review.md",
+        "evidence": "trinity-datum-usage-evidence.json",
+        "usage_scope": "instruction only explicitly confirmed on current original page and project file",
+        "vertical_datum": "unconfirmed",
+        "commercial_and_redistribution_permissions": "unconfirmed",
+        "primary_candidates_access": "TRRP/USBR proxy tunnel 403; additive network draft saved, not applied"
       }
     },
     {
