@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { parseCityFiles, syntheticCityXML, localCityCRS } from './cityModel';
 import type { CityFeature, CityLayer, CityModel } from './cityModel';
-import { footprintGround } from './cityTerrain';
+import { footprintGround, sampleGround } from './cityTerrain';
 import { NumberField } from './NumberField';
 import { saveBlob } from './types';
 import publicBuildings from './data/yokohama/buildings.gml?raw';
@@ -47,12 +47,12 @@ function Controls({ model, top, rotating }: { model: CityModel; top: boolean; ro
   useFrame((_, delta) => { if (control.current) { control.current.autoRotate = rotating; if (rotating) control.current.update(delta); } });
   return null;
 }
-function Feature({ feature, selected, select }: { feature: CityFeature; selected: boolean; select: () => void }) {
+function Feature({ feature, selected, click }: { feature: CityFeature; selected: boolean; click: (point: THREE.Vector3) => void }) {
   const geometry = useMemo(() => {
     const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(feature.positions, 3)); g.computeVertexNormals(); return g;
   }, [feature]);
   useEffect(() => () => geometry.dispose(), [geometry]);
-  return <mesh geometry={geometry} onClick={e => { e.stopPropagation(); select(); }}>
+  return <mesh geometry={geometry} onClick={e => { e.stopPropagation(); if (e.button === 0 && e.delta <= 2) click(e.point); }}>
     <meshStandardMaterial color={selected ? '#f2ad45' : layers[feature.layer].color} roughness={feature.layer === 'water' ? .3 : .88} side={THREE.DoubleSide} />
   </mesh>;
 }
@@ -76,7 +76,9 @@ export default function CityWorkspace() {
   const [footprint, setFootprint] = useState<Footprint>(() => defaultFootprint(loaded.model));
   const [draft, setDraft] = useState<Footprint | null>(null);
   const [showFootprint, setShowFootprint] = useState(false);
-  const changeSource = () => { revision.current++; setPending(null); setError(''); };
+  const [picking, setPicking] = useState(false);
+  const [pickNotice, setPickNotice] = useState('');
+  const changeSource = () => { revision.current++; setPending(null); setError(''); setPicking(false); setPickNotice(''); };
   const model = loaded.model;
   const counts = Object.keys(layers).map(k => ({ key: k as CityLayer, count: model.features.filter(f => f.layer === k).length }));
   const feature = model.features.find(f => f.id === selected);
@@ -88,6 +90,17 @@ export default function CityWorkspace() {
   const groundPreview = useMemo(() => footprintGround(model, plan), [model, plan.east, plan.north, plan.width, plan.length]);
   const confirmedGround = useMemo(() => footprintGround(model, footprint), [model, footprint]);
   const centerGround = groundPreview[0];
+  const clickFeature = (f: CityFeature, point: THREE.Vector3) => {
+    if (!picking) { setSelected(f.id); return; }
+    if (f.layer !== 'terrain') { setPickNotice('地形の面をクリックしてください。建物・道路などは施工位置に採用しません。'); return; }
+    const sample = sampleGround(model, point.x, -point.z);
+    if (sample.status !== 'unique') {
+      setPickNotice(sample.status === 'ambiguous' ? 'クリック位置の地形高さが一意に決まりません。入力案を保持しています。' : 'クリック位置に参照できる地形がありません。入力案を保持しています。');
+      return;
+    }
+    setDraft({ ...plan, east: sample.east, north: sample.north, elevation: sample.elevations[0] });
+    setPickNotice(`地形から入力候補を選択：東 ${sample.east.toFixed(3)} m・北 ${sample.north.toFixed(3)} m / 高さ ${sample.elevations[0].toFixed(3)} m。確認するまで表示中の施工範囲は変わりません。`);
+  };
   const extent = Math.max(model.bounds.max[0] - model.bounds.min[0], model.bounds.max[2] - model.bounds.min[2], 10);
   return <div className="city-workspace">
     <section className="panel city-import">
@@ -124,7 +137,7 @@ export default function CityWorkspace() {
         <h3>候補：{pending.model.features.length}地物・{pending.model.polygonCount}面 / {pending.model.crs}</h3>
         <p>原点 {pending.model.origin.join(', ')} / LOD {pending.model.lod}。入力した出典・利用条件の正当性は自動確認していません。確認すると表示モデルを置換し、選択地物・施工範囲をクリアします。</p>
         <ul>{pending.sources.map((f, i) => <li key={i}>{f.name} · {f.bytes} bytes · SHA-256 {f.sha256}</li>)}</ul>
-        <button type="button" className="primary" onClick={() => { setLoaded(pending); setPending(null); setSelected(null); setDraft(null); setShowFootprint(false); setFootprint(defaultFootprint(pending.model)); }}>確認して都市モデルを表示</button>
+        <button type="button" className="primary" onClick={() => { setLoaded(pending); setPending(null); setSelected(null); setDraft(null); setShowFootprint(false); setFootprint(defaultFootprint(pending.model)); setPicking(false); setPickNotice(''); }}>確認して都市モデルを表示</button>
         <button type="button" className="secondary" onClick={() => setPending(null)}>都市モデルの取込みを取消</button>
       </div>}
     </section>
@@ -133,22 +146,25 @@ export default function CityWorkspace() {
       <div className="city-actions">
         <button type="button" className="secondary" aria-pressed={!top} onClick={() => setTop(false)}>都市を斜めから</button>
         <button type="button" className="secondary" aria-pressed={top} onClick={() => setTop(true)}>都市を真上から</button>
-        <button type="button" className="secondary" aria-pressed={rotating} onClick={() => setRotating(!rotating)}>都市を自動回転</button>
+        <button type="button" className="secondary" aria-pressed={rotating} disabled={picking} onClick={() => setRotating(!rotating)}>都市を自動回転</button>
         <button type="button" className="secondary" aria-pressed={sunset} onClick={() => setSunset(!sunset)}>都市を夕景で表示</button>
+        <button type="button" className="secondary" aria-pressed={picking} onClick={() => { setPicking(!picking); setPickNotice(''); if (!picking) { setRotating(false); setSelected(null); } }}>地形をクリックして施工位置を選ぶ</button>
         <button type="button" className="secondary" onClick={() => saveBlob(new Blob([JSON.stringify({ schema_version: 1, model_type: 'citygml_display', numerical_solver_linked: false, synthetic: loaded.synthetic ? true : loaded.dataset ? false : null, data_kind: loaded.synthetic ? 'synthetic' : loaded.dataset ? 'public_city_model' : 'unspecified', dataset: loaded.dataset ?? null, sources: loaded.sources, source_url: loaded.sourceURL, attribution: loaded.attribution, usage_terms: loaded.terms, inspected_at: loaded.inspectedAt, crs: model.crs, origin: model.origin, bounds: model.bounds, lod: model.lod, feature_count: model.features.length, polygon_count: model.polygonCount, visible_layers: visible, selected_feature: selected, footprint: showFootprint ? footprint : null, terrain_inspection: showFootprint ? { method: 'display_triangle_barycentric_5_points', whole_footprint_coverage_verified: false, samples: confirmedGround } : null, top, rotating, sunset }, null, 2)], { type: 'application/json' }), 'doboku-city-display.json')}>都市の表示条件JSONを保存</button>
       </div>
-      <div className="city-stage" aria-label="都市と地形の3Dビュー">
+      {picking && <p role="status">施工位置の選択中：地形をクリックすると東・北・高さを入力候補にします。ドラッグは視点操作です。幅・長さを確認してから反映してください。</p>}
+      {pickNotice && <p role="status" aria-label="施工位置の選択結果">{pickNotice}</p>}
+      <div className="city-stage" aria-label="都市と地形の3Dビュー" style={{ cursor: picking ? 'crosshair' : undefined }}>
         <div className="city-hud"><span>{loaded.dataset ? 'PLATEAU / YOKOHAMA 2024 · 公開モデル抜粋' : loaded.synthetic ? 'SYNTHETIC CITY · 実在都市ではありません' : 'CITYGML · 読込みモデル'}</span><strong>{model.features.length} 地物 / {model.polygonCount} 面</strong><small>鉛直・水平とも1倍 · m</small></div>
         <Canvas frameloop={rotating ? 'always' : 'demand'} dpr={[1, 1.25]} camera={{ fov: 40 }} onPointerMissed={() => setSelected(null)}>
           <color attach="background" args={[sunset ? '#e4c4ac' : '#bed3de']} />
           <hemisphereLight args={['#e3f0fa', '#71654a', 2]} />
           <directionalLight position={[extent, extent * 2, extent * .6]} intensity={sunset ? 2.8 : 2.2} color={sunset ? '#ffd1a3' : '#fff4de'} />
           <Controls model={model} top={top} rotating={rotating} />
-          {model.features.filter(f => visible.includes(f.layer)).map((f, i) => <Feature key={`${loaded.inspectedAt}:${i}`} feature={f} selected={f.id === selected} select={() => setSelected(f.id)} />)}
+          {model.features.filter(f => visible.includes(f.layer)).map((f, i) => <Feature key={`${loaded.inspectedAt}:${i}`} feature={f} selected={f.id === selected} click={point => clickFeature(f, point)} />)}
           {showFootprint && <mesh position={[footprint.east, footprint.elevation - model.origin[2], -footprint.north]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={5}><planeGeometry args={[footprint.width, footprint.length]} /><meshBasicMaterial color="#f6a841" transparent opacity={.62} side={THREE.DoubleSide} depthTest={false} depthWrite={false} /></mesh>}
           <gridHelper args={[extent * 1.15, 16, '#70858b', '#8fa4a8']} position={[0, model.bounds.min[1] - 1, 0]} />
         </Canvas>
-        <div className="city-caption">北は画面の−Z方向 · 建物をクリックして選択 · 施工範囲は表示用マーカー</div>
+        <div className="city-caption">北は画面の−Z方向 · {picking ? '地形クリックで施工位置の入力候補を選択' : '地物をクリックして選択'} · 施工範囲は表示用マーカー</div>
       </div>
       <div className="city-layers">{counts.filter(c => c.count).map(c => <label key={c.key}><input type="checkbox" checked={visible.includes(c.key)} onChange={e => setVisible(e.target.checked ? [...visible, c.key] : visible.filter(k => k !== c.key))} />{layers[c.key].name} ({c.count})</label>)}</div>
       {feature && <p role="status">選択地物：{feature.id} / {layers[feature.layer].name} / {feature.triangleCount} 三角形</p>}
@@ -158,7 +174,7 @@ export default function CityWorkspace() {
     <section className="panel">
       <div className="panel-heading"><div><div className="eyebrow">PLANNING OVERLAY</div><h2>施工範囲を重ねる</h2></div><span className="badge">計画用マーカー</span></div>
       <p className="muted">表示原点から東・北の距離と原データ基準の高さを指定します。中心・四隅の5点で、地形の三角形から高さを補間して確認できます。5点の確認は範囲全体の地形被覆を保証しません。マーカーは水平面で、地盤への投影・掘削・土量・浸水計算は行いません。</p>
-      <div className="form-grid">{([['east', '施工範囲の東方向 (m)'], ['north', '施工範囲の北方向 (m)'], ['width', '施工範囲の幅 (m)'], ['length', '施工範囲の長さ (m)'], ['elevation', '施工範囲の標高 (m / 原データ基準)']] as const).map(([key, label]) => <NumberField key={key} label={label} value={plan[key]} onChange={v => setDraft({ ...plan, [key]: v })} />)}</div>
+      <div className="form-grid">{([['east', '施工範囲の東方向 (m)'], ['north', '施工範囲の北方向 (m)'], ['width', '施工範囲の幅 (m)'], ['length', '施工範囲の長さ (m)'], ['elevation', '施工範囲の標高 (m / 原データ基準)']] as const).map(([key, label]) => <NumberField key={key} label={label} value={plan[key]} onChange={v => { setDraft({ ...plan, [key]: v }); setPickNotice(''); }} />)}</div>
       <div role="region" aria-label="施工範囲の地形5点確認" className="city-review">
         <h3>編集中の範囲：地形の5点確認</h3>
         <ul>{groundPreview.map(s => <li key={s.label}>{s.label}：{s.status === 'unique' ? `${s.elevations[0].toFixed(3)} m / 原データ基準` : s.status === 'ambiguous' ? '高さが重なる・鉛直面を含むため一意に決められません' : '地形がありません・外挿しません'}（東 {s.east.toFixed(2)}・北 {s.north.toFixed(2)} m）</li>)}</ul>
@@ -166,7 +182,7 @@ export default function CityWorkspace() {
         <button type="button" className="secondary" disabled={centerGround?.status !== 'unique'} onClick={() => { if (centerGround?.status === 'unique') setDraft({ ...plan, elevation: centerGround.elevations[0] }); }}>中心の地形高さを標高候補にする</button>
         <p className="muted">候補を選んでも、確認するまで表示中のマーカーは変わりません。建物の屋根・道路は高さの参照対象に含めません。レイヤー非表示でも取り込んだ地形を確認します。</p>
       </div>
-      <div className="city-actions"><button type="button" className="primary" disabled={!validFootprint(plan)} onClick={() => { setFootprint(plan); setDraft(null); setShowFootprint(true); }}>確認して施工範囲を表示</button><button type="button" className="secondary" onClick={() => setDraft(null)}>施工範囲の編集を取消</button><button type="button" className="secondary" onClick={() => setShowFootprint(false)}>施工範囲を非表示</button></div>
+      <div className="city-actions"><button type="button" className="primary" disabled={!validFootprint(plan)} onClick={() => { setFootprint(plan); setDraft(null); setShowFootprint(true); setPicking(false); setPickNotice(''); }}>確認して施工範囲を表示</button><button type="button" className="secondary" onClick={() => { setDraft(null); setPickNotice(''); }}>施工範囲の編集を取消</button><button type="button" className="secondary" onClick={() => setShowFootprint(false)}>施工範囲を非表示</button></div>
       {!validFootprint(plan) && <p role="alert">有限値・正の幅/長さと、読込みモデルの水平範囲・標高範囲内を指定してください。</p>}
       {showFootprint && <p role="status">反映済み施工範囲：東 {footprint.east} m・北 {footprint.north} m / {footprint.width} × {footprint.length} m / 標高 {footprint.elevation} m</p>}
     </section>

@@ -31,6 +31,12 @@ Implementation order: workspace/contracts → engine → independent numerical v
 `apps/web/src/cityModel.ts` reads bounded embedded CityGML surfaces in the browser,
 validates declared CRS/dimensions and rings, and triangulates display geometry.
 `CityWorkspace.tsx` separates input, reviewed candidates and confirmed display/footprints.
+`cityTerrain.ts` inspects source terrain triangles at five display-coordinate points;
+it reports missing or ambiguous heights without extrapolation or a whole-area coverage claim.
+An explicit picking mode takes horizontal positions from the rendered mesh raycast,
+then rechecks source double-precision terrain heights before staging a footprint candidate.
+Orbit drags do not select candidates; footprint confirmation updates the marker and exported footprint.
+This is browser display geometry inspection, separate from Rust engineering solvers.
 EPSG:6697 horizontal coordinates use a GRS80 tangent-plane display approximation;
 source heights are retained. No datum conversion or solver integration is implied.
 The default scene is a licensed display subset of the original Yokohama 2024 PLATEAU
