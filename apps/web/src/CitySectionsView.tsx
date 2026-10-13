@@ -5,11 +5,12 @@ import type { GradingOverlay } from './cityGrading';
 
 const name = { east_west: '東西', south_north: '南北' };
 const labels = { unique: '高さが一意', uncovered: '地形なし', ambiguous: '高さが一意でない・鉛直面' };
-export default function CitySectionsView({ sections, expanded = false, selection, onSelect, grading }: {
+export default function CitySectionsView({ sections, expanded = false, selection, onSelect, grading, comparisonTargets = [] }: {
   sections: TerrainSection[]; expanded?: boolean;
   selection?: { axis: TerrainSection['axis']; distance: number } | null;
   onSelect?: (selection: { axis: TerrainSection['axis']; distance: number } | null) => void;
   grading?: GradingOverlay;
+  comparisonTargets?: number[];
 }) {
   const number = (value: number) => expanded ? String(value) : value.toFixed(6);
   return <div className="city-sections">{sections.map(s => {
@@ -20,6 +21,7 @@ export default function CitySectionsView({ sections, expanded = false, selection
     const select = (distance: number) => onSelect?.({ axis: s.axis, distance });
     const elevations = [...s.points.flatMap(p => p.elevations), ...s.intervals.flatMap(v => v.curves.flatMap(c => [c.from, c.to]))];
     if (grading) elevations.push(grading.target_elevation_m);
+    elevations.push(...comparisonTargets);
     let lo = Infinity, hi = -Infinity;
     for (const h of elevations) { lo = Math.min(lo, h); hi = Math.max(hi, h); }
     const padding = Math.max(.1, (hi - lo) * .05);
@@ -45,7 +47,7 @@ export default function CitySectionsView({ sections, expanded = false, selection
           <button type="button" className="secondary" onClick={() => onSelect(null)}>断面の位置照会を解除</button>
         </div>}
       </>}
-      {elevations.length ? <svg viewBox="0 0 610 310" role="img" aria-label={figureName} style={{ width: '100%', display: 'block' }} onClick={onSelect ? e => {
+      {elevations.length ? <svg viewBox="0 0 610 310" role="img" aria-label={figureName} data-section-height-range={`${bottom},${top}`} style={{ width: '100%', display: 'block' }} onClick={onSelect ? e => {
         const matrix = e.currentTarget.getScreenCTM(); if (!matrix) return;
         const p = e.currentTarget.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
         const local = p.matrixTransform(matrix.inverse());

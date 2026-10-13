@@ -91,6 +91,15 @@ and confirmation are separate, and revision/abort guards prevent stale previews.
 Confirmed restoration displays the archived calculation and original UTC event
 strings; the recomputation time is shown as a separate verification event.
 
+`CityGradingComparison` keeps a calculated or restored baseline unchanged and
+requests a second Rust run using the same source sections and a reviewed target
+elevation. `cityGradingComparison.ts` rejects foreign input geometry, different
+engine versions and mismatching coverage. Differences are scenario minus baseline;
+incomplete total areas remain null, with separate known-span subtotal differences.
+The shared section renderer uses both targets to match each axis's vertical range.
+HTML/CSV/JSON retain source provenance, conditions and both original run timestamps.
+The comparison does not construct excavated terrain or estimate volumes or costs.
+
 ## Hydraulic contract
 
 Stations increase **upstream to downstream**. Bed elevation is in a single project datum.
