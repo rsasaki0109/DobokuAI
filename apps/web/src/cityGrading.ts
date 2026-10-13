@@ -1,4 +1,5 @@
 import type { TerrainSection } from './citySections';
+import { hasJSONKeys, sameJSON } from './jsonMatch';
 
 export type GradingSpan = { start_m: number; end_m: number; ground:
   | { status: 'unique'; start_elevation_m: number; end_elevation_m: number }
@@ -33,12 +34,13 @@ export function inspectGradingRun(value: unknown, conditions: GradingConditions)
   const run = value as GradingRun;
   if (!run || typeof run.engine_version !== 'string' || !run.engine_version || run.model_version !== 'linear-profile-grading-1' ||
     typeof run.executed_at !== 'string' || !Number.isFinite(Date.parse(run.executed_at)) || run.volume_m3 !== null ||
-    JSON.stringify(run.conditions) !== JSON.stringify(conditions)) throw new Error('計算結果の条件・版・日時が一致しません');
+    !sameJSON(run.conditions, conditions)) throw new Error('計算結果の条件・版・日時が一致しません');
+  if (!hasJSONKeys(run, ['engine_version', 'model_version', 'executed_at', 'conditions', 'east_west', 'south_north', 'volume_m3'])) throw new Error('計算結果の項目が一致しません');
   const nonnegative = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0;
   for (const axis of ['east_west', 'south_north'] as const) {
     const q = run[axis], p = conditions[axis];
     const complete = p.unresolved_points_m.length === 0 && p.spans.every(s => s.ground.status === 'unique');
-    if (!q || q.complete !== complete || q.unresolved_point_count !== p.unresolved_points_m.length ||
+    if (!hasJSONKeys(q, ['complete', 'known_length_m', 'uncovered_length_m', 'ambiguous_length_m', 'unresolved_point_count', 'cut_area_m2', 'fill_area_m2', 'known_cut_area_m2', 'known_fill_area_m2', 'spans']) || q.complete !== complete || q.unresolved_point_count !== p.unresolved_points_m.length ||
       ![q.known_length_m, q.uncovered_length_m, q.ambiguous_length_m, q.known_cut_area_m2, q.known_fill_area_m2].every(nonnegative) ||
       Math.abs(q.known_length_m + q.uncovered_length_m + q.ambiguous_length_m - p.length_m) > p.length_m * 1e-12 ||
       (complete ? !nonnegative(q.cut_area_m2) || !nonnegative(q.fill_area_m2) : q.cut_area_m2 !== null || q.fill_area_m2 !== null) ||
@@ -46,10 +48,23 @@ export function inspectGradingRun(value: unknown, conditions: GradingConditions)
       !Array.isArray(q.spans) || q.spans.length !== p.spans.length) throw new Error('断面積結果の判定・数値が無効です');
     for (let i = 0; i < p.spans.length; i++) {
       const a = q.spans[i], b = p.spans[i];
-      if (!a || a.start_m !== b.start_m || a.end_m !== b.end_m ||
+      if (!hasJSONKeys(a, ['start_m', 'end_m', 'cut_area_m2', 'fill_area_m2', 'crossing_distance_m']) || a.start_m !== b.start_m || a.end_m !== b.end_m ||
         (b.ground.status === 'unique' ? !nonnegative(a.cut_area_m2) || !nonnegative(a.fill_area_m2) : a.cut_area_m2 !== null || a.fill_area_m2 !== null) ||
         (a.crossing_distance_m !== null && (b.ground.status !== 'unique' || !Number.isFinite(a.crossing_distance_m) || a.crossing_distance_m < b.start_m || a.crossing_distance_m > b.end_m))) throw new Error('断面積の区間結果が一致しません');
     }
   }
-  return structuredClone(run);
+  return { ...structuredClone(run), conditions: structuredClone(conditions) };
+}
+
+export async function requestCityGrading(conditions: GradingConditions, signal?: AbortSignal): Promise<GradingRun> {
+  const body = JSON.stringify({ confirmed: true, conditions });
+  if (new TextEncoder().encode(body).length > 262144) throw new Error('計算条件がAPIの256KiB制限を超えます。施工範囲を小さくして断面を再表示してください');
+  const response = await fetch('/api/earthwork/linear-grading', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, signal });
+  const text = await response.text();
+  if (!response.ok) {
+    let message = `HTTP ${response.status}`;
+    try { message = JSON.parse(text).error ?? message; } catch { /* extraction/proxy errors */ }
+    throw new Error(`Rust計算APIで計算できません：${message}`);
+  }
+  return inspectGradingRun(JSON.parse(text), conditions);
 }

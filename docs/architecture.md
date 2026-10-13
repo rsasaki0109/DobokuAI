@@ -82,6 +82,15 @@ checks response contracts, and draws/exports source geometry plus the proposed p
 Its separate HTML/CSV/JSON retain the calculation and source snapshot; display-only
 reports/settings keep their existing contracts. [Method and limits](city-grading.md).
 
+`cityGradingRestore.ts` accepts only the current grading-report contract, compares
+all source/geometry/provenance fields with the current confirmed section snapshot,
+and verifies every numerical field/version against a new Rust calculation.
+Object key order is insignificant; array order and values are exact. The file
+cannot replace the workspace's footprint, source records or geometry. Review
+and confirmation are separate, and revision/abort guards prevent stale previews.
+Confirmed restoration displays the archived calculation and original UTC event
+strings; the recomputation time is shown as a separate verification event.
+
 ## Hydraulic contract
 
 Stations increase **upstream to downstream**. Bed elevation is in a single project datum.
