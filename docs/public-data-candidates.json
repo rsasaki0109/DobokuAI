@@ -1,8 +1,52 @@
 {
-  "reviewed_on": "2026-10-12",
+  "reviewed_on": "2026-10-13",
   "adopted_practical_datasets": 0,
   "note": "Candidate inventory only. Published usage terms are recorded where inspected; adoption, field calibration and engineering trials are not certified. Dataset files are not distributed with DobokuAI.",
   "candidates": [
+    {
+      "id": "hec-trinity-instruction",
+      "status": "pending_primary_metadata_and_model_compatibility",
+      "source_url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest/tutorials/1d-steady-flow/calibration-of-a-steady-flow-hydraulics-model-workshop-solution",
+      "original_archive": {
+        "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/files/latest/233145084/233800105/1/1732742970839/Calibration+of+a+Steady+Flow+Model.zip",
+        "bytes": 340691,
+        "sha256": "7ed3f314635037fb9d4725f774e2d9ed8c7a900bdef8baeb952120206e560cc5",
+        "usage_scope": "Official tutorial: teaching example for purposes of instruction only; not current or future river conditions"
+      },
+      "inspected_geometry": {
+        "river_reaches": [
+          "Trinity         ,Lew_DC"
+        ],
+        "record_types": {
+          "1": 56
+        },
+        "interpolated_labels": 0,
+        "junctions": 0,
+        "datum_fields": [
+          "GIS Datum=",
+          "GIS Vertical Datum="
+        ]
+      },
+      "observed_water_surface_records": 65,
+      "observed_nonempty_levels_by_profile": [
+        51,
+        38,
+        65
+      ],
+      "data_usage_terms": "Official tutorial and project: teaching example for purposes of instruction only; not current or future conditions. No commercial or redistribution grant inferred.",
+      "vertical_datum": "Unconfirmed; GIS Vertical Datum field empty",
+      "survey_date": "unconfirmed",
+      "adoption_blockers": [
+        "Confirm instruction scope and authorized intended use",
+        "Confirm original units and common vertical reference of geometry and observed water levels",
+        "Resolve observation station/offset correspondence: 46 of 65 labels outside packaged geometry label range",
+        "Account for four flow change locations, transverse roughness and ineffective flow areas; current DobokuAI model cannot faithfully import the full reach",
+        "Complete permitted compatible workflow and independent validation; three profiles count as one site, not three river trials"
+      ],
+      "evidence": "public-data-hec-evidence.json",
+      "review": "public-data-hec-review.md",
+      "redistributed_data": false
+    },
     {
       "id": "bathypix-iowa",
       "status": "pending_primary_metadata",
@@ -1166,5 +1210,5 @@
       }
     }
   ],
-  "reviewed_timezone": "Asia/Tokyo"
+  "reviewed_timezone": "Etc/UTC"
 }

@@ -1,0 +1,781 @@
+{
+  "recorded_at_utc": "2026-10-13T13:41:23.297677+00:00",
+  "implementation_commit": "b985d47c81f00eb19901432aff3975eec9c753c7",
+  "adopted_practical_datasets": 0,
+  "limits": [
+    "Acquisition and literal text-key inventory only; no hydraulic import, solve or field validation",
+    "No raw original datasets or external software redistributed",
+    "Trinity usage is limited to instruction by the original tutorial"
+  ],
+  "archives": [
+    {
+      "url": "https://github.com/HydrologicEngineeringCenter/hec-downloads/releases/download/1.0.45/Example_Projects_7_0.zip",
+      "bytes": 427304097,
+      "sha256": "fac04f071e624c841b20e943e3b68f351b4531f565a0c24ab7d885cf9e38d523",
+      "official_release_digest_verified": true
+    },
+    {
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/files/latest/233145084/233800105/1/1732742970839/Calibration+of+a+Steady+Flow+Model.zip",
+      "bytes": 340691,
+      "sha256": "7ed3f314635037fb9d4725f774e2d9ed8c7a900bdef8baeb952120206e560cc5",
+      "usage_scope": "Official tutorial: teaching example for purposes of instruction only; not current or future river conditions"
+    }
+  ],
+  "source_observations": [
+    {
+      "label": "hec",
+      "url": "https://www.hec.usace.army.mil/software/hec-ras/download.aspx",
+      "status": 200,
+      "final_url": "https://www.hec.usace.army.mil/software/hec-ras/download.aspx",
+      "bytes": 34432,
+      "sha256": "f7c0f26394159cbcd9b9156260fddfaceeb010ef19caf5b405b8e25db3760cc7"
+    },
+    {
+      "label": "ncro",
+      "url": "https://data.cnra.ca.gov/dataset/ncro-bathymetry",
+      "status": 403
+    },
+    {
+      "label": "usgs",
+      "url": "https://www.sciencebase.gov/catalog/items?format=json&q=river%20cross%20section%20survey&max=5",
+      "status": 403
+    },
+    {
+      "label": "ca-robots",
+      "url": "https://data.ca.gov/robots.txt",
+      "status": 200,
+      "final_url": "https://data.ca.gov/robots.txt",
+      "bytes": 139,
+      "sha256": "f75b06e46987c7ba5d5c23bff0427d48a89a1beefa1226ef588080de8fea2085"
+    },
+    {
+      "label": "ncro-item",
+      "url": "https://gis.data.cnra.ca.gov/sharing/rest/content/items/8e350b44bc8b449b82b8260dccc770a7?f=pjson",
+      "status": 200,
+      "final_url": "https://gis.data.cnra.ca.gov/sharing/rest/content/items/8e350b44bc8b449b82b8260dccc770a7?f=pjson",
+      "bytes": 43681,
+      "sha256": "a2b934ad55f51ed4a7589a255024d34e673bea44ad3fe66fe1223ad29b27671e"
+    }
+  ],
+  "reference_observations": [
+    {
+      "label": "hec-docs",
+      "url": "https://www.hec.usace.army.mil/software/hec-ras/documentation.aspx",
+      "status": 200,
+      "bytes": 23513,
+      "sha256": "4309681068798d1392e821c33fedfd8dc51fc6af9c1df78acee3d7098dedbcf1"
+    },
+    {
+      "label": "hec-main",
+      "url": "https://www.hec.usace.army.mil/software/hec-ras/",
+      "status": 200,
+      "bytes": 21074,
+      "sha256": "dc8f05eee464763361e49433aa6b68e98492a6f39ffb1831208297145285432f"
+    },
+    {
+      "label": "hec-terms",
+      "url": "https://www.hec.usace.army.mil/software/terms-and-conditions.aspx",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "hec-release",
+      "url": "https://api.github.com/repos/HydrologicEngineeringCenter/hec-downloads/releases/tags/1.0.45",
+      "status": 200,
+      "bytes": 6554,
+      "sha256": "66e6897952b0d2bd03677f3b6b787bbc27056f415eaa99f354faf402f943932c"
+    },
+    {
+      "label": "hec-software",
+      "url": "https://www.hec.usace.army.mil/software/",
+      "bytes": 24464,
+      "sha256": "a0131b6facb6f30dcd58d4e0b569f9fcfb04ed2533b884973f3d02c7f43e6cb5"
+    },
+    {
+      "label": "hec-tutorials",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest",
+      "bytes": 100376,
+      "sha256": "bfdda7b3ff12336ad3083cc6e984bf66ed21fb0939c28fed94cce445d9c4b57d"
+    },
+    {
+      "label": "hec-user",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/rasum/latest",
+      "bytes": 162614,
+      "sha256": "e60d045e4e5738851b9f15133277dda7f92082e76bfc75e88d2f0ae753b89cb1"
+    },
+    {
+      "label": "hec-software-terms",
+      "url": "https://www.hec.usace.army.mil/software/terms_and_conditions.aspx",
+      "bytes": 28625,
+      "sha256": "4ca39449a10e5609a30403cb6100bb269d5e80cd24f16f03902e765615fc4ce7"
+    },
+    {
+      "label": "hec-ras-terms",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/rasum/latest/terms-and-conditions-of-use",
+      "bytes": 93976,
+      "sha256": "d2a861ba90881c4a8d6e0119ce16cdad13fbed8dd578819016fe4ec83efec7ad"
+    },
+    {
+      "label": "hec-app-guide",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/rasapp/latest",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "label": "hec-steady-tutorials",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest/tutorials/1d-steady-flow",
+      "bytes": 87856,
+      "sha256": "eaa45aa473fa73e8026e6b9e4d9df25ca5854cd26cb6c315e01ebd014baa7739"
+    },
+    {
+      "label": "hec-georeference-example",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/rasum/latest/entering-and-editing-geometric-data/example-of-georeferencing-an-hec-ras-model",
+      "bytes": 131968,
+      "sha256": "60d53c4003013debf63983297b656dfd84a7199ca7d5fd9be20b558212ee2920"
+    },
+    {
+      "label": "hec-steady-workshop",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest/tutorials/1d-steady-flow/steady-flow-modeling-with-hec-ras",
+      "bytes": 124424,
+      "sha256": "186eeabad1665a8f7454b493c1df2ffe1711b8b626a6724cfad0315ceb7cb586"
+    },
+    {
+      "label": "hec-calibration-workshop",
+      "url": "https://www.hec.usace.army.mil/confluence/rasdocs/hgt/latest/tutorials/1d-steady-flow/calibration-of-a-steady-flow-hydraulics-model-workshop-solution",
+      "bytes": 112497,
+      "sha256": "2ed8e62903fa25ea34189e5c4a3dea57946d954d1d7d5d4938e01eae9d1d72ef"
+    }
+  ],
+  "original_file_identifiers": [
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Baxter RAS Mapper/GIS Data/CA_SPCS_III_NAVD88.prj",
+      "bytes": 570,
+      "sha256": "bda960e30997fbc43705e00cf2ff4ef18f867d42c0866b08d5e4f0a3a189c38b"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Baxter RAS Mapper/RAS Model/Baxter.f01",
+      "bytes": 1537,
+      "sha256": "87bdc0e6a4eb9ed155b2a81863c1d54e1a70c137d49d2e925c33d768d9db11c6"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Baxter RAS Mapper/RAS Model/Baxter.g02",
+      "bytes": 842311,
+      "sha256": "2566fa787a1a93c768a0de80b814e397b49613e10282150a4997a04cba62a395"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Baxter RAS Mapper/RAS Model/Baxter.p01",
+      "bytes": 4267,
+      "sha256": "b0f03bbd9407a8b02dfdf738a803c5ff9dcfc44a0502746244d3ebe2b41ab234"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Baxter RAS Mapper/RAS Model/Baxter.p02",
+      "bytes": 4269,
+      "sha256": "7188a00e38a9dcc58ccc247a34b6eadaf8828492f979e7fb3a21d0ff2afe46d0"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Baxter RAS Mapper/RAS Model/Baxter.prj",
+      "bytes": 801,
+      "sha256": "c2c76e6f1970fcc87b2b521459fee6cd542b290465f40312d2ce61a08b2603a4"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Chapter 4 Example Data/EX1.F01",
+      "bytes": 1238,
+      "sha256": "3ae268bba1d3cddb889cb1579c8abbc6b7632c0b8d15b57dd257f1ef4128f033"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Chapter 4 Example Data/EX1.G02",
+      "bytes": 19,
+      "sha256": "62e59930f47ca83f53151f9a0afaa7f6921f9d2aa25b60b7ba312000521c3d23"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Chapter 4 Example Data/EX1.P01",
+      "bytes": 425,
+      "sha256": "312fb0e636f681dfdf50175f3c005d5f35b0f7c71d00cf38a479d6a85ce53b66"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Chapter 4 Example Data/EX1.g01",
+      "bytes": 8932,
+      "sha256": "072f935de7f2ab412f57194b62072b2de2e51e1e1449bf4b762a82c4248cd6cb"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Chapter 4 Example Data/EX1.prj",
+      "bytes": 551,
+      "sha256": "c5c99ea7ff1a3636a72247b72030387c78cc73c6ea7dbd2721e476c936b0dade"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.f01",
+      "bytes": 874,
+      "sha256": "4df04f9d34ca7abff0ce7d08b2d73a785caa0770f559855f21febb1c4dd43359"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.g01",
+      "bytes": 6955,
+      "sha256": "5cc9c28d2aac14342f21c618c887ebb8f77aa1aa0fdaa60a79ea4cdf8b01f6de"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.g02",
+      "bytes": 6261,
+      "sha256": "18156282fce043a13dad334a8ae37e1e07a7bf2f0adde5b5fb0eb16323ece89e"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.p01",
+      "bytes": 1256,
+      "sha256": "555e47d14ca5c3698ef7b3d4f958c3593388031c84fcefd81ce05a8a43be325e"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.p02",
+      "bytes": 1192,
+      "sha256": "5988aeb573ac7c635bf46b5a80c21604c02bd37c0d3cf9984c6823b950d33d18"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.prj",
+      "bytes": 570,
+      "sha256": "00b165a771bb0af8bc5dc6531436cf8a8a678325bee697065d4ecce85321207e"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Mixed Flow Regime Channel/MIXED.P01",
+      "bytes": 425,
+      "sha256": "d9d7603042601db759779902b688dfb86581508cd5b58ac28770d176a3b07f0c"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Mixed Flow Regime Channel/MIXED.PRJ",
+      "bytes": 560,
+      "sha256": "b0a6d0cad552cc02d9910e147f9704bf58546ba88f6897b7ea6bb7fcc893fb61"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Mixed Flow Regime Channel/MIXED.f01",
+      "bytes": 1834,
+      "sha256": "a0c50328fdf645d93b0d7bc1be7ac926fa1252505f7dce531ad37b925ad62e32"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Mixed Flow Regime Channel/MIXED.g01",
+      "bytes": 8499,
+      "sha256": "28d264546fabfae32590f369e8d2a7e90099af26fc9678512b4b599f843b5529"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.f01",
+      "bytes": 2239,
+      "sha256": "6185582a9bc41a8e69e7f780b97632e2bac0a156fd4bcfedd4c111f1d7e55b08"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.g01",
+      "bytes": 88047,
+      "sha256": "3dc4429ad51de717a2f797824bd8e4c9a8acda1a61874184195570603acc2c1a"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.g02",
+      "bytes": 636573,
+      "sha256": "980345d87260cee42caaca9746e2eb33907cdfa66cf5b87a2fb67a432d252080"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.p01",
+      "bytes": 1004,
+      "sha256": "f666798f52bd9268d5afe6681f4be3b39ea1c0817b92772dd70a815aef7f6d97"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.p02",
+      "bytes": 996,
+      "sha256": "91f7bb0b947d03daca8dcf02f3eb80af5368988b76e5c998a96149401ef3e0ea"
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.prj",
+      "bytes": 728,
+      "sha256": "037c708abaa6c277d6bc88cf63ed501757c2c4b8bb4d3fd6ec916436cf33671c"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.F01",
+      "bytes": 306,
+      "sha256": "aed1d5976fb9d3cd0525197c570f4a34c5d19226706ef2da3c6a1ce029c596c0"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.F02",
+      "bytes": 342,
+      "sha256": "bd8501b542223e9d8730367d13fc4f3f290d0c5cd0c956c4f4d92895ecc916f7"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.g01",
+      "bytes": 18822,
+      "sha256": "1439ee8646199cd19e787017a64cc89325acbcd3585db26182ce6cc5e5583aef"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.g02",
+      "bytes": 142204,
+      "sha256": "f3e7e93d3a86b1be91bbda9ac9d1eab6d1a891798aae1a2653ffdbe2ce8be43c"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.p01",
+      "bytes": 4262,
+      "sha256": "fbe09e8573ca2a3c93505d767c2817640d6c723321b1157e13b552c8a094bc54"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.p02",
+      "bytes": 2820,
+      "sha256": "883ceb8f88829a523f49a78d5e5116381bddd1d75e4a8f3427bfb9293ce817be"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.prj",
+      "bytes": 627,
+      "sha256": "7529b3d0097ceff8d66f146e2050935c9659a61ace81cdbb5c096ec04592cd59"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.F01",
+      "bytes": 333,
+      "sha256": "cb98249b3e3851db8b2e9322840b93b69c1f76a7a843747c8c6c0578bf562ba7"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.g01",
+      "bytes": 20882,
+      "sha256": "ed722bb270dbeca7a1bdfc750c14220af899cae455a53cf126e55badec0ad7c9"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.g02",
+      "bytes": 15222,
+      "sha256": "0a0ba8dfa10c4b169f56ca4d42d54d675b05f93188ba6aa169868b881d0dd76a"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.p01",
+      "bytes": 4247,
+      "sha256": "14262d90c2582781402215e4a67682684e69884c39b4dc502babfdd2f6a9a9fe"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.p02",
+      "bytes": 1156,
+      "sha256": "6db4fb7dc91a981dd07bc441da336e34f2eec8c8535f5e3ef3a7ef1611ea08c3"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.prj",
+      "bytes": 641,
+      "sha256": "c0b4fdf682b637faa78a2a9625fe2c0d28e682624e78068463032b0d5c73bfb1"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.f01",
+      "bytes": 1514,
+      "sha256": "ce34b2bb67802e9f29aa63a3b3d81ba98d002c378ba38f7f0a0126f852e95408"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.f02",
+      "bytes": 275,
+      "sha256": "da4c6a131cbb0ec668b6a37cd16d16830fd8620c750276694388d37b923c6441"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g01",
+      "bytes": 22168,
+      "sha256": "a17d053002703a50fa2c3e00b982cd3171b99c917ffdc237854fc50fa3e96b37"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g02",
+      "bytes": 22143,
+      "sha256": "4ed7a2c8bc8852b6f4eae914add88ab3b621d81e596cfce286b50b2c3427c7da"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g03",
+      "bytes": 20004,
+      "sha256": "20066a14eb672e7f16d8d6311a69cf2da401e161b75d7fdc2bcebb5ee93f04eb"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g04",
+      "bytes": 21117,
+      "sha256": "07a37634a5bb0eff679df71dcc192c139dcb4da68b59160748fe754e75139632"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.p01",
+      "bytes": 4354,
+      "sha256": "e239cda4f4d6aebe6a81f8c993fe47bc08aadbd18d41f8e8f5ecf229d61f9166"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.p02",
+      "bytes": 3596,
+      "sha256": "7ebc5e719615a74e1b3fa4dc6f3b97f647b230547ac594f6fe643aef9b404d32"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.p03",
+      "bytes": 4287,
+      "sha256": "365dabe7ba7ceac51353b8892b96957a67b8ca9cd769810f7962229ba7d63fb0"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.p04",
+      "bytes": 4287,
+      "sha256": "cfbd949a76ecd8ffddcf2066521588f4dbb0d2b969b583c3d5c2d40a69ba7f3a"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.prj",
+      "bytes": 722,
+      "sha256": "9b0bc1eb7b1443d8ff641845b61e892ca65802555dc7dc70df157e89012e1590"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.F01",
+      "bytes": 239,
+      "sha256": "f1f7a050353913e71ef6e566238801ffea3f77f4fc3b07f1e84959c297d7b399"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.P01",
+      "bytes": 447,
+      "sha256": "c224aa3ab4c0fe3bb9625a676f38264aef9347f460ca6b97899ddc8e1a52670a"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.P02",
+      "bytes": 442,
+      "sha256": "018830ed214d70a28127e9175722d2de27b6b4168f001da54ab8f70ed87c5ef9"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.g01",
+      "bytes": 63842,
+      "sha256": "5d3ddb4b73886639a3fde507b0c3cf0aa5ac3d1fea5974c0430a80881de99c68"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.g02",
+      "bytes": 65739,
+      "sha256": "e6ddacb28a853a6ef55a31f7a25c258f9ef36890c1b5210d29bb12bf08ccecf3"
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.prj",
+      "bytes": 607,
+      "sha256": "8cd17599bfd52df5a021b825e0224b3709bdd8722f3b6fa4577957a61b497a86"
+    },
+    {
+      "path": "trinity-originals/Calibration of a Steady Flow Model/CalibrationWorkshop.f01",
+      "bytes": 4858,
+      "sha256": "dc7a12503419616b6e61821ce4c02bff3ad32218de1a2ed5ffaa7270570f8196"
+    },
+    {
+      "path": "trinity-originals/Calibration of a Steady Flow Model/CalibrationWorkshop.g01",
+      "bytes": 569585,
+      "sha256": "13e53387a3dc94028b01ceca4be2b6a808eeea6cdde4213ac75f020565aee13e"
+    },
+    {
+      "path": "trinity-originals/Calibration of a Steady Flow Model/CalibrationWorkshop.p01",
+      "bytes": 3045,
+      "sha256": "1eca968796926f81406c650d4f2ec92f0f9ce12e7e5585d55df7baeac0929cf7"
+    },
+    {
+      "path": "trinity-originals/Calibration of a Steady Flow Model/CalibrationWorkshop.prj",
+      "bytes": 871,
+      "sha256": "1af8e2cd7a5ea5e5654c772baab86ac36a927f2539aa5d0483ddf716522a0513"
+    }
+  ],
+  "geometry_inventory": [
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Baxter RAS Mapper/RAS Model/Baxter.g02",
+      "title": "Imported GIS Data +Bridges",
+      "river_reaches": [
+        "Baxter River    ,Upper Reach",
+        "Tule Creek      ,Tributary",
+        "Baxter River    ,Lower Reach"
+      ],
+      "record_types": {
+        "1": 173,
+        "3": 5,
+        "6": 2
+      },
+      "interpolated_labels": 0,
+      "junctions": 1,
+      "datum_fields": [
+        "GIS Datum=NAD83",
+        "GIS Vertical Datum="
+      ]
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Chapter 4 Example Data/EX1.G02",
+      "title": "test",
+      "river_reaches": [],
+      "record_types": {},
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Chapter 4 Example Data/EX1.g01",
+      "title": "Base Geometry Data",
+      "river_reaches": [
+        "Butte Cr.       ,Tributary",
+        "Fall River      ,Upper Reach",
+        "Fall River      ,Lower Reach"
+      ],
+      "record_types": {
+        "1": 10
+      },
+      "interpolated_labels": 0,
+      "junctions": 1,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.g01",
+      "title": "ConSpan Culvert Geometry",
+      "river_reaches": [
+        "Spring Creek    ,Culvrt Reach"
+      ],
+      "record_types": {
+        "1": 10,
+        "2": 1
+      },
+      "interpolated_labels": 1,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/ConSpan Culvert/ConSpan.g02",
+      "title": "Twin Circular Pipes",
+      "river_reaches": [
+        "Spring Creek    ,Culvrt Reach"
+      ],
+      "record_types": {
+        "1": 10,
+        "2": 1
+      },
+      "interpolated_labels": 1,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Mixed Flow Regime Channel/MIXED.g01",
+      "title": "Mixed Flow Geometry Data",
+      "river_reaches": [
+        "Mixed Reach     ,Mixed Reach"
+      ],
+      "record_types": {
+        "1": 19
+      },
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.g01",
+      "title": "Imported From GIS",
+      "river_reaches": [
+        "Wailupe         ,upper",
+        "Kului Gorge     ,Headwaters",
+        "Wailupe         ,lower"
+      ],
+      "record_types": {
+        "1": 47
+      },
+      "interpolated_labels": 0,
+      "junctions": 1,
+      "datum_fields": [
+        "GIS Datum=NAD27",
+        "GIS Vertical Datum="
+      ]
+    },
+    {
+      "path": "hec-selected-originals/1D Steady Flow Hydraulics/Wailupe GeoRAS/WAILUPE.g02",
+      "title": "Final Geometry  Data - GIS + Interp + Br",
+      "river_reaches": [
+        "Wailupe         ,upper",
+        "Kului Gorge     ,Headwaters",
+        "Wailupe         ,lower"
+      ],
+      "record_types": {
+        "1": 206,
+        "3": 3
+      },
+      "interpolated_labels": 159,
+      "junctions": 1,
+      "datum_fields": [
+        "GIS Datum=NAD27",
+        "GIS Vertical Datum="
+      ]
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.g01",
+      "title": "Base Geometry Data",
+      "river_reaches": [
+        "Critical Cr.    ,Upper Reach"
+      ],
+      "record_types": {
+        "1": 12
+      },
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 1 - Critical Creek/CRITCREK.g02",
+      "title": "Base Geometry Data + Interpolated",
+      "river_reaches": [
+        "Critical Cr.    ,Upper Reach"
+      ],
+      "record_types": {
+        "1": 63
+      },
+      "interpolated_labels": 51,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.g01",
+      "title": "Base Geometry Data",
+      "river_reaches": [
+        "Critical Cr.    ,Upper Reach"
+      ],
+      "record_types": {
+        "1": 12
+      },
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 16 - Channel Modification/CHANMOD.g02",
+      "title": "Modified Geometry",
+      "river_reaches": [
+        "Critical Cr.    ,Upper Reach"
+      ],
+      "record_types": {
+        "1": 12
+      },
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g01",
+      "title": "Beaver Cr. + Bridge - P/W",
+      "river_reaches": [
+        "Beaver Creek    ,Kentwood"
+      ],
+      "record_types": {
+        "1": 14,
+        "3": 1
+      },
+      "interpolated_labels": 5,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g02",
+      "title": "Beaver Cr. + Bridge - Energy",
+      "river_reaches": [
+        "Beaver Creek    ,Kentwood"
+      ],
+      "record_types": {
+        "1": 14,
+        "3": 1
+      },
+      "interpolated_labels": 5,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g03",
+      "title": "Bvr.Cr.+Bridge - P/W: New Le, Lc",
+      "river_reaches": [
+        "Beaver Creek    ,Kentwood"
+      ],
+      "record_types": {
+        "1": 12,
+        "3": 1
+      },
+      "interpolated_labels": 5,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 2 - Beaver Creek/BEAVCREK.g04",
+      "title": "Bvr.Cr.+Bridge - Energy: New Le, Lc",
+      "river_reaches": [
+        "Beaver Creek    ,Kentwood"
+      ],
+      "record_types": {
+        "1": 12,
+        "3": 1
+      },
+      "interpolated_labels": 5,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.g01",
+      "title": "Existing Geometry",
+      "river_reaches": [
+        "Napa Creek      ,South Reach"
+      ],
+      "record_types": {
+        "1": 80,
+        "3": 4
+      },
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "hec-selected-originals/Applications Guide/Example 7 - Multiple Plans/NAPA.g02",
+      "title": "Proposed Bridge",
+      "river_reaches": [
+        "Napa Creek      ,South Reach"
+      ],
+      "record_types": {
+        "1": 82,
+        "3": 4
+      },
+      "interpolated_labels": 2,
+      "junctions": 0,
+      "datum_fields": []
+    },
+    {
+      "path": "trinity-originals/Calibration of a Steady Flow Model/CalibrationWorkshop.g01",
+      "title": "Trinity River with Initial n values",
+      "river_reaches": [
+        "Trinity         ,Lew_DC"
+      ],
+      "record_types": {
+        "1": 56
+      },
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": [
+        "GIS Datum=",
+        "GIS Vertical Datum="
+      ]
+    }
+  ],
+  "trinity": {
+    "observed_water_surface_records": 65,
+    "observed_nonempty_levels_by_profile": [
+      51,
+      38,
+      65
+    ],
+    "flow_change_records": [
+      "Trinity,Lew_DC          ,97.35",
+      "Trinity,Lew_DC          ,95.59",
+      "Trinity,Lew_DC          ,93.98",
+      "Trinity,Lew_DC          ,93.06"
+    ],
+    "normal_depth_slope_fields": [
+      "Up Slope=0.0023",
+      "Dn Slope=0.0023",
+      "Up Slope=0.0023",
+      "Dn Slope=0.0023",
+      "Up Slope=0.0023",
+      "Dn Slope=0.0023"
+    ],
+    "source_limit": "Instruction only; model roughness intentionally reduced; not current/future conditions",
+    "common_vertical_reference": "Unconfirmed; no named vertical datum in inspected original file fields",
+    "geometry": {
+      "river_reaches": [
+        "Trinity         ,Lew_DC"
+      ],
+      "record_types": {
+        "1": 56
+      },
+      "interpolated_labels": 0,
+      "junctions": 0,
+      "datum_fields": [
+        "GIS Datum=",
+        "GIS Vertical Datum="
+      ]
+    },
+    "geometry_river_station_labels_range": [
+      92.89,
+      97.35
+    ],
+    "observed_river_station_labels_range": [
+      92.98,
+      112.07
+    ],
+    "observed_records_outside_geometry_label_range": 46,
+    "observed_records_with_exact_geometry_label": 19,
+    "observed_records_with_nonzero_distance_field": 22,
+    "ineffective_flow_area_headers": 26,
+    "spatially_varying_manning": true
+  }
+}
