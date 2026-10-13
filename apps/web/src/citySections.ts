@@ -1,4 +1,4 @@
-import type { CityModel } from './cityModel';
+import type { CityModel, CityFeature } from './cityModel';
 import type { CityFootprint } from './cityReport';
 
 export type SectionStatus = 'unique' | 'uncovered' | 'ambiguous';
@@ -17,7 +17,7 @@ const uniqueHeights = (values: number[]) => {
 
 // Geometry of display triangles, not a surveyed river section. Cut every face
 // and sweep its exact boundaries; never join across missing or ambiguous spans.
-export function traceTerrainSection(model: CityModel, p: CityFootprint, axis: TerrainSection['axis']): TerrainSection {
+export function traceTerrainSection(model: CityModel, p: CityFootprint, axis: TerrainSection['axis'], sourceVerticalFaces?: ReadonlyMap<CityFeature, ReadonlySet<number>>): TerrainSection {
   const length = axis === 'east_west' ? p.width : p.length;
   if (![p.east, p.north, length].every(Number.isFinite) || length < 1e-6 || length > 5000) throw new Error('断面長は0.000001〜5000mの有限値が必要です');
   const base = (axis === 'east_west' ? p.east : p.north) - length / 2;
@@ -55,7 +55,7 @@ export function traceTerrainSection(model: CityModel, p: CityFootprint, axis: Te
       if (++cuts > 4096) throw new Error('断面と交差する地形面が4096件を超えます。施工範囲を小さくしてください');
       const [a, b, c] = vertices;
       const det = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
-      const vertical = Math.abs(det) < 1e-12;
+      const vertical = sourceVerticalFaces?.get(f)?.has(i) || Math.abs(det) < 1e-12;
       const height = (t: number) => right.t === left.t ? left.h : left.h + (right.h - left.h) * (t - left.t) / (right.t - left.t);
       const cut: Cut = { from, to, h0: height(from), h1: height(to), vertical, feature: f.id };
       if (from === to) event(from).touch.push(cut);

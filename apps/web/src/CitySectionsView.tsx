@@ -3,15 +3,19 @@ import { citySectionColors } from './citySectionOverlay';
 import { probeCitySection } from './citySectionProbe';
 import type { GradingOverlay } from './cityGrading';
 
-const name = { east_west: '東西', south_north: '南北' };
+const defaultNames = { east_west: '東西', south_north: '南北' };
 const labels = { unique: '高さが一意', uncovered: '地形なし', ambiguous: '高さが一意でない・鉛直面' };
-export default function CitySectionsView({ sections, expanded = false, selection, onSelect, grading, comparisonTargets = [] }: {
+export default function CitySectionsView({ sections, expanded = false, selection, onSelect, grading, comparisonTargets = [], names = defaultNames, directions, context = '反映済み範囲' }: {
   sections: TerrainSection[]; expanded?: boolean;
   selection?: { axis: TerrainSection['axis']; distance: number } | null;
   onSelect?: (selection: { axis: TerrainSection['axis']; distance: number } | null) => void;
   grading?: GradingOverlay;
   comparisonTargets?: number[];
+  names?: Record<TerrainSection['axis'], string>;
+  directions?: Record<TerrainSection['axis'], string>;
+  context?: string;
 }) {
+  const name = names;
   const number = (value: number) => expanded ? String(value) : value.toFixed(6);
   return <div className="city-sections">{sections.map(s => {
     const color = citySectionColors[s.axis];
@@ -28,7 +32,7 @@ export default function CitySectionsView({ sections, expanded = false, selection
     const bottom = lo - padding, top = hi + padding;
     const x = (t: number) => 65 + 510 * t / s.length, y = (h: number) => 245 - 220 * (h - bottom) / (top - bottom);
     return <div key={s.axis} className="city-review" role="region" aria-label={`${name[s.axis]}の${grading ? '切土・盛土結果' : '断面結果'}`}>
-      <h3>{name[s.axis]}の{grading ? '地形と計画標高' : '地形断面'}（反映済み範囲）</h3>
+      <h3>{name[s.axis]}の{grading ? '地形と計画標高' : '地形断面'}（{context}）</h3>
       <p>起点 東 {s.start.east.toFixed(3)}・北 {s.start.north.toFixed(3)} m → 終点 東 {s.end.east.toFixed(3)}・北 {s.end.north.toFixed(3)} m</p>
       <p>長さ {s.length} m / 地形なし {s.intervals.filter(v => v.status === 'uncovered').length} 区間 / 高さが一意でない {s.intervals.filter(v => v.status === 'ambiguous').length} 区間・{s.points.filter(p => p.status === 'ambiguous').length} 点</p>
       <p className="muted">{s.axis === 'east_west' ? '緑' : '青'}：一意な断面線 / 灰：欠損 / 橙：高さ候補を選べない区間 / 点線：判定点。縦横の縮尺は別です。</p>
@@ -74,7 +78,7 @@ export default function CitySectionsView({ sections, expanded = false, selection
           ? <circle key={i} cx={x(p.distance)} cy={y(p.elevations[0])} r="2.5" fill={color} onClick={onSelect ? e => { e.stopPropagation(); select(p.distance); } : undefined}><title>{`${p.distance} m / 標高 ${p.elevations[0]} m`}</title></circle>
           : <path key={i} d={`M${x(p.distance)} 25V245`} stroke={p.status === 'ambiguous' ? '#ac652d' : '#8a9690'} strokeDasharray="3 3" onClick={onSelect ? e => { e.stopPropagation(); select(p.distance); } : undefined}><title>{`${labels[p.status]} / ${p.distance} m`}</title></path>)}
         {[0, .5, 1].map(f => <text key={f} x={x(s.length * f)} y="265" textAnchor="middle" fontSize="11">{(s.length * f).toFixed(3)}</text>)}
-        <text x="320" y="291" textAnchor="middle" fontSize="12">起点からの距離 (m) · {s.axis === 'east_west' ? '西 → 東' : '南 → 北'}</text>
+        <text x="320" y="291" textAnchor="middle" fontSize="12">起点からの距離 (m) · {directions?.[s.axis] ?? (s.axis === 'east_west' ? '西 → 東' : '南 → 北')}</text>
         <text x="65" y="15" fontSize="11">標高 (m / 原データ基準)</text>
         {grading && <path data-grading-target="true" d={`M65 ${y(grading.target_elevation_m)}H575`} stroke="#713e9c" strokeWidth="2" strokeDasharray="7 3"><title>{`計画標高 ${grading.target_elevation_m} m / 原データ基準`}</title></path>}
         {probe && <g data-section-probe={probe.status} pointerEvents="none">

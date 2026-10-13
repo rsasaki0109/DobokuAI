@@ -13,6 +13,7 @@ import type { TerrainSection } from './citySections';
 import { citySectionCSV } from './citySectionCSV';
 import CitySectionsView from './CitySectionsView';
 import CityGrading from './CityGrading';
+import CityTransect from './CityTransect';
 import CitySectionOverlayView from './CitySectionOverlayView';
 import { citySectionOverlayData } from './citySectionOverlay';
 import { probeCitySection, cityProbePosition } from './citySectionProbe';
@@ -304,6 +305,7 @@ export default function CityWorkspace() {
       {currentSections?.error && <p role="alert">地形断面を作成できません：{currentSections.error}</p>}
       {currentSections?.data && <><p className="muted">断面点検日時：{currentSections.inspectedAt} / 編集中の値を反映するには施工範囲を確認してから再表示してください。</p><CitySectionsView sections={currentSections.data} selection={currentSelection} onSelect={selection => setSectionSelection(selection ? { ...selection, sections: currentSections.data! } : null)} /></>}
       {currentSections?.data && <CityGrading input={reportInput()} sections={currentSections.data} inspectedAt={currentSections.inspectedAt} />}
+      {showFootprint && <CityTransect input={reportInput()} />}
     </section>
     <p className="muted">都市モデルと施工範囲は河川プロジェクト・水理/構造の計算条件とは未連携です。別のRust計算で2線の切土・盛土断面積を確認できます。公開都市モデルの表示・断面積確認は、実河川の水理検証・校正とは別です。</p>
   </div>;
