@@ -14,6 +14,9 @@ import { citySectionCSV } from './citySectionCSV';
 import CitySectionsView from './CitySectionsView';
 import CityGrading from './CityGrading';
 import CityTransect from './CityTransect';
+import CityTransectOverlayView from './CityTransectOverlayView';
+import type { TerrainTransect } from './cityTransect';
+import { probeTerrainTransect, transectProbePosition, transectOverlayData } from './cityTransectSpatial';
 import CitySectionOverlayView from './CitySectionOverlayView';
 import { citySectionOverlayData } from './citySectionOverlay';
 import { probeCitySection, cityProbePosition } from './citySectionProbe';
@@ -100,6 +103,9 @@ export default function CityWorkspace() {
   const [showSectionOverlay, setShowSectionOverlay] = useState(true);
   const [sectionFocus, setSectionFocus] = useState(false);
   const [sectionSelection, setSectionSelection] = useState<{ sections: TerrainSection[]; axis: TerrainSection['axis']; distance: number } | null>(null);
+  const [transectState, setTransectState] = useState<{ model: CityModel; footprint: Footprint; transect: TerrainTransect; distance: number | null } | null>(null);
+  const [showTransectOverlay, setShowTransectOverlay] = useState(true);
+  const [transectFocus, setTransectFocus] = useState<TerrainTransect | null>(null);
   const [displayFile, setDisplayFile] = useState<File | null>(null);
   const [displayCandidate, setDisplayCandidate] = useState<{ loaded: Loaded; settings: CityDisplayRestore } | null>(null);
   const [displayError, setDisplayError] = useState('');
@@ -124,7 +130,12 @@ export default function CityWorkspace() {
     return section ? probeCitySection(section, currentSelection!.distance) : null;
   }, [currentSelection]);
   const probePosition = useMemo(() => cityProbePosition(probe, model.origin[2]), [probe, model.origin[2]]);
-  const focusBounds = sectionFocus ? overlayData.bounds : null;
+  const currentTransect = showFootprint && transectState?.model === model && transectState.footprint === footprint ? transectState : null;
+  const transectOverlay = useMemo(() => currentTransect ? transectOverlayData(currentTransect.transect, model.origin[2]) : null, [currentTransect?.transect, model.origin[2]]);
+  const transectProbe = useMemo(() => currentTransect?.distance !== null && currentTransect?.distance !== undefined ? probeTerrainTransect(currentTransect.transect, currentTransect.distance) : null, [currentTransect]);
+  const transectPosition = useMemo(() => transectProbePosition(transectProbe, model.origin[2]), [transectProbe, model.origin[2]]);
+  const transectFocusBounds = showTransectOverlay && currentTransect?.transect === transectFocus ? transectOverlay?.bounds : null;
+  const focusBounds = transectFocusBounds ?? (sectionFocus ? overlayData.bounds : null);
   const currentDisplayCandidate = displayCandidate?.loaded === loaded ? displayCandidate.settings : null;
   const exportCityDisplay = async () => {
     const snapshot = { schema_version: 2, display_version: cityDisplayVersion, exported_at: new Date().toISOString(),
@@ -212,9 +223,11 @@ export default function CityWorkspace() {
         <button type="button" className="secondary" aria-pressed={sunset} onClick={() => setSunset(!sunset)}>都市を夕景で表示</button>
         <button type="button" className="secondary" aria-pressed={picking} onClick={() => { setPicking(!picking); setPickNotice(''); if (!picking) { setRotating(false); setSelected(null); } }}>地形をクリックして施工位置を選ぶ</button>
         <button type="button" className="secondary" onClick={exportCityDisplay}>都市の表示条件JSONを保存</button>
-        <button type="button" className="secondary" disabled={!currentSections?.data} aria-pressed={!!currentSections?.data && showSectionOverlay} onClick={() => setShowSectionOverlay(!showSectionOverlay)}>地形断面を3Dに重ねる</button>
-        <button type="button" className="secondary" disabled={!overlayData.bounds} aria-pressed={!!focusBounds} onClick={() => setSectionFocus(true)}>地形断面を近くから見る</button>
-        <button type="button" className="secondary" disabled={!focusBounds} onClick={() => setSectionFocus(false)}>都市全体を表示</button>
+        <button type="button" className="secondary" disabled={!currentSections?.data} aria-pressed={!!currentSections?.data && showSectionOverlay} onClick={() => { setShowSectionOverlay(!showSectionOverlay); if (!showSectionOverlay) { setShowTransectOverlay(false); setTransectFocus(null); } }}>地形断面を3Dに重ねる</button>
+        <button type="button" className="secondary" disabled={!overlayData.bounds} aria-pressed={sectionFocus && !!overlayData.bounds} onClick={() => { setSectionFocus(true); setTransectFocus(null); setShowSectionOverlay(true); setShowTransectOverlay(false); }}>地形断面を近くから見る</button>
+        <button type="button" className="secondary" disabled={!currentTransect} aria-pressed={!!currentTransect && showTransectOverlay} onClick={() => { setShowTransectOverlay(!showTransectOverlay); if (!showTransectOverlay) { setShowSectionOverlay(false); setSectionFocus(false); } }}>指定線を3Dに重ねる</button>
+        <button type="button" className="secondary" disabled={!transectOverlay?.bounds} aria-pressed={!!transectFocusBounds} onClick={() => { if (currentTransect) { setTransectFocus(currentTransect.transect); setSectionFocus(false); setShowTransectOverlay(true); setShowSectionOverlay(false); } }}>指定線を近くから見る</button>
+        <button type="button" className="secondary" disabled={!focusBounds} onClick={() => { setSectionFocus(false); setTransectFocus(null); }}>都市全体を表示</button>
       </div>
       {picking && <p role="status">施工位置の選択中：地形をクリックすると東・北・高さを入力候補にします。ドラッグは視点操作です。幅・長さを確認してから反映してください。</p>}
       {pickNotice && <p role="status" aria-label="施工位置の選択結果">{pickNotice}</p>}
@@ -228,13 +241,17 @@ export default function CityWorkspace() {
           {model.features.filter(f => visible.includes(f.layer)).map((f, i) => <Feature key={`${loaded.inspectedAt}:${i}`} feature={f} selected={f.id === selected} click={point => clickFeature(f, point)} />)}
           {showFootprint && <mesh position={[footprint.east, footprint.elevation - model.origin[2], -footprint.north]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={5}><planeGeometry args={[footprint.width, footprint.length]} /><meshBasicMaterial color="#f6a841" transparent opacity={.62} side={THREE.DoubleSide} depthTest={false} depthWrite={false} /></mesh>}
           {!!currentSections?.data && showSectionOverlay && <CitySectionOverlayView data={overlayData} probePosition={probePosition} />}
+          {!!transectOverlay && showTransectOverlay && <CityTransectOverlayView data={transectOverlay} probePosition={transectPosition} />}
           <gridHelper args={[extent * 1.15, 16, '#70858b', '#8fa4a8']} position={[0, model.bounds.min[1] - 1, 0]} />
         </Canvas>
         <div className="city-caption">北は画面の−Z方向 · {picking ? '地形クリックで施工位置の入力候補を選択' : '地物をクリックして選択'} · 施工範囲は表示用マーカー</div>
       </div>
       {!!currentSections?.data && showSectionOverlay && <p role="status" aria-label="地形断面の3D表示">反映済み地形断面：{overlayData.axes.map(a => `${a.axis === 'east_west' ? '東西（緑）' : '南北（青）'} ${a.length} m / 一意な線${a.segments.length / 6}区間・${a.points.length / 3}点 / 一意でない点${a.ambiguousPoints}`).join(' / ')}。元の地形高さを保持し、建物の背後も表示します。欠損・高さが一意でない区間に線を引きません。細かな判定は2D図と表で確認してください。</p>}
-      {!!focusBounds && <p role="status" aria-label="地形断面の近接表示">地形断面を近接表示中。カメラは一意な高さの線・点を囲む範囲を見ています。マーカーは表示用の水平面です。</p>}
+      {!!focusBounds && !transectFocusBounds && <p role="status" aria-label="地形断面の近接表示">地形断面を近接表示中。カメラは一意な高さの線・点を囲む範囲を見ています。マーカーは表示用の水平面です。</p>}
       {probePosition && showSectionOverlay && <p role="status" aria-label="断面照会位置の3D表示">紫の点：{probe!.axis === 'east_west' ? '東西' : '南北'}の起点から {probe!.distance} m / 東 {probe!.east} m・北 {probe!.north} m・標高 {probe!.elevations[0]} m（原データ基準）。位置の点は視認用の13pxです。</p>}
+      {!!transectOverlay && showTransectOverlay && <p role="status" aria-label="指定線の3D表示">指定線（緑）：{transectOverlay.length} m / 一意な線{transectOverlay.segments.length / 6}区間・{transectOverlay.points.length / 3}点 / 一意でない点{transectOverlay.ambiguousPoints}。元の座標と地形高さを保持し、欠損・曖昧な区間に線を引きません。</p>}
+      {!!transectFocusBounds && <p role="status" aria-label="指定線の近接表示">指定線を近接表示中。一意な高さの線・点を囲む範囲を見ています。</p>}
+      {transectPosition && showTransectOverlay && <p role="status" aria-label="指定線照会位置の3D表示">紫の点：始点から {transectProbe!.distance} m / 東 {transectProbe!.east} m・北 {transectProbe!.north} m・標高 {transectProbe!.elevations[0]} m（原データ基準）。位置の点は視認用の13pxです。</p>}
       <div className="city-layers">{counts.filter(c => c.count).map(c => <label key={c.key}><input type="checkbox" checked={visible.includes(c.key)} onChange={e => setVisible(e.target.checked ? [...visible, c.key] : visible.filter(k => k !== c.key))} />{layers[c.key].name} ({c.count})</label>)}</div>
       {feature && <p role="status">選択地物：{feature.id} / {layers[feature.layer].name} / {feature.triangleCount} 三角形</p>}
       <p className="muted city-provenance">{model.crs === localCityCRS ? '局所座標：東・北・高さ（m）。' : 'EPSG:6697：緯度・経度・高さ。GRS80接平面で水平を表示用に近似し、原高さを保持します。測量座標変換・標高基準変換ではありません。'} {loaded.attribution || '出典未入力'} / {loaded.terms || '利用条件未入力'}。元CityGMLは別途保持してください。</p>
@@ -305,7 +322,11 @@ export default function CityWorkspace() {
       {currentSections?.error && <p role="alert">地形断面を作成できません：{currentSections.error}</p>}
       {currentSections?.data && <><p className="muted">断面点検日時：{currentSections.inspectedAt} / 編集中の値を反映するには施工範囲を確認してから再表示してください。</p><CitySectionsView sections={currentSections.data} selection={currentSelection} onSelect={selection => setSectionSelection(selection ? { ...selection, sections: currentSections.data! } : null)} /></>}
       {currentSections?.data && <CityGrading input={reportInput()} sections={currentSections.data} inspectedAt={currentSections.inspectedAt} />}
-      {showFootprint && <CityTransect input={reportInput()} />}
+      {showFootprint && <CityTransect input={reportInput()} onResult={(transect, distance) => {
+        setTransectState(transect ? { model, footprint, transect, distance } : null);
+        if (transect) { setShowTransectOverlay(true); setShowSectionOverlay(false); setSectionFocus(false); }
+        else setTransectFocus(null);
+      }} />}
     </section>
     <p className="muted">都市モデルと施工範囲は河川プロジェクト・水理/構造の計算条件とは未連携です。別のRust計算で2線の切土・盛土断面積を確認できます。公開都市モデルの表示・断面積確認は、実河川の水理検証・校正とは別です。</p>
   </div>;

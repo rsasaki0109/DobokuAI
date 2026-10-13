@@ -1,11 +1,12 @@
 import type { TerrainSection } from './citySections';
 import { citySectionColors } from './citySectionOverlay';
 import { probeCitySection } from './citySectionProbe';
+import type { CitySectionProbe } from './citySectionProbe';
 import type { GradingOverlay } from './cityGrading';
 
 const defaultNames = { east_west: '東西', south_north: '南北' };
 const labels = { unique: '高さが一意', uncovered: '地形なし', ambiguous: '高さが一意でない・鉛直面' };
-export default function CitySectionsView({ sections, expanded = false, selection, onSelect, grading, comparisonTargets = [], names = defaultNames, directions, context = '反映済み範囲' }: {
+export default function CitySectionsView({ sections, expanded = false, selection, onSelect, grading, comparisonTargets = [], names = defaultNames, directions, context = '反映済み範囲', probeAt = probeCitySection }: {
   sections: TerrainSection[]; expanded?: boolean;
   selection?: { axis: TerrainSection['axis']; distance: number } | null;
   onSelect?: (selection: { axis: TerrainSection['axis']; distance: number } | null) => void;
@@ -14,6 +15,7 @@ export default function CitySectionsView({ sections, expanded = false, selection
   names?: Record<TerrainSection['axis'], string>;
   directions?: Record<TerrainSection['axis'], string>;
   context?: string;
+  probeAt?: (section: TerrainSection, distance: number) => CitySectionProbe | null;
 }) {
   const name = names;
   const number = (value: number) => expanded ? String(value) : value.toFixed(6);
@@ -21,7 +23,7 @@ export default function CitySectionsView({ sections, expanded = false, selection
     const color = citySectionColors[s.axis];
     const figureName = `${name[s.axis]}の${grading ? '切土・盛土断面' : '地形断面'}`;
     const distance = selection?.axis === s.axis ? selection.distance : undefined;
-    const probe = distance === undefined ? null : probeCitySection(s, distance);
+    const probe = distance === undefined ? null : probeAt(s, distance);
     const select = (distance: number) => onSelect?.({ axis: s.axis, distance });
     const elevations = [...s.points.flatMap(p => p.elevations), ...s.intervals.flatMap(v => v.curves.flatMap(c => [c.from, c.to]))];
     if (grading) elevations.push(grading.target_elevation_m);
